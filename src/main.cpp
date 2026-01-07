@@ -162,12 +162,6 @@ int main(int argc, char** argv) {
 
     //Genera la prima configurazione
     initialize_configuration(conf_local, N_alloc, gen);
-    if(world_rank == 0){
-        cout<<"Configurazione iniziale: "<<conf_local[1]<<endl;
-    }
-    if (world_rank==1){
-        cout<<"Configurazione iniziale: "<<conf_local[1]<<endl;
-    }
     
 
     // Classificazione dei siti in bulk (siti con vicini all'
@@ -193,7 +187,24 @@ int main(int argc, char** argv) {
                            neighbors, cart_comm, N_dim, 
                            buffers, faces, requests);
         mpiTime.stop();
-        
+        if(world_rank == 0){
+            cout<<"Configurazione iniziale: "<<conf_local[1]<<endl;
+        }
+        if (world_rank==1){
+            cout<<"Configurazione iniziale: "<<conf_local[1]<<endl;
+        }
+        if (world_rank==2){
+            cout<<"Configurazione iniziale: "<<conf_local[1]<<endl;
+        }
+        if (world_rank==3){
+            cout<<"Configurazione iniziale: "<<conf_local[1]<<endl;
+        }
+        if (world_rank==4){
+            cout<<"Configurazione iniziale: "<<conf_local[1]<<endl;
+        }
+        if (world_rank==5){
+            cout<<"Configurazione iniziale: "<<conf_local[1]<<endl;
+        }
         // Si aggiornano i siti interni mentre MPI comunica
         computeTime.start();
         metropolis_update(conf_local, bulk_sites, 
