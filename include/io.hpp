@@ -90,8 +90,8 @@ inline void print_performance_summary(double total, double compute,
 }
 
 // Scrive una misura nel file di output
-inline void write_measurement(FILE* measFile, double mag, double en, size_t N, int world_rank) {
-    fprintf(measFile, "%lg %lg %lg %d\n", mag/N, en/N, world_rank);
+inline void write_measurement(FILE* measFile, double mag, double en, size_t N) {
+    fprintf(measFile, "%lg %lg\n", mag/N, en/N);
     fflush(measFile);
 }
 
