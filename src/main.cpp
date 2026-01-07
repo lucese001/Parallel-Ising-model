@@ -188,22 +188,22 @@ int main(int argc, char** argv) {
                            buffers, faces, requests);
         mpiTime.stop();
         if(world_rank == 0){
-            cout<<"Configurazione iniziale: "<<conf_local[1]<<endl;
+            for (size_t i = 0; i < N_local; ++i) {
+                cout<<conf_local[i]<<" ";
+            }
+            cout<<endl;
         }
         if (world_rank==1){
-            cout<<"Configurazione iniziale: "<<conf_local[1]<<endl;
+            for (size_t i = 0; i < N_local; ++i) {
+                cout<<conf_local[i]<<" ";
+            }
+            cout<<endl;
         }
         if (world_rank==2){
-            cout<<"Configurazione iniziale: "<<conf_local[1]<<endl;
-        }
-        if (world_rank==3){
-            cout<<"Configurazione iniziale: "<<conf_local[1]<<endl;
-        }
-        if (world_rank==4){
-            cout<<"Configurazione iniziale: "<<conf_local[1]<<endl;
-        }
-        if (world_rank==5){
-            cout<<"Configurazione iniziale: "<<conf_local[1]<<endl;
+            for (size_t i = 0; i < N_local; ++i) {
+                cout<<conf_local[i]<<" ";
+            }
+            cout<<endl;
         }
         // Si aggiornano i siti interni mentre MPI comunica
         computeTime.start();
