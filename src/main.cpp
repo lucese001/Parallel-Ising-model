@@ -34,9 +34,9 @@ size_t seed;               // seed per il generatore di numeri casuali
 timer timer::timerCost;
 
 int main(int argc, char** argv) {
-    timer totalTime, computeTime, mpiTime, ioTime,setuptime;
+    timer totalTime, computeTime, mpiTime, ioTime,setupTime;
     totalTime.start();
-    setuptime.start();
+    setupTime.start();
     int world_size; // Numero di processi
     int world_rank; // Rank (id) del processo
     MPI_Init(&argc, &argv);
