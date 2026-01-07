@@ -162,6 +162,13 @@ int main(int argc, char** argv) {
 
     //Genera la prima configurazione
     initialize_configuration(conf_local, N_alloc, gen);
+    if(world_rank == 0){
+        cout<<"Configurazione iniziale: "<<conf_local[1]<<endl;
+    }
+    if (world_rank==1){
+        cout<<"Configurazione iniziale: "<<conf_local[1]<<endl;
+    }
+    
 
     // Classificazione dei siti in bulk (siti con vicini all'
     // interno del nodo) e boundary (siti con vicini
