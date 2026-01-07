@@ -24,7 +24,7 @@ using namespace std;
 // Parametri della simulazione
 size_t N = 1;              // numero totale di siti
 double Beta;               // inverso della temperatura
-size_t nThreads;       // numero di thread OpenMP
+size_t nThreads;           // numero di thread OpenMP
 size_t N_dim;              // numero di dimensioni
 vector<size_t> arr;        // lunghezze del reticolo per dimensione
 size_t nConfs;             // numero di configurazioni
@@ -221,8 +221,8 @@ int main(int argc, char** argv) {
         // Si calcolano la magnetizzazione e l'energia globali
         mpiTime.start();
         double global_mag, global_en;
-        MPI_Reduce(&local_mag, &global_mag, 1, MPI_DOUBLE, MPI_SUM, 0, cart_comm);
-        MPI_Reduce(&local_en, &global_en, 1, MPI_DOUBLE, MPI_SUM, 0, cart_comm);
+        MPI_Reduce(&local_mag, &global_mag, world_size, MPI_DOUBLE, MPI_SUM, 0, cart_comm);
+        MPI_Reduce(&local_en, &global_en, world_size, MPI_DOUBLE, MPI_SUM, 0, cart_comm);
         mpiTime.stop();
         
         // Si scrivono le misure nel file
