@@ -180,13 +180,6 @@ int main(int argc, char** argv) {
     
     for (int iConf = 0; iConf < (int)local_Nconfs; ++iConf) {
         
-        mpiTime.start();
-        // Si iniziano a scambiare gli halo. La funzione non si blocca
-        // ad aspettare che tutti gli scambi siano stati completati.
-        start_halo_exchange(conf_local, local_L, local_L_halo, 
-                           neighbors, cart_comm, N_dim, 
-                           buffers, faces, requests);
-        mpiTime.stop();
         if(world_rank == 0){
             for (size_t i = 0; i < N_local; ++i) {
                 cout<<conf_local[i]<<" ";
@@ -205,6 +198,13 @@ int main(int argc, char** argv) {
             }
             cout<<endl;
         }
+        mpiTime.start();
+        // Si iniziano a scambiare gli halo. La funzione non si blocca
+        // ad aspettare che tutti gli scambi siano stati completati.
+        start_halo_exchange(conf_local, local_L, local_L_halo, 
+                           neighbors, cart_comm, N_dim, 
+                           buffers, faces, requests);
+        mpiTime.stop();
         // Si aggiornano i siti interni mentre MPI comunica
         computeTime.start();
         metropolis_update(conf_local, bulk_sites, 
