@@ -96,8 +96,8 @@ inline void write_measurement(FILE* measFile, double mag, double en, size_t N) {
 }
 
 // Stampa il progresso della simulazione
-inline void print_progress(int iConf, int local_Nconfs, int nConfs, int world_size) {
-    if ((iConf + 1) % 10 == 0 || (iConf + 1) == local_Nconfs) {
+/*inline void print_progress(int iConf, int nConfs, int world_size) {
+    if ((iConf + 1) % 10 == 0 || (iConf + 1) == nConfs) {
         int global_progress = 0;
         for (int r = 0; r < world_size; ++r) {
             int r_done = std::min(iConf + 1, 
@@ -108,7 +108,7 @@ inline void print_progress(int iConf, int local_Nconfs, int nConfs, int world_si
         printf("Progress: %d/%d (%.1f%%)\n", 
                global_progress, nConfs, 100.0 * global_progress / nConfs);
     }
-}
+}*/
 
 // Stampa le informazioni sulla simulazione
 inline void print_simulation_info(size_t N_dim, size_t N, size_t nThreads, int nConfs, 
