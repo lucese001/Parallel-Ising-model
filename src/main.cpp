@@ -123,10 +123,10 @@ int main(int argc, char** argv) {
 
     //Calcolo del numero di configurazioni locali
     size_t local_Nconfs;
-    local_Nconfs = nConfs / world_size;
+    /*local_Nconfs = nConfs / world_size;
     if (world_rank < (nConfs % world_size)) {
         local_Nconfs++;
-    }
+    }*/
 
     //Vettore che contiene, per ogni sito,
     // i suoi vicini lungo ogni dimensione.
@@ -178,7 +178,7 @@ int main(int argc, char** argv) {
     buffers.resize(N_dim);
     setupTime.stop();
     
-    for (int iConf = 0; iConf < (int)local_Nconfs; ++iConf) {
+    for (int iConf = 0; iConf < (int)nConfs; ++iConf) {
         
         if(world_rank == 0){
             for (size_t i = 0; i < N_local; ++i) {
@@ -239,15 +239,15 @@ int main(int argc, char** argv) {
         // Si calcolano la magnetizzazione e l'energia globali
         mpiTime.start();
         double global_mag, global_en;
-        MPI_Reduce(&local_mag, &global_mag, world_size, MPI_DOUBLE, MPI_SUM, 0, cart_comm);
-        MPI_Reduce(&local_en, &global_en, world_size, MPI_DOUBLE, MPI_SUM, 0, cart_comm);
+        MPI_Reduce(&local_mag, &global_mag, 1, MPI_DOUBLE, MPI_SUM, 0, cart_comm);
+        MPI_Reduce(&local_en, &global_en, 1, MPI_DOUBLE, MPI_SUM, 0, cart_comm);
         mpiTime.stop();
         
         // Si scrivono le misure nel file
         if (world_rank == 0) {
             ioTime.start();
             write_measurement(measFile, global_mag, global_en, N);
-            print_progress(iConf, local_Nconfs, nConfs, world_size);
+            /*print_progress(iConf, local_Nconfs, nConfs, world_size);*/
             ioTime.stop();
         }
     } // fine del loop sulle configurazioni
