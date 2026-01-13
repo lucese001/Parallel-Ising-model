@@ -179,11 +179,14 @@ int main(int argc, char** argv) {
     setupTime.stop();
     
     for (int iConf = 0; iConf < (int)nConfs; ++iConf) {
-        
+        for (size_t j=0;j<=world_rank;j++){
             for (size_t i = 0; i < N_local; ++i) {
-                cout<<"conf: "<<conf_local[i]<<" rank: "<< world_rank<<" Conf: "<<iConf<<endl;
+                cout<<"conf: "<<conf_local[i]<<" rank: "<< j<<" Conf: "<<iConf<<endl;
             }
             cout<<endl;
+            MPI_Barrier(MPI_COMM_WORLD);
+        }
+
         mpiTime.start();
         // Si iniziano a scambiare gli halo. La funzione non si blocca
         // ad aspettare che tutti gli scambi siano stati completati.
