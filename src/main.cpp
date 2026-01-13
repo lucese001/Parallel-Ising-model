@@ -180,24 +180,10 @@ int main(int argc, char** argv) {
     
     for (int iConf = 0; iConf < (int)nConfs; ++iConf) {
         
-        if(world_rank == 0){
             for (size_t i = 0; i < N_local; ++i) {
                 cout<<"conf: "<<conf_local[i]<<" rank: "<< world_rank<<" Conf: "<<iConf<<endl;
             }
             cout<<endl;
-        }
-        if (world_rank==1){
-            for (size_t i = 0; i < N_local; ++i) {
-                cout<<conf_local[i]<<" ";
-            }
-            cout<<endl;
-        }
-        if (world_rank==2){
-            for (size_t i = 0; i < N_local; ++i) {
-                cout<<conf_local[i]<<" ";
-            }
-            cout<<endl;
-        }
         mpiTime.start();
         // Si iniziano a scambiare gli halo. La funzione non si blocca
         // ad aspettare che tutti gli scambi siano stati completati.
