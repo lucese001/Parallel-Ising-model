@@ -182,7 +182,7 @@ int main(int argc, char** argv) {
         
         if(world_rank == 0){
             for (size_t i = 0; i < N_local; ++i) {
-                cout<<conf_local[i]<<" ";
+                cout<<"conf: "<<conf_local[i]<<" rank: "<< world_rank<<" Conf: "<<iConf<<endl;
             }
             cout<<endl;
         }
