@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <cstddef>
+#include <cstdint>
 #include <mpi.h>
 #include "utility.hpp"
 
@@ -8,8 +9,8 @@ using std::vector;
 
 // Tipo per passare i buffer per riferimento
 struct HaloBuffers {
-    vector<vector<int>> send_minus, send_plus; 
-    vector<vector<int>> recv_minus, recv_plus; 
+    vector<vector<int8_t>> send_minus, send_plus; 
+    vector<vector<int8_t>> recv_minus, recv_plus; 
     
     void resize(size_t N_dim) {
         send_minus.resize(N_dim);  
@@ -40,7 +41,7 @@ inline vector<FaceInfo> build_faces(const vector<size_t>& local_L, size_t N_dim)
 }
 
 // Inizia lo scambio halo non-blocking
-inline void start_halo_exchange(vector<int>& conf_local, 
+inline void start_halo_exchange(vector<int8_t>& conf_local, 
                                 const vector<size_t>& local_L,
                                 const vector<size_t>& local_L_halo,
                                 const vector<vector<int>>& neighbors, 
@@ -101,22 +102,22 @@ inline void start_halo_exchange(vector<int>& conf_local,
         MPI_Request req;
         
         // Ricevi da vicino "dietro"
-        MPI_Irecv(buffers.recv_minus[d].data(), face_size, MPI_INT,
+        MPI_Irecv(buffers.recv_minus[d].data(), face_size, MPI_INT8_T,
                  neighbors[d][0], tag_plus, cart_comm, &req);
         requests.push_back(req);
         
         // Ricevi da vicino "davanti"
-        MPI_Irecv(buffers.recv_plus[d].data(), face_size, MPI_INT,
+        MPI_Irecv(buffers.recv_plus[d].data(), face_size, MPI_INT8_T,
                  neighbors[d][1], tag_minus, cart_comm, &req);
         requests.push_back(req);
         
         // Invia a vicino "dietro"
-        MPI_Isend(buffers.send_minus[d].data(), face_size, MPI_INT,
+        MPI_Isend(buffers.send_minus[d].data(), face_size, MPI_INT8_T,
                  neighbors[d][0], tag_minus, cart_comm, &req);
         requests.push_back(req);
         
         // Invia a vicino "davanti"
-        MPI_Isend(buffers.send_plus[d].data(), face_size, MPI_INT,
+        MPI_Isend(buffers.send_plus[d].data(), face_size, MPI_INT8_T,
                  neighbors[d][1], tag_plus, cart_comm, &req);
         requests.push_back(req);
     }
@@ -129,7 +130,7 @@ inline void finish_halo_exchange(std::vector<MPI_Request>& reqs) {
 }
 
 // Scrive i dati ricevuti nelle regioni halo
-inline void write_halo_data(vector<int>& conf_local,
+inline void write_halo_data(vector<int8_t>& conf_local,
                             const HaloBuffers& buffers,
                             const vector<FaceInfo>& faces,
                             const vector<size_t>& local_L,

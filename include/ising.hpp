@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <cstddef>
+#include <cstdint>
 #include <cstring>
 #include <random>
 #include "prng_engine.hpp"
@@ -14,7 +15,7 @@ using std::mt19937_64;
 extern size_t N_dim;
 
 // computeEnSite: energia locale attorno a iSite
-inline int computeEnSite(const vector<int>& conf, 
+inline int computeEnSite(const vector<int8_t>& conf, 
                          const size_t& iSite_local,
                          const vector<size_t>& local_L,
                          const vector<size_t>& local_L_halo) {
@@ -59,7 +60,7 @@ inline int computeEnSite(const vector<int>& conf,
 }
 
 // computeEn: energia totale (riduzione parallela)
-inline int computeEn(const vector<int>& conf, size_t N_local,
+inline int computeEn(const vector<int8_t>& conf, size_t N_local,
                      const vector<size_t>& local_L,
                      const vector<size_t>& local_L_halo) {
     long long en = 0;
@@ -71,7 +72,7 @@ inline int computeEn(const vector<int>& conf, size_t N_local,
 }
 
 // computeMagnetization_local: magnetizzazione locale
-inline double computeMagnetization_local(const vector<int>& conf, size_t N_local,
+inline double computeMagnetization_local(const vector<int8_t>& conf, size_t N_local,
                                          const vector<size_t>& local_L,
                                          const vector<size_t>& local_L_halo) {
     long long mag = 0;
@@ -95,21 +96,21 @@ inline double computeMagnetization_local(const vector<int>& conf, size_t N_local
 }
 
 // initialize_configuration: crea configurazione iniziale casuale (prng_engine)
-inline void initialize_configuration(vector<int>& conf_local, 
+inline void initialize_configuration(vector<int8_t>& conf_local, 
                                      size_t N_alloc,
                                      prng_engine& gen) {
     for (size_t i = 0; i < N_alloc; ++i) {
-        conf_local[i] = binomial_distribution<int>(1, 0.5)(gen) * 2 - 1;
+        conf_local[i] = (int8_t)(binomial_distribution<int>(1, 0.5)(gen) * 2 - 1);
     }
 }
 
 #ifndef PARALLEL_RNG
 // Overload per vector<mt19937_64>
-inline void initialize_configuration(vector<int>& conf_local, 
+inline void initialize_configuration(vector<int8_t>& conf_local, 
                                      size_t N_alloc,
                                      vector<mt19937_64>& gen) {
     for (size_t i = 0; i < N_alloc; ++i) {
-        conf_local[i] = binomial_distribution<int>(1, 0.5)(gen[i]) * 2 - 1;
+        conf_local[i] = (int8_t)(binomial_distribution<int>(1, 0.5)(gen[i]) * 2 - 1);
     }
 }
 #endif

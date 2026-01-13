@@ -1,4 +1,5 @@
 #define PARALLEL_RNG
+#define DEBUG_PRINT
 
 #include "prng_engine.hpp"
 #include "utility.hpp"
@@ -154,7 +155,7 @@ int main(int argc, char** argv) {
     print_simulation_info(N_dim, N, nThreads, nConfs, Beta,
                           sizeof(prng_engine), true);
 #endif
-    vector<int> conf_local(N_alloc); //Vettore che contiene la configurazione locale
+    vector<int8_t> conf_local(N_alloc); //Vettore che contiene la configurazione locale (int8_t per risparmiare memoria)
     vector<size_t> bulk_sites; //Vettore che contiene la configurazione dei siti bulk
     vector<size_t> boundary_sites; //Vettore che contiene la configurazione dei siti boundary
     vector<size_t> bulk_global_indices; //Vettore che contiene gli indici globali dei siti bulk
@@ -179,13 +180,11 @@ int main(int argc, char** argv) {
     setupTime.stop();
     
     for (int iConf = 0; iConf < (int)nConfs; ++iConf) {
-        for (size_t j=0;j<=world_rank;j++){
-            for (size_t i = 0; i < N_local; ++i) {
-                cout<<"conf: "<<conf_local[i]<<" rank: "<< j<<" Conf: "<<iConf<<endl;
-            }
-            cout<<endl;
-            MPI_Barrier(MPI_COMM_WORLD);
-        }
+#ifdef DEBUG_PRINT
+        // Stampa la configurazione per debug (utile per verificare riproducibilità)
+        print_configuration_debug(conf_local, local_L, local_L_halo, N_dim, N_local,
+                                  world_rank, world_size, iConf, cart_comm);
+#endif
 
         mpiTime.start();
         // Si iniziano a scambiare gli halo. La funzione non si blocca

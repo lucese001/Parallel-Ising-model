@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <cstddef>
+#include <cstdint>
 #include <cmath>
 #include <random>
 #include <algorithm>
@@ -22,7 +23,7 @@ extern double Beta;
 // metropolis_update: esegue uno sweep Metropolis completo
 // con aggiornamento a scacchiera sui siti specificati
 #ifdef PARALLEL_RNG
-inline void metropolis_update(vector<int>& conf_local,
+inline void metropolis_update(vector<int8_t>& conf_local,
                               const vector<size_t>& sites, 
                               const vector<size_t>& sites_global_indices,
                               const vector<size_t>& local_L,
@@ -30,7 +31,7 @@ inline void metropolis_update(vector<int>& conf_local,
                               prng_engine& gen, int iConf,
                               size_t nThreads, size_t N_local) {
 #else
-inline void metropolis_update(vector<int>& conf_local,
+inline void metropolis_update(vector<int8_t>& conf_local,
                               const vector<size_t>& sites, 
                               const vector<size_t>& sites_global_indices,
                               const vector<size_t>& local_L,
@@ -79,11 +80,11 @@ inline void metropolis_update(vector<int>& conf_local,
                     size_t iSite_halo = coord_to_index(N_dim, local_L_halo.data(), 
                                                        coord_tmp.data());
                     
-                    const int oldVal = conf_local[iSite_halo];
+                    const int8_t oldVal = conf_local[iSite_halo];
                     const int enBefore = computeEnSite(conf_local, iSite, 
                                                        local_L, local_L_halo);
 
-                    conf_local[iSite_halo] = binomial_distribution<int>(1, 0.5)(genView) * 2 - 1;
+                    conf_local[iSite_halo] = (int8_t)(binomial_distribution<int>(1, 0.5)(genView) * 2 - 1);
 
                     const int enAfter = computeEnSite(conf_local, iSite, 
                                                       local_L, local_L_halo);

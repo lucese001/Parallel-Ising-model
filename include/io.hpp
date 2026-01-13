@@ -1,8 +1,10 @@
 #pragma once
 #include <cstdio>
 #include <cstddef>
+#include <cstdint>
 #include <vector>
 #include <mpi.h>
+#include "utility.hpp"
 
 using std::vector;
 
@@ -153,4 +155,56 @@ inline void print_mpi_topology(int world_rank, int world_size, size_t N_dim,
         }
         MPI_Barrier(MPI_COMM_WORLD);
     }
+}
+
+// Stampa la configurazione locale per debug
+// Ogni rank stampa in ordine la propria configurazione
+inline void print_configuration_debug(const vector<int8_t>& conf_local,
+                                       const vector<size_t>& local_L,
+                                       const vector<size_t>& local_L_halo,
+                                       size_t N_dim, size_t N_local,
+                                       int world_rank, int world_size,
+                                       int iConf, MPI_Comm comm) {
+    for (int r = 0; r < world_size; ++r) {
+        if (world_rank == r) {
+            printf("RANK %d, Conf %d\n", world_rank, iConf);
+            
+            if (N_dim == 2) {
+                // Stampa come matrice 2D
+                for (size_t y = 0; y < local_L[1]; ++y) {
+                    printf("  ");
+                    for (size_t x = 0; x < local_L[0]; ++x) {
+                        // Converti coordinate locali (senza halo) in coordinate con halo
+                        size_t coord_halo[2] = {x + 1, y + 1};
+                        size_t idx_halo = coord_halo[0] + coord_halo[1] * local_L_halo[0];
+                        // Stampa '+' per spin +1, '-' per spin -1
+                        printf("%c ", conf_local[idx_halo] > 0 ? '+' : '-');
+                    }
+                    printf("\n");
+                }
+            } else {
+                // Per altre dimensioni, stampa linearmente
+                vector<size_t> coord_local(N_dim);
+                vector<size_t> coord_halo(N_dim);
+                printf("  Spins: ");
+                for (size_t i = 0; i < N_local; ++i) {
+                    index_to_coord(i, N_dim, local_L.data(), coord_local.data());
+                    for (size_t d = 0; d < N_dim; ++d) {
+                        coord_halo[d] = coord_local[d] + 1;
+                    }
+                    size_t idx_halo = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
+                    printf("%+d ", (int)conf_local[idx_halo]);
+                    if ((i + 1) % 16 == 0 && i + 1 < N_local) printf("\n        ");
+                }
+                printf("\n");
+            }
+            fflush(stdout);
+        }
+        MPI_Barrier(comm);
+    }
+    if (world_rank == 0) {
+        printf("-----------------------------------\n");
+        fflush(stdout);
+    }
+    MPI_Barrier(comm);
 }
