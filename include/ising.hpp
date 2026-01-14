@@ -95,22 +95,41 @@ inline double computeMagnetization_local(const vector<int8_t>& conf, size_t N_lo
     return (double) mag;
 }
 
-// initialize_configuration: crea configurazione iniziale casuale (prng_engine)
-inline void initialize_configuration(vector<int8_t>& conf_local, 
-                                     size_t N_alloc,
-                                     prng_engine& gen) {
-    for (size_t i = 0; i < N_alloc; ++i) {
-        conf_local[i] = (int8_t)(binomial_distribution<int>(1, 0.5)(gen) * 2 - 1);
-    }
-}
+// Crea una configurazione iniziale casuale usando l'indice globale 
+// (per garantire riproducibilità) indipendente dal numero di rank/thread
+inline void initialize_configuration(vector<int8_t>& conf_local,
+                                     size_t N_local,
+                                     size_t N_dim,
+                                     const vector<size_t>& local_L,
+                                     const vector<size_t>& local_L_halo,
+                                     const vector<size_t>& global_offset,
+                                     const vector<size_t>& arr,
+                                     uint64_t base_seed) {
+    // Prima inizializza tutto a 0 (incluso halo)
+    std::fill(conf_local.begin(), conf_local.end(), 0);
+    
+    #pragma omp parallel
+    {
+        // Ogni thread ha i suoi buffer per le coordinate
+        vector<size_t> coord_local(N_dim);
+        vector<size_t> coord_halo(N_dim);
+        
+        #pragma omp for
+        for (size_t i = 0; i < N_local; ++i) {
 
-#ifndef PARALLEL_RNG
-// Overload per vector<mt19937_64>
-inline void initialize_configuration(vector<int8_t>& conf_local, 
-                                     size_t N_alloc,
-                                     vector<mt19937_64>& gen) {
-    for (size_t i = 0; i < N_alloc; ++i) {
-        conf_local[i] = (int8_t)(binomial_distribution<int>(1, 0.5)(gen[i]) * 2 - 1);
+            size_t global_index = compute_global_index(i, local_L, global_offset, arr, N_dim);
+            uint64_t site_seed = base_seed + global_index;
+            prng_engine site_gen(site_seed);
+            int8_t spin = (site_gen.randInt() & 1) ? 1 : -1;
+            //Prepara giá in anticipo gli halo
+            index_to_coord(i, N_dim, local_L.data(), coord_local.data());
+            for (size_t d = 0; d < N_dim; ++d) {
+                coord_halo[d] = coord_local[d] + 1;  // +1 per saltare l'halo
+            }
+            size_t idx_halo = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
+            
+            // Memorizza lo spin
+            conf_local[idx_halo] = spin;
+        }
     }
 }
-#endif

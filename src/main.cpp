@@ -96,11 +96,13 @@ int main(int argc, char** argv) {
 
     size_t N_local = 1;
     size_t N_alloc = 1;
+    size_t N_global=1;
     vector<size_t> local_L_halo(N_dim);
     for (size_t d = 0; d < N_dim; ++d) {
         local_L_halo[d] = local_L[d] + 2;
         N_local *= local_L[d];      // numero di siti del nodo
         N_alloc *= local_L_halo[d]; // numero di siti del nodo + halo
+        N_global*=arr[d];
     }
 
     vector<int> rank_coords(N_dim); // Coordinate cartesiane del rank nella griglia MPI
@@ -161,8 +163,9 @@ int main(int argc, char** argv) {
     vector<size_t> bulk_global_indices; //Vettore che contiene gli indici globali dei siti bulk
     vector<size_t> boundary_global_indices; //Vettore che contiene gli indici globali dei siti boundary
 
-    //Genera la prima configurazione
-    initialize_configuration(conf_local, N_alloc, gen);
+    //Genera la prima configurazione (usa indice globale per riproducibilità)
+    initialize_configuration(conf_local, N_local, N_dim, local_L, local_L_halo,
+                             global_offset, arr, seed);
     
 
     // Classificazione dei siti in bulk (siti con vicini all'
