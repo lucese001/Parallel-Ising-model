@@ -208,3 +208,98 @@ inline void print_configuration_debug(const vector<int8_t>& conf_local,
     }
     MPI_Barrier(comm);
 }
+
+// Stampa la configurazione GLOBALE per debug (ricostruita da tutti i rank)
+// Utile per confrontare configurazioni con diverso numero di rank
+inline void print_global_configuration_debug(const vector<int8_t>& conf_local,
+                                              const vector<size_t>& local_L,
+                                              const vector<size_t>& local_L_halo,
+                                              const vector<size_t>& global_offset,
+                                              const vector<size_t>& arr,
+                                              size_t N_dim, size_t N_local, size_t N_global,
+                                              int world_rank, int world_size,
+                                              int iConf, MPI_Comm comm) {
+    // Alloca buffer per la configurazione globale su rank 0
+    vector<int8_t> global_conf;
+    if (world_rank == 0) {
+        global_conf.resize(N_global);
+    }
+    
+    // Ogni rank prepara i suoi dati: (global_index, spin) pairs
+    vector<size_t> my_global_indices(N_local);
+    vector<int8_t> my_spins(N_local);
+    
+    vector<size_t> coord_local(N_dim);
+    vector<size_t> coord_halo(N_dim);
+    vector<size_t> coord_global(N_dim);
+    
+    for (size_t i = 0; i < N_local; ++i) {
+        // Calcola indice globale
+        size_t global_idx = compute_global_index(i, local_L, global_offset, arr, N_dim,
+                                                  coord_local.data(), coord_global.data());
+        my_global_indices[i] = global_idx;
+        
+        // Leggi spin dalla posizione con halo
+        index_to_coord(i, N_dim, local_L.data(), coord_local.data());
+        for (size_t d = 0; d < N_dim; ++d) {
+            coord_halo[d] = coord_local[d] + 1;
+        }
+        size_t idx_halo = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
+        my_spins[i] = conf_local[idx_halo];
+    }
+    
+    // Raccogli i dati su rank 0
+    if (world_rank == 0) {
+        // Metti i miei dati
+        for (size_t i = 0; i < N_local; ++i) {
+            global_conf[my_global_indices[i]] = my_spins[i];
+        }
+        
+        // Ricevi dagli altri rank
+        for (int r = 1; r < world_size; ++r) {
+            int recv_count;
+            MPI_Recv(&recv_count, 1, MPI_INT, r, 0, comm, MPI_STATUS_IGNORE);
+            
+            vector<size_t> recv_indices(recv_count);
+            vector<int8_t> recv_spins(recv_count);
+            
+            MPI_Recv(recv_indices.data(), recv_count * sizeof(size_t), MPI_BYTE, r, 1, comm, MPI_STATUS_IGNORE);
+            MPI_Recv(recv_spins.data(), recv_count, MPI_INT8_T, r, 2, comm, MPI_STATUS_IGNORE);
+            
+            for (int i = 0; i < recv_count; ++i) {
+                global_conf[recv_indices[i]] = recv_spins[i];
+            }
+        }
+        
+        // Stampa la configurazione globale
+        printf("=== GLOBAL CONFIG, Conf %d ===\n", iConf);
+        if (N_dim == 2) {
+            for (size_t y = 0; y < arr[1]; ++y) {
+                printf("  ");
+                for (size_t x = 0; x < arr[0]; ++x) {
+                    size_t idx = x + y * arr[0];
+                    printf("%c ", global_conf[idx] > 0 ? '+' : '-');
+                }
+                printf("\n");
+            }
+        } else {
+            printf("  ");
+            for (size_t i = 0; i < N_global; ++i) {
+                printf("%+d ", (int)global_conf[i]);
+                if ((i + 1) % 16 == 0 && i + 1 < N_global) printf("\n  ");
+            }
+            printf("\n");
+        }
+        printf("==============================\n");
+        fflush(stdout);
+    } else {
+        // Invia i miei dati a rank 0
+        int send_count = (int)N_local;
+        MPI_Send(&send_count, 1, MPI_INT, 0, 0, comm);
+        MPI_Send(my_global_indices.data(), N_local * sizeof(size_t), MPI_BYTE, 0, 1, comm);
+        MPI_Send(my_spins.data(), N_local, MPI_INT8_T, 0, 2, comm);
+    }
+    
+    MPI_Barrier(comm);
+}
+

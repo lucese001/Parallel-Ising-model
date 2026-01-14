@@ -184,9 +184,10 @@ int main(int argc, char** argv) {
     
     for (int iConf = 0; iConf < (int)nConfs; ++iConf) {
 #ifdef DEBUG_PRINT
-        // Stampa la configurazione per debug (utile per verificare riproducibilità)
-        print_configuration_debug(conf_local, local_L, local_L_halo, N_dim, N_local,
-                                  world_rank, world_size, iConf, cart_comm);
+        // Stampa la configurazione GLOBALE per debug (utile per verificare riproducibilità)
+        print_global_configuration_debug(conf_local, local_L, local_L_halo, global_offset, arr,
+                                          N_dim, N_local, N_global, world_rank, world_size, 
+                                          iConf, cart_comm);
 #endif
 
         mpiTime.start();
