@@ -49,17 +49,16 @@ inline size_t coord_to_index(size_t n_dim, const size_t *arr_ptr, const size_t *
 }
 
 // Calcola l'indice globale di un sito dato il suo indice locale
+// NOTA: usa buffer pre-allocati per evitare allocazioni non-deterministiche in OpenMP
 inline size_t compute_global_index(size_t iSite_local,
                                    const vector<size_t>& local_L,
                                    const vector<size_t>& global_offset,
                                    const vector<size_t>& arr,
-                                   size_t N_dim) {
-    // Buffer temporaneo per le coordinate
-    vector<size_t> coord_local(N_dim);
-    vector<size_t> coord_global(N_dim);
-    
+                                   size_t N_dim,
+                                   size_t* coord_local,
+                                   size_t* coord_global) {
     // Converte l'indice locale in coordinate locali
-    index_to_coord(iSite_local, N_dim, local_L.data(), coord_local.data());
+    index_to_coord(iSite_local, N_dim, local_L.data(), coord_local);
     
     // Converte coordinate locali in coordinate globali
     for (size_t d = 0; d < N_dim; ++d) {
@@ -67,7 +66,7 @@ inline size_t compute_global_index(size_t iSite_local,
     }
     
     // Converte coordinate globali in indice globale
-    return coord_to_index(N_dim, arr.data(), coord_global.data());
+    return coord_to_index(N_dim, arr.data(), coord_global);
 }
 
 // Classifica i siti in bulk (interni) e boundary (al bordo)
@@ -82,6 +81,7 @@ inline void classify_sites(size_t N_local, size_t N_dim,
                            vector<size_t>& boundary_global_indices) {
     
     vector<size_t> coord_buf(N_dim);
+    vector<size_t> coord_global(N_dim);  // buffer per compute_global_index
     
     for (size_t iSite = 0; iSite < N_local; ++iSite) {
         index_to_coord(iSite, N_dim, local_L.data(), coord_buf.data());
@@ -96,8 +96,8 @@ inline void classify_sites(size_t N_local, size_t N_dim,
         }
         
         // Calcola l'indice globale
-        size_t global_idx = compute_global_index(iSite, local_L, 
-                                                  global_offset, arr, N_dim);
+        size_t global_idx = compute_global_index(iSite, local_L, global_offset, arr, N_dim,
+                                                  coord_buf.data(), coord_global.data());
         
         // Classifica il sito
         if (is_boundary) {

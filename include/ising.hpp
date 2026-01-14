@@ -110,18 +110,21 @@ inline void initialize_configuration(vector<int8_t>& conf_local,
     
     #pragma omp parallel
     {
-        // Ogni thread ha i suoi buffer per le coordinate
+        // Ogni thread ha i suoi buffer per le coordinate (allocati UNA volta per thread)
         vector<size_t> coord_local(N_dim);
         vector<size_t> coord_halo(N_dim);
+        vector<size_t> coord_global(N_dim);  // buffer per compute_global_index
         
         #pragma omp for
         for (size_t i = 0; i < N_local; ++i) {
 
-            size_t global_index = compute_global_index(i, local_L, global_offset, arr, N_dim);
+            size_t global_index = compute_global_index(i, local_L, global_offset, arr, N_dim,
+                                                       coord_local.data(), coord_global.data());
             uint64_t site_seed = base_seed + global_index;
             prng_engine site_gen(site_seed);
             int8_t spin = (site_gen() & 1) ? 1 : -1;
-            //Prepara giá in anticipo gli halo
+            
+            // Converti l'indice locale (senza halo) in indice con halo
             index_to_coord(i, N_dim, local_L.data(), coord_local.data());
             for (size_t d = 0; d < N_dim; ++d) {
                 coord_halo[d] = coord_local[d] + 1;  // +1 per saltare l'halo
