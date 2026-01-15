@@ -158,22 +158,24 @@ int main(int argc, char** argv) {
                           sizeof(prng_engine), true);
 #endif
     vector<int8_t> conf_local(N_alloc); //Vettore che contiene la configurazione locale (int8_t per risparmiare memoria)
-    vector<size_t> bulk_sites; //Vettore che contiene la configurazione dei siti bulk
-    vector<size_t> boundary_sites; //Vettore che contiene la configurazione dei siti boundary
-    vector<size_t> bulk_global_indices; //Vettore che contiene gli indici globali dei siti bulk
-    vector<size_t> boundary_global_indices; //Vettore che contiene gli indici globali dei siti boundary
+    
+    // Vettori separati per siti Red/Black Bulk e Boundary
+    vector<size_t> bulk_red_sites, bulk_black_sites;
+    vector<size_t> bulk_red_indices, bulk_black_indices;
+    vector<size_t> boundary_red_sites, boundary_black_sites;
+    vector<size_t> boundary_red_indices, boundary_black_indices;
 
     //Genera la prima configurazione (usa indice globale per riproducibilità)
     initialize_configuration(conf_local, N_local, N_dim, local_L, local_L_halo,
                              global_offset, arr, seed);
     
 
-    // Classificazione dei siti in bulk (siti con vicini all'
-    // interno del nodo) e boundary (siti con vicini
-    // fuori dal nodo)
+    // Classificazione dei siti in bulk/boundary e Red/Black
     classify_sites(N_local, N_dim, local_L, global_offset, arr,
-                   bulk_sites, bulk_global_indices,
-                   boundary_sites, boundary_global_indices);
+                   bulk_red_sites, bulk_red_indices,
+                   bulk_black_sites, bulk_black_indices,
+                   boundary_red_sites, boundary_red_indices,
+                   boundary_black_sites, boundary_black_indices);
 
     static int global_conf_count = 0; //Numero di configurazioni globali
     vector<FaceInfo> faces = build_faces(local_L, N_dim); // Costruisce le informazioni delle facce per lo scambio halo
@@ -190,38 +192,73 @@ int main(int argc, char** argv) {
                                           iConf, cart_comm);
 #endif
 
+        // Aggiornamento Red/Black.
+        // Aggiorniamo i siti nel seguente ordine:
+        //1)Bulk rosso
+        //2)Boundary rosso
+        //3)Bulk nero
+        //4)Boundary nero
+        
         mpiTime.start();
-        // Si iniziano a scambiare gli halo. La funzione non si blocca
-        // ad aspettare che tutti gli scambi siano stati completati.
+        // Inizia l' halo exchange nero (paritá 1)
         start_halo_exchange(conf_local, local_L, local_L_halo, 
                            neighbors, cart_comm, N_dim, 
-                           buffers, faces, requests);
+                           buffers, faces, requests, 1);
         mpiTime.stop();
-        // Si aggiornano i siti interni mentre MPI comunica
+        
         computeTime.start();
-        metropolis_update(conf_local, bulk_sites, 
-                          bulk_global_indices,
+        // Update Bulk rosso (parità 0)
+        metropolis_update(conf_local, bulk_red_sites, 
+                          bulk_red_indices,
                           local_L, local_L_halo, gen, 
-                          iConf, nThreads, N_local);
+                          iConf, nThreads, N_local, 0);
         computeTime.stop();
         
-        // Si aspetta il completamento della comunicazione MPI
         mpiTime.start();
+        // Completa lo scambio halo rossi
         finish_halo_exchange(requests);
-        // Si scrivono gli halo ricevuti in conf_local
-        write_halo_data(conf_local, buffers, faces, local_L, local_L_halo, N_dim);
+        // Scrivi gli halo rossi (paritá 0)
+        write_halo_data(conf_local, buffers, faces, local_L, local_L_halo, N_dim, 1);
         mpiTime.stop();
         
-        // Si aggiornano i siti al bordo
         computeTime.start();
-        metropolis_update(conf_local, boundary_sites, 
-                          boundary_global_indices,
+        // Update boundary rossa
+        metropolis_update(conf_local, boundary_red_sites, 
+                          boundary_red_indices,
                           local_L, local_L_halo, gen, 
-                          iConf, nThreads, N_local);
+                          iConf, nThreads, N_local, 0);
+        computeTime.stop();        
+        mpiTime.start();
+        // Inizia l' halo exchange rosso (paritá 0)
+        start_halo_exchange(conf_local, local_L, local_L_halo, 
+                           neighbors, cart_comm, N_dim, 
+                           buffers, faces, requests, 0);
+        mpiTime.stop();
+        
+        computeTime.start();
+        // Update Bulk nero (paritá 1)
+        metropolis_update(conf_local, bulk_black_sites, 
+                          bulk_black_indices,
+                          local_L, local_L_halo, gen, 
+                          iConf, nThreads, N_local, 1);
         computeTime.stop();
         
-        // Si misura la magnetizzazione e l'energia in ogni processo
+        mpiTime.start();
+
+        // Completa lo scambio halo
+        finish_halo_exchange(requests);
+        // Scrivi gli halo rossi (paritá 0)
+        write_halo_data(conf_local, buffers, faces, local_L, local_L_halo, N_dim, 0);
+        mpiTime.stop();
+        
         computeTime.start();
+        // Update boundary nera (paritá 1)
+        metropolis_update(conf_local, boundary_black_sites, 
+                          boundary_black_indices,
+                          local_L, local_L_halo, gen, 
+                          iConf, nThreads, N_local, 1);
+        
+        // Si misura la magnetizzazione e l'energia in ogni nodo
         double local_mag = computeMagnetization_local(conf_local, N_local, 
                                                       local_L, local_L_halo);
         double local_en = computeEn(conf_local, N_local, 

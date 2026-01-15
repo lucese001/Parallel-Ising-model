@@ -71,14 +71,19 @@ inline size_t compute_global_index(size_t iSite_local,
 
 // Classifica i siti in bulk (interni) e boundary (al bordo)
 // Popola anche i vettori con gli indici globali corrispondenti
+// Classifica i siti in bulk/boundary e Red/Black
 inline void classify_sites(size_t N_local, size_t N_dim,
                            const vector<size_t>& local_L,
                            const vector<size_t>& global_offset,
                            const vector<size_t>& arr,
-                           vector<size_t>& bulk_sites,
-                           vector<size_t>& bulk_global_indices,
-                           vector<size_t>& boundary_sites,
-                           vector<size_t>& boundary_global_indices) {
+                           vector<size_t>& bulk_red_sites,
+                           vector<size_t>& bulk_red_indices,
+                           vector<size_t>& bulk_black_sites,
+                           vector<size_t>& bulk_black_indices,
+                           vector<size_t>& boundary_red_sites,
+                           vector<size_t>& boundary_red_indices,
+                           vector<size_t>& boundary_black_sites,
+                           vector<size_t>& boundary_black_indices) {
     
     vector<size_t> coord_buf(N_dim);
     vector<size_t> coord_global(N_dim);  // buffer per compute_global_index
@@ -95,17 +100,34 @@ inline void classify_sites(size_t N_local, size_t N_dim,
             }
         }
         
-        // Calcola l'indice globale
+        // Calcola l'indice globale e coordinate globali
         size_t global_idx = compute_global_index(iSite, local_L, global_offset, arr, N_dim,
                                                   coord_buf.data(), coord_global.data());
         
+        // Calcola parità globale
+        size_t sum_global = 0;
+        for (size_t d = 0; d < N_dim; ++d) {
+            sum_global += coord_global[d];
+        }
+        int parity = sum_global % 2; // 0 = Rosso, 1 = Nero
+        
         // Classifica il sito
-        if (is_boundary) {
-            boundary_sites.push_back(iSite);
-            boundary_global_indices.push_back(global_idx);
-        } else {
-            bulk_sites.push_back(iSite);
-            bulk_global_indices.push_back(global_idx);
+        if (!is_boundary) { // Bulk
+            if (parity == 0) {
+                bulk_red_sites.push_back(iSite);
+                bulk_red_indices.push_back(global_idx);
+            } else {
+                bulk_black_sites.push_back(iSite);
+                bulk_black_indices.push_back(global_idx);
+            }
+        } else { // Boundary
+            if (parity == 0) {
+                boundary_red_sites.push_back(iSite);
+                boundary_red_indices.push_back(global_idx);
+            } else {
+                boundary_black_sites.push_back(iSite);
+                boundary_black_indices.push_back(global_idx);
+            }
         }
     }
 }

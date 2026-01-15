@@ -105,12 +105,12 @@ inline void initialize_configuration(vector<int8_t>& conf_local,
                                      const vector<size_t>& global_offset,
                                      const vector<size_t>& arr,
                                      uint64_t base_seed) {
-    // Prima inizializza tutto a 0 (incluso halo)
+    // Inizializza tutto a 0
     std::fill(conf_local.begin(), conf_local.end(), 0);
     
     #pragma omp parallel
     {
-        // Ogni thread ha i suoi buffer per le coordinate (allocati UNA volta per thread)
+        // Ogni thread ha i suoi buffer per le coordinate
         vector<size_t> coord_local(N_dim);
         vector<size_t> coord_halo(N_dim);
         vector<size_t> coord_global(N_dim);  // buffer per compute_global_index

@@ -29,7 +29,8 @@ inline void metropolis_update(vector<int8_t>& conf_local,
                               const vector<size_t>& local_L,
                               const vector<size_t>& local_L_halo,
                               prng_engine& gen, int iConf,
-                              size_t nThreads, size_t N_local) {
+                              size_t nThreads, size_t N_local,
+                              int target_parity) {
 #else
 inline void metropolis_update(vector<int8_t>& conf_local,
                               const vector<size_t>& sites, 
@@ -37,13 +38,15 @@ inline void metropolis_update(vector<int8_t>& conf_local,
                               const vector<size_t>& local_L,
                               const vector<size_t>& local_L_halo,
                               vector<mt19937_64>& gen, int iConf,
-                              size_t nThreads, size_t N_local) {
+                              size_t nThreads, size_t N_local,
+                              int target_parity) {
 #endif
     
     vector<size_t> coord_buf(N_dim);
     vector<size_t> coord_tmp(N_dim);
     
-    for (int par = 0; par < 2; ++par) { //Aggiornamento a scacchiera
+
+    {
 #ifdef PARALLEL_RNG
 #pragma omp parallel firstprivate(coord_buf, coord_tmp)
         {
@@ -61,18 +64,16 @@ inline void metropolis_update(vector<int8_t>& conf_local,
                 size_t global_idx = sites_global_indices[idx]; 
                 mt19937_64& genView = gen[iSite];
 #endif
-                index_to_coord(iSite, N_dim, local_L.data(), 
-                               coord_buf.data());
-                size_t sum = 0;
-                for (size_t d = 0; d < N_dim; ++d) sum += coord_buf[d];
-                size_t pSite = sum % 2;
+                
 
-                if (par == (int)pSite) {
 #ifdef PARALLEL_RNG
                     // discard basato sull'indice globale
                     prng_engine genView = gen;
-                    genView.discard(2 * 2 * (global_idx / 2 + N / 2 * (par + 2 * iConf)));
+                    genView.discard(2 * 2 * (global_idx / 2 + N / 2 * (target_parity + 2 * iConf)));
 #endif
+                    
+                    // Converti iSite in coord per trovare halo index vicini
+                    index_to_coord(iSite, N_dim, local_L.data(), coord_buf.data());
                     
                     for (size_t d = 0; d < N_dim; ++d) {
                         coord_tmp[d] = coord_buf[d] + 1;
@@ -93,7 +94,6 @@ inline void metropolis_update(vector<int8_t>& conf_local,
                     const int acc = binomial_distribution<int>(1, pAcc)(genView);
 
                     if (!acc) conf_local[iSite_halo] = oldVal;
-                }
 #ifdef PARALLEL_RNG
             }
         }
