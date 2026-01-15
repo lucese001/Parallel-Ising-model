@@ -159,7 +159,7 @@ int main(int argc, char** argv) {
 #endif
     vector<int8_t> conf_local(N_alloc); //Vettore che contiene la configurazione locale (int8_t per risparmiare memoria)
     
-    // Vettori separati per siti Red/Black Bulk e Boundary
+    // Vettori separati per siti Rosso/Nero Bulk e Boundary
     vector<size_t> bulk_red_sites, bulk_black_sites;
     vector<size_t> bulk_red_indices, bulk_black_indices;
     vector<size_t> boundary_red_sites, boundary_black_sites;
@@ -170,7 +170,7 @@ int main(int argc, char** argv) {
                              global_offset, arr, seed);
     
 
-    // Classificazione dei siti in bulk/boundary e Red/Black
+    // Classificazione dei siti in bulk/boundary e Rosso/Nero
     classify_sites(N_local, N_dim, local_L, global_offset, arr,
                    bulk_red_sites, bulk_red_indices,
                    bulk_black_sites, bulk_black_indices,
@@ -192,7 +192,7 @@ int main(int argc, char** argv) {
                                           iConf, cart_comm);
 #endif
 
-        // Aggiornamento Red/Black.
+        // Aggiornamento Rosso/Nero.
         // Aggiorniamo i siti nel seguente ordine:
         //1)Bulk rosso
         //2)Boundary rosso

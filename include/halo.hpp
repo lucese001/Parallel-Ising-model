@@ -26,6 +26,13 @@ struct FaceInfo {
     vector<size_t> map;
 };
 
+struct FaceCache {
+    size_t face_size;
+    vector<size_t> face_to_full;
+    vector<vector<size_t>> linear_to_full_index_minus;
+    vector<vector<size_t>> linear_to_full_index_plus;
+};
+
 // Costruisce le informazioni delle facce per lo scambio halo
 inline vector<FaceInfo> build_faces(const vector<size_t>& local_L, size_t N_dim) {
     vector<FaceInfo> faces(N_dim);
@@ -40,6 +47,52 @@ inline vector<FaceInfo> build_faces(const vector<size_t>& local_L, size_t N_dim)
     return faces;
 }
 
+inline std::vector<FaceCache>
+build_face_cache(FaceInfo& faces,size_t& local_L,
+                 size_t& local_L_halo, size_t N_dim)
+{
+    std::vector<FaceCache> cache(N_dim);
+
+    for (size_t d = 0; d < N_dim; ++d) {
+
+        const size_t& face_dims   = faces[d].dims;
+        const size_t& face_to_full = faces[d].map;
+
+        // calcolo face_size
+        size_t face_size = 1;
+        for (size_t x=0; x<face_dims.size(); ++x) {
+            face_size *= face_dims[x];
+        }
+
+        cache[d].face_size = face_size;
+        cache[d].idx_minus.resize(face_size);
+        cache[d].idx_plus.resize(face_size);
+        vector<size_t> coord_face(face_dims.size());
+        vector<size_t> coord_full(N_dim);
+
+        for (size_t i = 0; i < face_size; ++i) {
+
+            index_to_coord(i,face_dims.size(),face_dims.data(),coord_face.data());
+
+            // trasforma le coordinate della faccia in coordinate globali
+            for (size_t j = 0; j < face_to_full.size(); ++j)
+                coord_full[face_to_full[j]] = coord_face[j] + 1;
+
+            // faccia meno
+            coord_full[d] = 1;
+            cache[d].idx_minus[i] =coord_to_index(N_dim,local_L_halo.data(),coord_full.data());
+
+            // faccia più
+            coord_full[d] = local_L[d];
+            cache[d].idx_plus[i] =coord_to_index(N_dim,local_L_halo.data(),coord_full.data());
+        }
+    }
+
+    return cache;
+}
+
+
+
 // Inizia lo scambio halo non-blocking
 inline void start_halo_exchange(vector<int8_t>& conf_local, 
                                 const vector<size_t>& local_L,
@@ -48,7 +101,7 @@ inline void start_halo_exchange(vector<int8_t>& conf_local,
                                 MPI_Comm cart_comm, size_t N_dim,
                                 HaloBuffers& buffers,
                                 const vector<FaceInfo>& faces,
-                                vector<MPI_Request>& requests) {
+                                vector<MPI_Request>& requests, int parity) {
     
     requests.clear();
     buffers.send_minus.resize(N_dim);
@@ -171,7 +224,7 @@ inline void write_halo_data(vector<int8_t>& conf_local,
     }
 }
 
-// halo_index: trova i rank vicini lungo ogni dimensione MPI
+// trova i rank vicini lungo ogni dimensione MPI
 inline void halo_index(MPI_Comm cart_comm, int ndims, std::vector<std::vector<int>>& neighbors) {
     neighbors.resize(ndims, std::vector<int>(2));
 
