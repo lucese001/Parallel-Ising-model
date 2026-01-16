@@ -237,7 +237,7 @@ int main(int argc, char** argv) {
         // Inizia l' halo exchange rosso (paritá 0)
         start_halo_exchange(conf_local, local_L, local_L_halo, 
                            neighbors, cart_comm, N_dim, 
-                           buffers, faces, requests, 0);
+                           buffers, faces, requests, 0,face_cache);
         mpiTime.stop();
         
         computeTime.start();
