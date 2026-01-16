@@ -206,7 +206,7 @@ int main(int argc, char** argv) {
         // Inizia l' halo exchange nero (paritá 1)
         start_halo_exchange(conf_local, local_L, local_L_halo, 
                            neighbors, cart_comm, N_dim, 
-                           buffers, faces, requests, face_cache, 1);
+                           buffers, faces, requests, 1, face_cache);
         mpiTime.stop();
         
         computeTime.start();
@@ -222,7 +222,7 @@ int main(int argc, char** argv) {
         finish_halo_exchange(requests);
         // Scrivi gli halo
         write_halo_data(conf_local, buffers, faces, local_L, 
-                        local_L_halo, N_dim, face_cache, 1);
+                        local_L_halo, N_dim, 1, face_cache);
         mpiTime.stop();
         
         computeTime.start();
@@ -236,7 +236,7 @@ int main(int argc, char** argv) {
         // Inizia l' halo exchange rosso (paritá 0)
         start_halo_exchange(conf_local, local_L, local_L_halo, 
                            neighbors, cart_comm, N_dim, 
-                           buffers, faces, requests, face_cache, 0);
+                           buffers, faces, requests, 0, face_cache);
         mpiTime.stop();
         
         computeTime.start();
@@ -253,7 +253,7 @@ int main(int argc, char** argv) {
         finish_halo_exchange(requests);
         // Scrivi gli halo rossi (paritá 0)
         write_halo_data(conf_local, buffers, faces, local_L, 
-                        local_L_halo, N_dim, face_cache, 0);
+                        local_L_halo, N_dim, 0, face_cache);
         mpiTime.stop();
         
         computeTime.start();
