@@ -48,7 +48,7 @@ inline vector<FaceInfo> build_faces(const vector<size_t>& local_L, size_t N_dim)
 }
 
 inline std::vector<FaceCache>
-build_face_cache(FaceInfo& faces,size_t& local_L,
+build_face_cache(vector<FaceInfo>& faces,size_t& local_L,
                  size_t& local_L_halo, size_t N_dim)
 {
     std::vector<FaceCache> cache(N_dim);
