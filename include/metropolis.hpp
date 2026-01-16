@@ -69,7 +69,7 @@ inline void metropolis_update(vector<int8_t>& conf_local,
 #ifdef PARALLEL_RNG
                     // discard basato sull'indice globale
                     prng_engine genView = gen;
-                    genView.discard(2 * 2 * (global_idx / 2 + N / 2 * (target_parity + 2 * iConf)));
+                    genView.discard(2 * 2 * (global_idx + N * iConf));
 #endif
                     
                     // Converti iSite in coord per trovare halo index vicini
