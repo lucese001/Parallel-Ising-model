@@ -215,7 +215,7 @@ int main(int argc, char** argv) {
         metropolis_update(conf_local, bulk_red_sites, 
                           bulk_red_indices,
                           local_L, local_L_halo, gen, 
-                          iConf, nThreads, N_local, 0, face_cache);
+                          iConf, nThreads, N_local, 0);
         computeTime.stop();
         
         mpiTime.start();
@@ -231,7 +231,7 @@ int main(int argc, char** argv) {
         metropolis_update(conf_local, boundary_red_sites, 
                           boundary_red_indices,
                           local_L, local_L_halo, gen, 
-                          iConf, nThreads, N_local, 0, face_cache);
+                          iConf, nThreads, N_local, 0);
         computeTime.stop();        
         mpiTime.start();
         // Inizia l' halo exchange rosso (paritá 0)
