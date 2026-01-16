@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <mpi.h>
@@ -28,13 +29,13 @@ struct FaceInfo {
 
 struct FaceCache {
     size_t face_size;
-    //nota: ogni vettore è composto da due vettori, 
+    //nota: ogni vettore è composto da due vettori,
     // uno per il caso pari e uno per il caso dispari.
-    vector<vector<size_t>,2> face_to_full;
-    vector<vector<size_t>,2> idx_minus;      // Indici del boundary negativo (per fare Send)
-    vector<vector<size_t>,2> idx_plus;       // Indici del boundary positivo (per fare Send)
-    vector<vector<size_t>,2> idx_halo_minus; // Indici della regione halo negativa (per fare Recv/Write)
-    vector<vector<size_t>,2> idx_halo_plus;  // Indici della regione halo positiva (per fare Recv/Write)
+    std::array<vector<size_t>, 2> face_to_full;
+    std::array<vector<size_t>, 2> idx_minus;      // Indici del boundary negativo (per fare Send)
+    std::array<vector<size_t>, 2> idx_plus;       // Indici del boundary positivo (per fare Send)
+    std::array<vector<size_t>, 2> idx_halo_minus; // Indici della regione halo negativa (per fare Recv/Write)
+    std::array<vector<size_t>, 2> idx_halo_plus;  // Indici della regione halo positiva (per fare Recv/Write)
 };
 
 // Costruisce le informazioni delle facce per lo scambio halo
@@ -91,7 +92,7 @@ build_face_cache(const vector<FaceInfo>& faces,
             for (size_t j = 0; j < face_to_full.size(); ++j)
                 coord_full[face_to_full[j]] = coord_face[j] + 1;
 
-            // faccia meno (inner)
+            // faccia meno
             coord_full[d] = 1;
             size_t idx_inner_minus =
                 coord_to_index(N_dim, local_L_halo.data(), coord_full.data());
@@ -107,7 +108,7 @@ build_face_cache(const vector<FaceInfo>& faces,
                 coord_to_index(N_dim, local_L_halo.data(), coord_full.data())
             );
 
-            // faccia più (inner)
+            // faccia più
             coord_full[d] = local_L[d];
             size_t idx_inner_plus =
                 coord_to_index(N_dim, local_L_halo.data(), coord_full.data());
@@ -233,6 +234,16 @@ inline void write_halo_data(
             // Scrive i dati ricevuti negli halo più
             conf_local[cache[d].idx_halo_plus[parity][i]] = buffers.recv_plus[d][i];
         }
+    }
+}
+
+// Calcola gli indici dei vicini usando la topologia cartesiana MPI
+inline void halo_index(MPI_Comm cart_comm, int N_dim,
+                      vector<vector<int>>& neighbors) {
+    neighbors.resize(N_dim);
+    for (int d = 0; d < N_dim; ++d) {
+        neighbors[d].resize(2);
+        MPI_Cart_shift(cart_comm, d, 1, &neighbors[d][0], &neighbors[d][1]);
     }
 }
 

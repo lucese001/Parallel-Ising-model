@@ -59,14 +59,24 @@ inline size_t compute_global_index(size_t iSite_local,
                                    size_t* coord_global) {
     // Converte l'indice locale in coordinate locali
     index_to_coord(iSite_local, N_dim, local_L.data(), coord_local);
-    
+
     // Converte coordinate locali in coordinate globali
     for (size_t d = 0; d < N_dim; ++d) {
         coord_global[d] = coord_local[d] + global_offset[d];
     }
-    
+
     // Converte coordinate globali in indice globale
     return coord_to_index(N_dim, arr.data(), coord_global);
+}
+
+// Overload semplificato per calcolare la parità dalle coordinate
+// Ritorna la somma delle coordinate (usata per calcolare parità)
+inline size_t compute_global_index(const vector<size_t>& coord_full) {
+    size_t sum = 0;
+    for (size_t d = 0; d < coord_full.size(); ++d) {
+        sum += coord_full[d];
+    }
+    return sum;
 }
 
 // Classifica i siti in bulk (interni) e boundary (al bordo)
