@@ -186,22 +186,7 @@ int main(int argc, char** argv) {
     vector<MPI_Request> requests; //definizione richieste processi MPI
     HaloBuffers buffers; //definizione buffers
     buffers.resize(N_dim);
-    //Forse cosí funziona la riproducibilitá??? Cancellare se no...
-    start_halo_exchange(conf_local, local_L, local_L_halo, 
-                   neighbors, cart_comm, N_dim, 
-                   buffers, faces, requests, 0, face_cache);
-    finish_halo_exchange(requests);
-    write_halo_data(conf_local, buffers, faces, local_L, 
-                local_L_halo, N_dim, 0, face_cache);
 
-    start_halo_exchange(conf_local, local_L, local_L_halo, 
-                   neighbors, cart_comm, N_dim, 
-                   buffers, faces, requests, 1, face_cache);
-    finish_halo_exchange(requests);
-    write_halo_data(conf_local, buffers, faces, local_L, 
-                local_L_halo, N_dim, 1, face_cache);
-    setupTime.stop();
-    
     for (int iConf = 0; iConf < (int)nConfs; ++iConf) {
 #ifdef DEBUG_PRINT
         // Stampa la configurazione globale per debug (utile per verificare riproducibilità)
@@ -221,7 +206,7 @@ int main(int argc, char** argv) {
         // Inizia l' halo exchange nero (paritá 1)
         start_halo_exchange(conf_local, local_L, local_L_halo, 
                            neighbors, cart_comm, N_dim, 
-                           buffers, faces, requests, 1, face_cache);
+                           buffers, faces, requests, face_cache, 1);
         mpiTime.stop();
         
         computeTime.start();
@@ -237,7 +222,7 @@ int main(int argc, char** argv) {
         finish_halo_exchange(requests);
         // Scrivi gli halo
         write_halo_data(conf_local, buffers, faces, local_L, 
-                        local_L_halo, N_dim, 1,face_cache);
+                        local_L_halo, N_dim, face_cache, 1);
         mpiTime.stop();
         
         computeTime.start();
@@ -251,7 +236,7 @@ int main(int argc, char** argv) {
         // Inizia l' halo exchange rosso (paritá 0)
         start_halo_exchange(conf_local, local_L, local_L_halo, 
                            neighbors, cart_comm, N_dim, 
-                           buffers, faces, requests, 0,face_cache);
+                           buffers, faces, requests, face_cache, 0);
         mpiTime.stop();
         
         computeTime.start();
@@ -268,7 +253,7 @@ int main(int argc, char** argv) {
         finish_halo_exchange(requests);
         // Scrivi gli halo rossi (paritá 0)
         write_halo_data(conf_local, buffers, faces, local_L, 
-                        local_L_halo, N_dim, 0,face_cache);
+                        local_L_halo, N_dim, face_cache, 0);
         mpiTime.stop();
         
         computeTime.start();
