@@ -253,7 +253,8 @@ int main(int argc, char** argv) {
         // Completa lo scambio halo
         finish_halo_exchange(requests);
         // Scrivi gli halo rossi (paritá 0)
-        write_halo_data(conf_local, buffers, faces, local_L, local_L_halo, N_dim, 0);
+        write_halo_data(conf_local, buffers, faces, local_L, 
+                        local_L_halo, N_dim, 0,face_cache);
         mpiTime.stop();
         
         computeTime.start();
