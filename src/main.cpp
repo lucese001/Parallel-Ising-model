@@ -207,7 +207,7 @@ int main(int argc, char** argv) {
         // Inizia l' halo exchange nero (paritá 1)
         start_halo_exchange(conf_local, local_L, local_L_halo, 
                            neighbors, cart_comm, N_dim, 
-                           buffers, faces, requests, face_cache);
+                           buffers, faces, requests, 1, face_cache);
         mpiTime.stop();
         
         computeTime.start();
@@ -215,14 +215,15 @@ int main(int argc, char** argv) {
         metropolis_update(conf_local, bulk_red_sites, 
                           bulk_red_indices,
                           local_L, local_L_halo, gen, 
-                          iConf, nThreads, N_local, 0);
+                          iConf, nThreads, N_local, 0, face_cache);
         computeTime.stop();
         
         mpiTime.start();
         // Completa lo scambio halo
         finish_halo_exchange(requests);
-        // Scrivi gli halo neri (paritá 1)
-        write_halo_data(conf_local, buffers, faces, local_L, local_L_halo, N_dim, 1);
+        // Scrivi gli halo
+        write_halo_data(conf_local, buffers, faces, local_L, 
+                        local_L_halo, N_dim, 1,face_cache);
         mpiTime.stop();
         
         computeTime.start();
@@ -230,7 +231,7 @@ int main(int argc, char** argv) {
         metropolis_update(conf_local, boundary_red_sites, 
                           boundary_red_indices,
                           local_L, local_L_halo, gen, 
-                          iConf, nThreads, N_local, 0);
+                          iConf, nThreads, N_local, 0, face_cache);
         computeTime.stop();        
         mpiTime.start();
         // Inizia l' halo exchange rosso (paritá 0)

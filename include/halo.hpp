@@ -29,8 +29,10 @@ struct FaceInfo {
 struct FaceCache {
     size_t face_size;
     vector<size_t> face_to_full;
-    vector<vector<size_t>> linear_to_full_index_minus;
-    vector<vector<size_t>> linear_to_full_index_plus;
+    vector<size_t> idx_minus;      // Indices of inner boundary (for Send)
+    vector<size_t> idx_plus;       // Indices of inner boundary (for Send)
+    vector<size_t> idx_halo_minus; // Indices of halo region (for Recv/Write)
+    vector<size_t> idx_halo_plus;  // Indices of halo region (for Recv/Write)
 };
 
 // Costruisce le informazioni delle facce per lo scambio halo
@@ -48,15 +50,15 @@ inline vector<FaceInfo> build_faces(const vector<size_t>& local_L, size_t N_dim)
 }
 
 inline std::vector<FaceCache>
-build_face_cache(vector<FaceInfo>& faces,size_t& local_L,
-                 size_t& local_L_halo, size_t N_dim)
+build_face_cache(const vector<FaceInfo>& faces, const vector<size_t>& local_L,
+                 const vector<size_t>& local_L_halo, size_t N_dim)
 {
     std::vector<FaceCache> cache(N_dim);
 
     for (size_t d = 0; d < N_dim; ++d) {
 
-        const size_t& face_dims   = faces[d].dims;
-        const size_t& face_to_full = faces[d].map;
+        const vector<size_t>& face_dims   = faces[d].dims;
+        const vector<size_t>& face_to_full = faces[d].map;
 
         // calcolo face_size
         size_t face_size = 1;
@@ -67,6 +69,9 @@ build_face_cache(vector<FaceInfo>& faces,size_t& local_L,
         cache[d].face_size = face_size;
         cache[d].idx_minus.resize(face_size);
         cache[d].idx_plus.resize(face_size);
+        cache[d].idx_halo_minus.resize(face_size); // Resize halo indices
+        cache[d].idx_halo_plus.resize(face_size);  // Resize halo indices
+        
         vector<size_t> coord_face(face_dims.size());
         vector<size_t> coord_full(N_dim);
 
@@ -80,20 +85,26 @@ build_face_cache(vector<FaceInfo>& faces,size_t& local_L,
                 //che dato che sono 2 per dimensione varia)
                 coord_full[face_to_full[j]] = coord_face[j] + 1; 
 
-            // faccia meno
+            // faccia meno (Inner)
             coord_full[d] = 1;
-            cache[d].idx_minus[i] =coord_to_index(N_dim,local_L_halo.data(),coord_full.data());
+            cache[d].idx_minus[i] = coord_to_index(N_dim,local_L_halo.data(),coord_full.data());
+            
+            // Halo index corrispondente (faccia meno -> halo meno, coord 0)
+            coord_full[d] = 0;
+            cache[d].idx_halo_minus[i] = coord_to_index(N_dim,local_L_halo.data(),coord_full.data());
 
-            // faccia più
+            // faccia più (Inner)
             coord_full[d] = local_L[d];
-            cache[d].idx_plus[i] =coord_to_index(N_dim,local_L_halo.data(),coord_full.data());
+            cache[d].idx_plus[i] = coord_to_index(N_dim,local_L_halo.data(),coord_full.data());
+            
+            // Halo index corrispondente (faccia più -> halo più, coord L+1)
+            coord_full[d] = local_L[d] + 1;
+            cache[d].idx_halo_plus[i] = coord_to_index(N_dim,local_L_halo.data(),coord_full.data());
         }
     }
 
     return cache;
 }
-
-
 
 // Inizia lo scambio halo non-blocking
 inline void start_halo_exchange(vector<int8_t>& conf_local, 
@@ -168,38 +179,20 @@ inline void write_halo_data(vector<int8_t>& conf_local,
                             const vector<FaceInfo>& faces,
                             const vector<size_t>& local_L,
                             const vector<size_t>& local_L_halo,
-                            size_t N_dim) {
+                            size_t N_dim,
+                            int parity,
+                            const vector<FaceCache>& cache) {
     
     for (size_t d = 0; d < N_dim; ++d) {
-        const vector<size_t>& face_dims = faces[d].dims;
-        const vector<size_t>& face_to_full = faces[d].map;
+        // Usa la cache per scrivere negli halo in modo efficiente
+        const size_t& face_size = cache[d].face_size;
         
-        size_t face_size = 1;
-        for (size_t x : face_dims) face_size *= x;
-        
-        vector<size_t> coord_face(face_dims.size());
-        vector<size_t> coord_full(N_dim);
-        
-        // Scrivi negli halo
         for (size_t i = 0; i < face_size; ++i) {
-            index_to_coord(i, face_dims.size(), face_dims.data(), 
-                          coord_face.data());
+            // Halo negativo (recv_minus corrisponde a halo_minus)
+            conf_local[cache[d].idx_halo_minus[i]] = buffers.recv_minus[d][i];
             
-            for (size_t j = 0; j < face_to_full.size(); ++j) {
-                coord_full[face_to_full[j]] = coord_face[j] + 1;
-            }
-            
-            // Halo negativo
-            coord_full[d] = 0;
-            size_t idx_halo_minus = coord_to_index(N_dim, local_L_halo.data(), 
-                                                   coord_full.data());
-            conf_local[idx_halo_minus] = buffers.recv_minus[d][i];
-            
-            // Halo positivo
-            coord_full[d] = local_L[d] + 1;
-            size_t idx_halo_plus = coord_to_index(N_dim, local_L_halo.data(), 
-                                                  coord_full.data());
-            conf_local[idx_halo_plus] = buffers.recv_plus[d][i];
+            // Halo positivo (recv_plus corrisponde a halo_plus)
+            conf_local[cache[d].idx_halo_plus[i]] = buffers.recv_plus[d][i];
         }
     }
 }
