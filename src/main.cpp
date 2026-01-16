@@ -186,6 +186,20 @@ int main(int argc, char** argv) {
     vector<MPI_Request> requests; //definizione richieste processi MPI
     HaloBuffers buffers; //definizione buffers
     buffers.resize(N_dim);
+    //Forse cosí funziona la riproducibilitá??? Cancellare se no...
+    start_halo_exchange(conf_local, local_L, local_L_halo, 
+                   neighbors, cart_comm, N_dim, 
+                   buffers, faces, requests, 0, face_cache);
+    finish_halo_exchange(requests);
+    write_halo_data(conf_local, buffers, faces, local_L, 
+                local_L_halo, N_dim, 0, face_cache);
+
+    start_halo_exchange(conf_local, local_L, local_L_halo, 
+                   neighbors, cart_comm, N_dim, 
+                   buffers, faces, requests, 1, face_cache);
+    finish_halo_exchange(requests);
+    write_halo_data(conf_local, buffers, faces, local_L, 
+                local_L_halo, N_dim, 1, face_cache);
     setupTime.stop();
     
     for (int iConf = 0; iConf < (int)nConfs; ++iConf) {
