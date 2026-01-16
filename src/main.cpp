@@ -176,9 +176,13 @@ int main(int argc, char** argv) {
                    bulk_black_sites, bulk_black_indices,
                    boundary_red_sites, boundary_red_indices,
                    boundary_black_sites, boundary_black_indices);
+    
+    // Costruisce le dimensioni delle facce e la sua posizione
+    vector<FaceInfo> faces = build_faces(local_L, N_dim);
+    // Salva gli indici dei siti che appartengono a ogni faccia
+    vector<FaceCache> face_cache = build_face_cache(faces,local_L,local_L_halo,N_dim);
 
     static int global_conf_count = 0; //Numero di configurazioni globali
-    vector<FaceInfo> faces = build_faces(local_L, N_dim); // Costruisce le informazioni delle facce per lo scambio halo
     vector<MPI_Request> requests; //definizione richieste processi MPI
     HaloBuffers buffers; //definizione buffers
     buffers.resize(N_dim);
@@ -186,7 +190,7 @@ int main(int argc, char** argv) {
     
     for (int iConf = 0; iConf < (int)nConfs; ++iConf) {
 #ifdef DEBUG_PRINT
-        // Stampa la configurazione GLOBALE per debug (utile per verificare riproducibilità)
+        // Stampa la configurazione globale per debug (utile per verificare riproducibilità)
         print_global_configuration_debug(conf_local, local_L, local_L_halo, global_offset, arr,
                                           N_dim, N_local, N_global, world_rank, world_size, 
                                           iConf, cart_comm);
@@ -203,7 +207,7 @@ int main(int argc, char** argv) {
         // Inizia l' halo exchange nero (paritá 1)
         start_halo_exchange(conf_local, local_L, local_L_halo, 
                            neighbors, cart_comm, N_dim, 
-                           buffers, faces, requests, 1);
+                           buffers, faces, requests, face_cache);
         mpiTime.stop();
         
         computeTime.start();
@@ -215,9 +219,9 @@ int main(int argc, char** argv) {
         computeTime.stop();
         
         mpiTime.start();
-        // Completa lo scambio halo rossi
+        // Completa lo scambio halo
         finish_halo_exchange(requests);
-        // Scrivi gli halo rossi (paritá 0)
+        // Scrivi gli halo neri (paritá 1)
         write_halo_data(conf_local, buffers, faces, local_L, local_L_halo, N_dim, 1);
         mpiTime.stop();
         

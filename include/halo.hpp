@@ -60,8 +60,8 @@ build_face_cache(FaceInfo& faces,size_t& local_L,
 
         // calcolo face_size
         size_t face_size = 1;
-        for (size_t x=0; x<face_dims.size(); ++x) {
-            face_size *= face_dims[x];
+        for (size_t i=0; i< face_dims.size(); ++i) {
+            face_size *= face_dims[i];
         }
 
         cache[d].face_size = face_size;
@@ -76,7 +76,9 @@ build_face_cache(FaceInfo& faces,size_t& local_L,
 
             // trasforma le coordinate della faccia in coordinate globali
             for (size_t j = 0; j < face_to_full.size(); ++j)
-                coord_full[face_to_full[j]] = coord_face[j] + 1;
+                //copia le coordinate della faccia (meno quella della faccia
+                //che dato che sono 2 per dimensione varia)
+                coord_full[face_to_full[j]] = coord_face[j] + 1; 
 
             // faccia meno
             coord_full[d] = 1;
@@ -101,7 +103,8 @@ inline void start_halo_exchange(vector<int8_t>& conf_local,
                                 MPI_Comm cart_comm, size_t N_dim,
                                 HaloBuffers& buffers,
                                 const vector<FaceInfo>& faces,
-                                vector<MPI_Request>& requests, int parity) {
+                                vector<MPI_Request>& requests, int parity,
+                                const vector<FaceCache>& cache) {
     
     requests.clear();
     buffers.send_minus.resize(N_dim);
@@ -109,43 +112,20 @@ inline void start_halo_exchange(vector<int8_t>& conf_local,
     buffers.recv_minus.resize(N_dim);
     buffers.recv_plus.resize(N_dim);
     
+    // Si fa il loop su ogni dimensione per scambiare le facce (2 per dimensione)
     for (size_t d = 0; d < N_dim; ++d) {
-        const vector<size_t>& face_dims = faces[d].dims;
-        const vector<size_t>& face_to_full = faces[d].map;
-        
-        // Calcola face_size
-        size_t face_size = 1;
-        for (size_t x : face_dims) face_size *= x;
-        
-        // Resize dei buffer per questa dimensione
+        const size_t& face_size = cache[d].face_size;
+
+        // Resize dei buffer
         buffers.send_minus[d].resize(face_size);
         buffers.send_plus[d].resize(face_size);
         buffers.recv_minus[d].resize(face_size);
         buffers.recv_plus[d].resize(face_size);
     
-        vector<size_t> coord_face(face_dims.size());
-        vector<size_t> coord_full(N_dim);
-        
-        // Prepara dati da inviare
+        // Prepara i buffer con le configurazioni
         for (size_t i = 0; i < face_size; ++i) {
-            index_to_coord(i, face_dims.size(), face_dims.data(), 
-                          coord_face.data());
-            
-            for (size_t j = 0; j < face_to_full.size(); ++j) {
-                coord_full[face_to_full[j]] = coord_face[j] + 1;
-            }
-            
-            // Faccia negativa (bordo inferiore in dimensione d)
-            coord_full[d] = 1;
-            size_t idx_minus = coord_to_index(N_dim, local_L_halo.data(), 
-                                             coord_full.data());
-            buffers.send_minus[d][i] = conf_local[idx_minus];
-            
-            // Faccia positiva (bordo superiore in dimensione d)
-            coord_full[d] = local_L[d];
-            size_t idx_plus = coord_to_index(N_dim, local_L_halo.data(), 
-                                            coord_full.data());
-            buffers.send_plus[d][i] = conf_local[idx_plus];
+            buffers.send_minus[d][i] = conf_local[cache[d].idx_minus[i]];
+            buffers.send_plus[d][i] = conf_local[cache[d].idx_plus[i]];
         }
         
         int tag_minus = 100 + d;
