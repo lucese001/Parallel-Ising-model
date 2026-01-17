@@ -1,4 +1,11 @@
 #pragma once
+
+// Define R123_ASSERT before including philox.h
+#ifndef R123_ASSERT
+#include <cassert>
+#define R123_ASSERT(x) assert(x)
+#endif
+
 #include "../random123/include/Random123/philox.h"
 #include <cstdint>
 
