@@ -1,7 +1,12 @@
 #define PARALLEL_RNG
 #define DEBUG_PRINT
 
+#ifdef USE_PHILOX
+#include "philox_rng.hpp"
+#else
 #include "prng_engine.hpp"
+#endif
+
 #include "utility.hpp"
 #include "ising.hpp"
 #include "metropolis.hpp"
@@ -151,8 +156,13 @@ int main(int argc, char** argv) {
         timer::timerCost.stop(); 
     }
 
-#ifdef PARALLEL_RNG
-    //Inizializzazione del generatore di numeri casuali
+#ifdef USE_PHILOX
+    // Philox RNG: riproducible per update Bulk-Boundary
+    PhiloxRNG gen(seed + world_rank * 104729);
+    print_simulation_info(N_dim, N, nThreads, nConfs, Beta,
+                          sizeof(PhiloxRNG), true);
+#else
+    // prng_engine: non riproducibile per update Bulk-Boundary
     prng_engine gen(seed + world_rank * 104729);
     print_simulation_info(N_dim, N, nThreads, nConfs, Beta,
                           sizeof(prng_engine), true);
@@ -189,18 +199,23 @@ int main(int argc, char** argv) {
 
     for (int iConf = 0; iConf < (int)nConfs; ++iConf) {
 #ifdef DEBUG_PRINT
-        // Stampa la configurazione globale per debug (utile per verificare riproducibilità)
+        // Stampa la configurazione globale per debug (utile 
+        // per verificare riproducibilità)
         print_global_configuration_debug(conf_local, local_L, local_L_halo, global_offset, arr,
                                           N_dim, N_local, N_global, world_rank, world_size, 
                                           iConf, cart_comm);
 #endif
 
         // Aggiornamento Rosso/Nero.
-        // Aggiorniamo i siti nel seguente ordine:
-        //1)Bulk rosso
-        //2)Boundary rosso
-        //3)Bulk nero
-        //4)Boundary nero
+        // L'ordine dei processi é il seguente:
+        //1)avvia la comunicazione MPI per gli halo neri
+        //2)update Bulk rosso
+        //3)aspetta la sincronizzazione e scrive gli halo neri
+        //4)update Boundary rosso
+        //5)avvia la comunicazione MPI per gli halo rossi
+        //6)update Bulk nero
+        //7)aspetta la sincronizzazione e scrive gli halo neri
+        //8)update Boundary nero
         
         mpiTime.start();
         // Inizia l' halo exchange nero (paritá 1)
