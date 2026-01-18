@@ -10,6 +10,7 @@
 using std::vector;
 using std::binomial_distribution;
 using std::mt19937_64;
+using namespace std;
 
 // Variabili globali esterne (definite in new_ising.cpp)
 extern size_t N_dim;
@@ -61,7 +62,7 @@ inline int computeEnSite(const vector<int8_t>& conf,
 inline int computeEnSiteDebug(const vector<int8_t>& conf, 
                          const size_t& iSite_local,
                          const vector<size_t>& local_L,
-                         const vector<size_t>& local_L_halo,condPrint) {
+                         const vector<size_t>& local_L_halo,bool condPrint) {
     
     static thread_local vector<size_t> coord_site(N_dim);
     static thread_local vector<size_t> coord_halo(N_dim);
