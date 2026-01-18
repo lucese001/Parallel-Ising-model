@@ -78,6 +78,7 @@ inline void metropolis_update(vector<int8_t>& conf_local,
             if ( global_idx == 3 ) {
                 rand0 = gen.get1(global_idx, iConf, 0, true);
                 rand1 = gen.get1(global_idx, iConf, 1, false);
+
             } else {
                 rand0 = gen.get1(global_idx, iConf, 0, false);
                 rand1 = gen.get1(global_idx, iConf, 1, false);
@@ -90,6 +91,9 @@ inline void metropolis_update(vector<int8_t>& conf_local,
 
             const int enAfter = computeEnSite(conf_local, iSite,
                                              local_L, local_L_halo);
+            if ( global_idx == 3 ) {    
+                cout<< "enAfter" <<   enAfter << "   enBefore"   <<   enBefore
+            }                   
             const int eDiff = enAfter - enBefore;
             const double pAcc = std::min(1.0, exp(-Beta * (double)eDiff));
 
