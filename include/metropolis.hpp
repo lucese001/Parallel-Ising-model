@@ -75,13 +75,13 @@ inline void metropolis_update(vector<int8_t>& conf_local,
 
             // DEBUG: Get raw random numbers for both samples
             if ( global_idx == 7 ) { 
-            uint32_t rand0 = gen.get(global_idx, iConf, 0, true);
-            uint32_t rand1 = gen.get(global_idx, iConf, 1, false);
+            uint32_t rand0 = gen.get1(global_idx, iConf, 0, true);
+            uint32_t rand1 = gen.get1(global_idx, iConf, 1, false);
             }
             else
             {
-            uint32_t rand0 = gen.get(global_idx, iConf, 0, false);
-            uint32_t rand1 = gen.get(global_idx, iConf, 1, false);
+            uint32_t rand0 = gen.get1(global_idx, iConf, 0, false);
+            uint32_t rand1 = gen.get1(global_idx, iConf, 1, false);
 
             }
 
