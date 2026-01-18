@@ -99,8 +99,8 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
         size_t idx_plus = coord_to_index(N_dim, local_L_halo.data(), coord_neigh.data());
         if (condPrint){
             cout<<"en1"<<en<<endl;
-            cout<<"conf_idx_plus:"<< conf[idx_plus];
-            cout<<"conf_idx_center:"<<conf[idx_center];
+            cout<<"conf_idx_plus:"<<  static_cast<int>(conf[idx_plus]);
+            cout<<"conf_idx_center:"<<  static_cast<int>conf([idx_center]);
         }
         en -= conf[idx_plus] * conf[idx_center];
         if (condPrint){
