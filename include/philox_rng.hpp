@@ -56,9 +56,17 @@ public:
         uint32_t ctr2 = sample_number;  // Which random number for this site
         uint32_t ctr3 = 0;
 
+        // Split scrambled value into counter components
+        // uint32_t ctr4 = (uint32_t)(scrambled & 0xEEEEEEEE);
+        // uint32_t ctr5 = (uint32_t)(scrambled >> 16);
+        // uint32_t ctr6 = sample_number;  // Which random number for this site
+        // uint32_t ctr = 0;
+
+
         // Generate 4 random uint32_t values using Random123's Philox
         philox4x32_ctr_t ctr = {{ctr0, ctr1, ctr2, ctr3}};
         philox4x32_key_t key = {{base_key0_, base_key1_}};
+        //philox4x32_key_t key = {{ctr4, ctr5}};
         if (flagPrint){
           std::cout <<"ctr"<<ctr<<"   key"<<key<<std::endl;
         }

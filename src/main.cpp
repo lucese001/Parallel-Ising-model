@@ -158,7 +158,7 @@ int main(int argc, char** argv) {
 
 #ifdef USE_PHILOX
     // Philox RNG: riproducible per update Bulk-Boundary
-    PhiloxRNG gen(seed + world_rank * 104729);
+    PhiloxRNG gen(seed + 104729);
     print_simulation_info(N_dim, N, nThreads, nConfs, Beta,
                           sizeof(PhiloxRNG), true);
 #else
