@@ -91,7 +91,8 @@ inline void metropolis_update(vector<int8_t>& conf_local,
 
             // DEBUG PRINT: Show complete RNG state for this site
             cout << "PHILOX_DEBUG: iConf=" << iConf
-                 << "global coord:"<< index_to_coord(global_idx)[0]<<","<<index_to_coord(global_idx)[1]
+                 << "global coord:"<< index_to_coord(global_idx, N_dim, arr.data(), coord_buf.data()) [0]
+                 <<","<<index_to_coord(global_idx, N_dim, arr.data(), coord_buf.data())[1]
                  << " global_idx=" << global_idx
                  << " | rand0=" << rand0
                  << " spin=" << (int)proposed_spin
