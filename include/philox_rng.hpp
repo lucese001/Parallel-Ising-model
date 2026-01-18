@@ -1,5 +1,5 @@
 #pragma once
-
+#include <cstdint>
 // Define R123_ASSERT before including philox.h
 #ifndef R123_ASSERT
 #include <cassert>
@@ -27,7 +27,7 @@ public:
 
     // Get deterministic random uint32_t for (global_idx, iConf, sample_number)
     // sample_number: 0 for first random, 1 for second, etc.
-    uint32_t get(uint64_t global_idx, uint32_t iConf, uint32_t sample_number) {
+    uint32_t get(uint64_t global_idx, uint32_t iConf, uint32_t sample_number,bool flagPrint) {
         // Scramble inputs to maximize statistical independence
         uint64_t scrambled = global_idx * PRIME1 + (uint64_t)iConf * PRIME2;
 
@@ -40,6 +40,9 @@ public:
         // Generate 4 random uint32_t values using Random123's Philox
         philox4x32_ctr_t ctr = {{ctr0, ctr1, ctr2, ctr3}};
         philox4x32_key_t key = {{base_key0_, base_key1_}};
+        if (flagPrint){
+          cout <<"ctr"<<ctr<<"   key"<<key<<endl;
+        }
         philox4x32_ctr_t result = philox4x32(ctr, key);
 
         // Return first value
