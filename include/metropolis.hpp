@@ -92,7 +92,7 @@ inline void metropolis_update(vector<int8_t>& conf_local,
             const int enAfter = computeEnSite(conf_local, iSite,
                                              local_L, local_L_halo);
             if ( global_idx == 3 ) {    
-                cout<< "enAfter" <<   enAfter << "   enBefore"   <<   enBefore
+                cout<< "enAfter" <<   enAfter << "   enBefore"   <<   enBefore << endl;
             }                   
             const int eDiff = enAfter - enBefore;
             const double pAcc = std::min(1.0, exp(-Beta * (double)eDiff));
