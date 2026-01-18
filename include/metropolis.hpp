@@ -71,10 +71,14 @@ inline void metropolis_update(vector<int8_t>& conf_local,
             // Philox é un counter-based RNG. In questo modo l'ordine in cui
             // vengono aggiornati i siti non influenza i numeri estratti
             // (dipendono solo dall'indice globale e dalla configurazione)
+
+            // DEBUG: Get raw random numbers for both samples
+            uint32_t rand0 = gen.get(global_idx, iConf, 0);
+            uint32_t rand1 = gen.get(global_idx, iConf, 1);
+
             // Sample 0: Proposta di spin
-            conf_local[iSite_halo] = gen.get_spin(global_idx, iConf, 0);
-            cout<<"isiteHalo"<< iSite_halo<<endl;
-            cout<<"spin proposal:"<< conf_local[iSite_halo]<<"iSite: "<<iSite_halo<< "Configuration: "<< iConf<<endl;
+            int8_t proposed_spin = (rand0 & 1) ? 1 : -1;
+            conf_local[iSite_halo] = proposed_spin;
 
             const int enAfter = computeEnSite(conf_local, iSite,
                                              local_L, local_L_halo);
@@ -82,9 +86,20 @@ inline void metropolis_update(vector<int8_t>& conf_local,
             const double pAcc = std::min(1.0, exp(-Beta * (double)eDiff));
 
             // Sample 1: Probabilitá di accetazione
-            const double rand_uniform = gen.get_double(global_idx, iConf, 1);
-            cout<<"p acc: "<< rand_uniform<<endl;
+            const double rand_uniform = (double)rand1 / 4294967296.0;
             const int acc = (rand_uniform < pAcc) ? 1 : 0;
+
+            // DEBUG PRINT: Show complete RNG state for this site
+            cout << "PHILOX_DEBUG: iConf=" << iConf
+                 << " global_idx=" << global_idx
+                 << " iSite=" << iSite
+                 << " iSite_halo=" << iSite_halo
+                 << " | rand0=" << rand0
+                 << " spin=" << (int)proposed_spin
+                 << " | rand1=" << rand1
+                 << " p_uniform=" << rand_uniform
+                 << " pAcc=" << pAcc
+                 << " acc=" << acc << endl;
 
             if (!acc) conf_local[iSite_halo] = oldVal;
         }
