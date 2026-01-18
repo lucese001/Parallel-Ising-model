@@ -76,6 +76,10 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
     
     // Converti iSite_local (senza halo) in coordinate locali
     index_to_coord(iSite_local, N_dim, local_L.data(), coord_site.data());
+    if (condPrint){
+            cout<<"coord[x]"<<static_cast<size_t>index_to_coord[0]<<endl;
+            cout<<"coord[y]"<<static_cast<size_t>index_to_coord[1]<<endl;
+   }
     
     // Aggiungi offset +1 per l'halo (le celle interne iniziano da 1)
     for (size_t d = 0; d < N_dim; ++d) {
