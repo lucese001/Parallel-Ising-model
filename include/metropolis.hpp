@@ -66,12 +66,13 @@ inline void metropolis_update(vector<int8_t>& conf_local,
                                               coord_tmp.data());
 
             const int8_t oldVal = conf_local[iSite_halo];
+            const int enBefore;
             if ( global_idx == 3 ) {
-            const int enBefore = computeEnSiteDebug(conf_local, iSite,
+                enBefore = computeEnSiteDebug(conf_local, iSite,
                                               local_L, local_L_halo, true);
             }
             if ( global_idx != 3 ) {
-            const int enBefore = computeEnSiteDebug(conf_local, iSite,
+                enBefore = computeEnSiteDebug(conf_local, iSite,
                                               local_L, local_L_halo, false);
             }
 
