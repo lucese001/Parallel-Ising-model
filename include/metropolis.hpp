@@ -74,7 +74,7 @@ inline void metropolis_update(vector<int8_t>& conf_local,
             // Sample 0: Proposta di spin
             conf_local[iSite_halo] = gen.get_spin(global_idx, iConf, 0);
 
-            cout<<"spin proposal:"<< conf_local [iSite_halo]<<"iSite: "<<iSite_halo<< "Configuration: "<< iConf<<endl;
+            cout<<"spin proposal:"<< conf_local[iSite_halo]<<"iSite: "<<iSite_halo<< "Configuration: "<< iConf<<endl;
 
             const int enAfter = computeEnSite(conf_local, iSite,
                                              local_L, local_L_halo);
