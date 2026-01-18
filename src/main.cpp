@@ -229,7 +229,7 @@ int main(int argc, char** argv) {
         metropolis_update(conf_local, bulk_red_sites, 
                           bulk_red_indices,
                           local_L, local_L_halo, gen, 
-                          iConf, nThreads, N_local, 0);
+                          iConf, nThreads, N_local, 0, arr);
         computeTime.stop();
         
         mpiTime.start();
@@ -245,7 +245,7 @@ int main(int argc, char** argv) {
         metropolis_update(conf_local, boundary_red_sites, 
                           boundary_red_indices,
                           local_L, local_L_halo, gen, 
-                          iConf, nThreads, N_local, 0);
+                          iConf, nThreads, N_local, 0, arr);
         computeTime.stop();        
         mpiTime.start();
         // Inizia l' halo exchange rosso (paritá 0)
@@ -259,7 +259,7 @@ int main(int argc, char** argv) {
         metropolis_update(conf_local, bulk_black_sites, 
                           bulk_black_indices,
                           local_L, local_L_halo, gen, 
-                          iConf, nThreads, N_local, 1);
+                          iConf, nThreads, N_local, 1, arr);
         computeTime.stop();
         
         mpiTime.start();
@@ -276,7 +276,7 @@ int main(int argc, char** argv) {
         metropolis_update(conf_local, boundary_black_sites, 
                           boundary_black_indices,
                           local_L, local_L_halo, gen, 
-                          iConf, nThreads, N_local, 1);
+                          iConf, nThreads, N_local, 1, arr);
         
         // Si misura la magnetizzazione e l'energia in ogni nodo
         double local_mag = computeMagnetization_local(conf_local, N_local, 
