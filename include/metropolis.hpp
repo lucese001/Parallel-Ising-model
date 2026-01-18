@@ -74,6 +74,8 @@ inline void metropolis_update(vector<int8_t>& conf_local,
             // Sample 0: Proposta di spin
             conf_local[iSite_halo] = gen.get_spin(global_idx, iConf, 0);
 
+            cout<<"spin proposal:"<< conf_local [iSite_halo]<<"iSite: "<<iSite_halo<< "Configuration: "<< iConf<<endl;
+
             const int enAfter = computeEnSite(conf_local, iSite,
                                              local_L, local_L_halo);
             const int eDiff = enAfter - enBefore;
@@ -81,6 +83,7 @@ inline void metropolis_update(vector<int8_t>& conf_local,
 
             // Sample 1: Probabilitá di accetazione
             const double rand_uniform = gen.get_double(global_idx, iConf, 1);
+            cout<<"p acc: "<< rand_uniform<<endl;
             const int acc = (rand_uniform < pAcc) ? 1 : 0;
 
             if (!acc) conf_local[iSite_halo] = oldVal;
