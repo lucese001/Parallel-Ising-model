@@ -6,7 +6,7 @@
 #define R123_ASSERT(x) assert(x)
 #endif
 
-#include <Random123/philox.h>
+#include "Random123/philox.h"
 #include <cstdint>
 
 class PhiloxRNG {
