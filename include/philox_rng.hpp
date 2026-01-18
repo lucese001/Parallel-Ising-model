@@ -60,7 +60,7 @@ public:
         philox4x32_ctr_t ctr = {{ctr0, ctr1, ctr2, ctr3}};
         philox4x32_key_t key = {{base_key0_, base_key1_}};
         if (flagPrint){
-          cout <<"ctr"<<ctr<<"   key"<<key<<endl;
+          std::cout <<"ctr"<<ctr<<"   key"<<key<<std::endl;
         }
         philox4x32_ctr_t result = philox4x32(ctr, key);
 

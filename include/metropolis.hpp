@@ -78,11 +78,9 @@ inline void metropolis_update(vector<int8_t>& conf_local,
             uint32_t rand0 = gen.get1(global_idx, iConf, 0, true);
             uint32_t rand1 = gen.get1(global_idx, iConf, 1, false);
             }
-            else
-            {
+            else {
             uint32_t rand0 = gen.get1(global_idx, iConf, 0, false);
             uint32_t rand1 = gen.get1(global_idx, iConf, 1, false);
-
             }
 
 
