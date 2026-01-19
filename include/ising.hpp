@@ -33,7 +33,7 @@ inline int computeEnSite(const vector<int8_t>& conf,
         coord_halo.resize(N_dim);
         coord_neigh.resize(N_dim);
     }
-    if (is_bulk=true) {
+    if is_bulk=true{
     // Converti iSite_local (senza halo) in coordinate locali
     size_t idx_center= iSite_local;
         index_to_coord(iSite_local, N_dim, local_L.data(), coord_site.data());
@@ -54,7 +54,7 @@ inline int computeEnSite(const vector<int8_t>& conf,
         return en;
     }
 
-    if (is_bulk=false) {
+    if is_bulk=false{
         
     // Aggiungi offset +1 per l'halo (le celle interne iniziano da 1)
     for (size_t d = 0; d < N_dim; ++d) {
