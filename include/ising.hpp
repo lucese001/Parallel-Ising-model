@@ -88,7 +88,19 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
             cout<<"coord_halo["<<d<<"]"<<coord_halo[d]<<endl;
         }
     }
-    
+    if (condPrint){
+        for (size_t y = 0; y < local_L_halo[0]; ++y) {
+            printf("  ");
+            for (size_t x = 0; x < local_L_halo[1]; ++x) {
+                size_t idx_halo = coord_halo[0] + coord_halo[1] * local_L_halo[0];
+                printf("%c ", coord_halo[idx_halo] > 0 ? '+' : '-');
+            }
+            printf("\n");
+        }
+    }
+
+
+
     // Indice nel conf_local (con halo)
     size_t idx_center = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
     
