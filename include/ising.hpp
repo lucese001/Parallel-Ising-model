@@ -99,71 +99,106 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
         coord_neigh.resize(N_dim);
     }
 
-    // Converti iSite_local (senza halo) in coordinate locali
-    index_to_coord(iSite_local, N_dim, local_L.data(), coord_site.data());
-    if (condPrint){
+
+
+
+
+    if (is_bulk) {
+        size_t idx_center = iSite_local;
+        index_to_coord(iSite_local, N_dim, local_L.data(), coord_site.data());
+            if (condPrint){
             cout<<"coord[x]"<<static_cast<size_t>(coord_site[0])<<endl;
             cout<<"coord[y]"<<static_cast<size_t>(coord_site[1])<<endl;
-   }
+            }
+        int en = 0;
+        for (size_t d = 0; d < N_dim; ++d) {
 
-    // Aggiungi offset +1 per l'halo (le celle interne iniziano da 1)
-    for (size_t d = 0; d < N_dim; ++d) {
-        coord_halo[d] = coord_site[d] + 1;
-        if (condPrint){
-            cout<<"coord_halo["<<d<<"]"<<coord_halo[d]<<endl;
-        }
-    }
-
-    // Indice nel conf_local (con halo)
-    size_t idx_center = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
-
-    int en = 0;
-    for (size_t d = 0; d < N_dim; ++d) {
-        // Vicino +1
-        memcpy(coord_neigh.data(), coord_halo.data(), N_dim * sizeof(size_t));
-        coord_neigh[d] = coord_halo[d] + 1;
-
-        // Per siti bulk, verifica che non accediamo all'halo
-        if (is_bulk) {
-            assert(coord_neigh[d] >= 1 && coord_neigh[d] <= local_L[d]);
-        }
-
-        if (condPrint){
-            cout<<"coord_neigh["<<d<<"]"<<coord_neigh[d]<<endl;
-        }
-        size_t idx_plus = coord_to_index(N_dim, local_L_halo.data(), coord_neigh.data());
-        if (condPrint){
+            // Vicino +1
+            memcpy(coord_neigh.data(), coord_site.data(), N_dim * sizeof(size_t));
+            coord_neigh[d] = coord_site[d] + 1;
+            if (condPrint){
+                for (i<=N_dim;i++){
+                    cout<<"coord_neigh["<<i<<"]"<<coord_neigh[i]<<endl;
+                }
+            }
+            size_t idx_plus = coord_to_index(N_dim, local_L.data(), coord_neigh.data());
+            en -= conf[idx_plus] * conf[idx_center];
+                    if (condPrint){
             cout<<"idx_plus:"<<  static_cast<size_t>(idx_plus) << endl;
             cout<<"idx_center:"<<  static_cast<size_t>(idx_center) << endl;
             cout<<"conf_idx_plus:"<<  static_cast<int>(conf[idx_plus]) << endl;
             cout<<"conf_idx_center:"<<  static_cast<int>(conf[idx_center]) << endl;
-        }
-        en -= conf[idx_plus] * conf[idx_center];
-        if (condPrint){
-            cout<<"en1 "<<en<<endl;
+            cout<<"en(+1): "<< en<<endl;
         }
 
-        // Vicino -1
-        memcpy(coord_neigh.data(), coord_halo.data(), N_dim * sizeof(size_t));
-        coord_neigh[d] = coord_halo[d] - 1;
-
-        // Per siti bulk, verifica che non accediamo all'halo
-        if (is_bulk) {
-            assert(coord_neigh[d] >= 1 && coord_neigh[d] <= local_L[d]);
+            // Vicino -1
+            memcpy(coord_neigh.data(), coord_site.data(), N_dim * sizeof(size_t));
+            coord_neigh[d] = coord_site[d] - 1;
+            size_t idx_minus = coord_to_index(N_dim, local_L.data(), coord_neigh.data());
+            en -= conf[idx_minus] * conf[idx_center];
+            if (condPrint){
+            cout<<"idx_minus:"<<  static_cast<size_t>(idx_minus) << endl;
+            cout<<"idx_center:"<<  static_cast<size_t>(idx_center) << endl;
+            cout<<"conf_idx_minus:"<<  static_cast<int>(conf[idx_minus]) << endl;
+            cout<<"conf_idx_center:"<<  static_cast<int>(conf[idx_center]) << endl;
+            cout<<"en(-1): "<< en<<endl;
+        }
+        }
+        return en;
+    } else {
+        // BOUNDARY: Aggiungi offset +1 per l'halo (le celle interne iniziano da 1)
+        index_to_coord(iSite_local, N_dim, local_L.data(), coord_site.data());
+        for (size_t d = 0; d < N_dim; ++d) {
+            coord_halo[d] = coord_site[d] + 1;
         }
 
-        if (condPrint){
-            cout<<"coord_neigh1["<<d<<"]"<<coord_neigh[d]<<endl;
-        }
-        size_t idx_minus = coord_to_index(N_dim, local_L_halo.data(), coord_neigh.data());
-        en -= conf[idx_minus] * conf[idx_center];
-        if (condPrint){
-            cout<<"en2 "<<en<<endl;
+        // Indice nel conf_local (con halo)
+        size_t idx_center = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
+            if (condPrint){
+            cout<<"coord[x]"<<static_cast<size_t>(coord_site[0])<<endl;
+            cout<<"coord[y]"<<static_cast<size_t>(coord_site[1])<<endl;
+            cout<<"coord[x]"<<static_cast<size_t>(coord_halo[0])<<endl;
+            cout<<"coord[y]"<<static_cast<size_t>(coord_halo[1])<<endl;
+   }
+
+        int en = 0;
+        for (size_t d = 0; d < N_dim; ++d) {
+            // Vicino +1
+            memcpy(coord_neigh.data(), coord_halo.data(), N_dim * sizeof(size_t));
+            coord_neigh[d] = coord_halo[d] + 1;
+            if (condPrint){
+                for (i<=N_dim;i++){
+                    cout<<"coord_neigh["<<i<<"]"<<coord_neigh[i]<<endl;
+                }
+            }
+
+            size_t idx_plus = coord_to_index(N_dim, local_L_halo.data(), coord_neigh.data());
+            en -= conf[idx_plus] * conf[idx_center];
+            if (condPrint){
+            cout<<"idx_plus:"<<  static_cast<size_t>(idx_plus) << endl;
+            cout<<"idx_center:"<<  static_cast<size_t>(idx_center) << endl;
+            cout<<"conf_idx_plus:"<<  static_cast<int>(conf[idx_plus]) << endl;
+            cout<<"conf_idx_center:"<<  static_cast<int>(conf[idx_center]) << endl;
+            cout<<"en(+1):"<<en<< endl;
         }
 
+            // Vicino -1
+            memcpy(coord_neigh.data(), coord_halo.data(), N_dim * sizeof(size_t));
+            coord_neigh[d] = coord_halo[d] - 1;
+
+            size_t idx_minus = coord_to_index(N_dim, local_L_halo.data(), coord_neigh.data());
+            en -= conf[idx_minus] * conf[idx_center];
+            if (condPrint){
+            cout<<"idx_minus:"<<  static_cast<size_t>(idx_minus) << endl;
+            cout<<"idx_center:"<<  static_cast<size_t>(idx_center) << endl;
+            cout<<"conf_idx_minus:"<<  static_cast<int>(conf[idx_minus]) << endl;
+            cout<<"conf_idx_center:"<<  static_cast<int>(conf[idx_center]) << endl;
+            cout<<"en(-1):"<<en<< endl;
+        }
+        }
+
+        return en;
     }
-
-    return en;
 }
 
 // computeEn: energia totale (riduzione parallela)
