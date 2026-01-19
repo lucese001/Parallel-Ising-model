@@ -286,7 +286,7 @@ int main(int argc, char** argv) {
                   metropolis_update(conf_local, boundary_black_sites,
                           boundary_black_indices,
                           local_L, local_L_halo, gen,
-                          iConf, nThreads, N_local, 1, arr, true) ;
+                          iConf, nThreads, N_local, 1, arr, true)  
         }
         else {
                     metropolis_update(conf_local, boundary_black_sites,
