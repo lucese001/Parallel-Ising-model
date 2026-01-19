@@ -117,7 +117,7 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
             memcpy(coord_neigh.data(), coord_site.data(), N_dim * sizeof(size_t));
             coord_neigh[d] = coord_site[d] + 1;
             if (condPrint){
-                for (size_t i= 0 ;i<=N_dim;i++){
+                for (size_t i= 0 ;i<N_dim;i++){
                     cout<<"coord_neigh["<<i<<"]"<<coord_neigh[i]<<endl;
                 }
             }
@@ -167,7 +167,7 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
             memcpy(coord_neigh.data(), coord_halo.data(), N_dim * sizeof(size_t));
             coord_neigh[d] = coord_halo[d] + 1;
             if (condPrint){
-                for (size_t i=0; i<=N_dim;i++ ){
+                for (size_t i=0; i<N_dim;i++ ){
                     cout<<"coord_neigh["<<i<<"]"<<coord_neigh[i]<<endl;
                 }
             }
