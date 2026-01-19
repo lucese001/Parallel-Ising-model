@@ -89,10 +89,10 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
         }
     }
     if (condPrint){
-        for (size_t y = 0; y < local_L_halo[0]; ++y) {
+        for (size_t y = 0; y < local_L_halo[1]; ++y) {
             printf("  ");
-            for (size_t x = 0; x < local_L_halo[1]; ++x) {
-                size_t idx_halo = coord_halo[0] + coord_halo[1] * local_L_halo[0];
+            for (size_t x = 0; x < local_L_halo[0]; ++x) {
+                size_t idx_halo = x + y * local_L_halo[0];
                 cout << "idx_halo" << idx_halo << endl;
                 cout << "conf[idx_halo]" << static_cast<int>(conf[idx_halo]) << endl;
                 printf("%c ", conf[idx_halo] > 0 ? '+' : '-');
