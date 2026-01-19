@@ -142,7 +142,7 @@ inline void start_halo_exchange(
     vector<MPI_Request>& requests,
     const vector<FaceCache>& cache,
     int parity,
-    bool debug_print = false)
+    bool debug_print)
 {
     requests.clear();
 

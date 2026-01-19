@@ -82,14 +82,14 @@ inline void metropolis_update(vector<int8_t>& conf_local,
 
             // DEBUG: Get raw random numbers for both samples
             uint32_t rand0, rand1;
-            if ( global_idx == 3 ) {
-                rand0 = gen.get1(global_idx, iConf, 0, true);
-                rand1 = gen.get1(global_idx, iConf, 1, false);
-
-            } else {
+//            if ( global_idx == 3 ) {
                 rand0 = gen.get1(global_idx, iConf, 0, false);
                 rand1 = gen.get1(global_idx, iConf, 1, false);
-            }
+
+            // } else {
+            //     rand0 = gen.get1(global_idx, iConf, 0, false);
+            //     rand1 = gen.get1(global_idx, iConf, 1, false);
+            // }
 
 
             // Sample 0: Proposta di spin
@@ -109,7 +109,7 @@ inline void metropolis_update(vector<int8_t>& conf_local,
             const int acc = (rand_uniform < pAcc) ? 1 : 0;
 
             // DEBUG PRINT: Show complete RNG state for this siteç
-            if ( global_idx == 3 ) {  
+            /*if ( global_idx == 3 ) {  
             cout << "PHILOX_DEBUG: iConf=" << iConf
 //                 << "global coord:"<< index_to_coord(global_idx, N_dim, arr.data(), coord_buf.data()) [0]
 //                 <<","<<index_to_coord(global_idx, N_dim, arr.data(), coord_buf.data())[1]
@@ -120,7 +120,7 @@ inline void metropolis_update(vector<int8_t>& conf_local,
                  << " p_uniform=" << rand_uniform
                  << " pAcc=" << pAcc
                  << " acc=" << acc << endl;
-            }
+            }*/
             if (!acc) conf_local[iSite_halo] = oldVal;
         }
     }
