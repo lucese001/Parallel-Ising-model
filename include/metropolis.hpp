@@ -30,6 +30,7 @@ extern double Beta;
 
 // Philox RNG: riproducible per update Bulk-Boundary (non dipende dalla
 // sequenza estratta).
+// is_bulk: true per siti bulk (non accedono all'halo), false per siti boundary
 inline void metropolis_update(vector<int8_t>& conf_local,
                               const vector<size_t>& sites,
                               const vector<size_t>& sites_global_indices,
@@ -40,7 +41,8 @@ inline void metropolis_update(vector<int8_t>& conf_local,
                               size_t nThreads,
                               size_t N_local,
                               int target_parity,
-                              vector<size_t>& arr )
+                              vector<size_t>& arr,
+                              bool is_bulk)
 {
     vector<size_t> coord_buf(N_dim);
     vector<size_t> coord_tmp(N_dim);
@@ -69,11 +71,11 @@ inline void metropolis_update(vector<int8_t>& conf_local,
             int enBefore;
 //            if ( global_idx == 3 ) {
                 enBefore = computeEnSiteDebug(conf_local, iSite,
-                                              local_L, local_L_halo, true);
+                                              local_L, local_L_halo, true, is_bulk);
             // }
             // if ( global_idx != 3 ) {
             //     enBefore = computeEnSiteDebug(conf_local, iSite,
-            //                                   local_L, local_L_halo, false);
+            //                                   local_L, local_L_halo, false, is_bulk);
             // }
 
             // Philox é un counter-based RNG. In questo modo l'ordine in cui
@@ -97,10 +99,10 @@ inline void metropolis_update(vector<int8_t>& conf_local,
             conf_local[iSite_halo] = proposed_spin;
 
             const int enAfter = computeEnSite(conf_local, iSite,
-                                             local_L, local_L_halo);
-            if ( global_idx == 3 ) {    
+                                             local_L, local_L_halo, is_bulk);
+            if ( global_idx == 3 ) {
                 cout<< "enAfter" <<   enAfter << "   enBefore"   <<   enBefore << endl;
-            }                   
+            }
             const int eDiff = enAfter - enBefore;
             const double pAcc = std::min(1.0, exp(-Beta * (double)eDiff));
 
@@ -127,6 +129,7 @@ inline void metropolis_update(vector<int8_t>& conf_local,
 
 #else  // Versione originale prng_engine (dipende dalla sequenza estratta)
 
+// is_bulk: true per siti bulk (non accedono all'halo), false per siti boundary
 inline void metropolis_update(vector<int8_t>& conf_local,
                               const vector<size_t>& sites,
                               const vector<size_t>& sites_global_indices,
@@ -136,7 +139,8 @@ inline void metropolis_update(vector<int8_t>& conf_local,
                               int iConf,
                               size_t nThreads,
                               size_t N_local,
-                              int target_parity)
+                              int target_parity,
+                              bool is_bulk)
 {
     vector<size_t> coord_buf(N_dim);
     vector<size_t> coord_tmp(N_dim);
@@ -167,12 +171,12 @@ inline void metropolis_update(vector<int8_t>& conf_local,
 
             const int8_t oldVal = conf_local[iSite_halo];
             const int enBefore = computeEnSite(conf_local, iSite,
-                                              local_L, local_L_halo);
+                                              local_L, local_L_halo, is_bulk);
 
             conf_local[iSite_halo] = (int8_t)(binomial_distribution<int>(1, 0.5)(genView) * 2 - 1);
 
             const int enAfter = computeEnSite(conf_local, iSite,
-                                             local_L, local_L_halo);
+                                             local_L, local_L_halo, is_bulk);
             const int eDiff = enAfter - enBefore;
             const double pAcc = std::min(1.0, exp(-Beta * (double)eDiff));
             const int acc = binomial_distribution<int>(1, pAcc)(genView);

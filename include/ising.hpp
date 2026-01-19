@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <cstring>
 #include <random>
+#include <cassert>
 #include "prng_engine.hpp"
 #include "utility.hpp"
 
@@ -16,71 +17,87 @@ using namespace std;
 extern size_t N_dim;
 
 // computeEnSite: energia locale attorno a iSite
-inline int computeEnSite(const vector<int8_t>& conf, 
+// is_bulk: true per siti bulk (non accedono all'halo), false per siti boundary
+inline int computeEnSite(const vector<int8_t>& conf,
                          const size_t& iSite_local,
                          const vector<size_t>& local_L,
-                         const vector<size_t>& local_L_halo) {
-    
+                         const vector<size_t>& local_L_halo,
+                         bool is_bulk) {
+
     static thread_local vector<size_t> coord_site(N_dim);
     static thread_local vector<size_t> coord_halo(N_dim);
     static thread_local vector<size_t> coord_neigh(N_dim);
-    
+
     if (coord_site.size() != N_dim) {
         coord_site.resize(N_dim);
         coord_halo.resize(N_dim);
         coord_neigh.resize(N_dim);
     }
-    
+
     // Converti iSite_local (senza halo) in coordinate locali
     index_to_coord(iSite_local, N_dim, local_L.data(), coord_site.data());
-    
+
     // Aggiungi offset +1 per l'halo (le celle interne iniziano da 1)
     for (size_t d = 0; d < N_dim; ++d) {
         coord_halo[d] = coord_site[d] + 1;
     }
-    
+
     // Indice nel conf_local (con halo)
     size_t idx_center = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
-    
+
     int en = 0;
     for (size_t d = 0; d < N_dim; ++d) {
         // Vicino +1
         memcpy(coord_neigh.data(), coord_halo.data(), N_dim * sizeof(size_t));
         coord_neigh[d] = coord_halo[d] + 1;
+
+        // Per siti bulk, verifica che non accediamo all'halo
+        if (is_bulk) {
+            assert(coord_neigh[d] >= 1 && coord_neigh[d] <= local_L[d]);
+        }
+
         size_t idx_plus = coord_to_index(N_dim, local_L_halo.data(), coord_neigh.data());
         en -= conf[idx_plus] * conf[idx_center];
-        
+
         // Vicino -1
         memcpy(coord_neigh.data(), coord_halo.data(), N_dim * sizeof(size_t));
         coord_neigh[d] = coord_halo[d] - 1;
+
+        // Per siti bulk, verifica che non accediamo all'halo
+        if (is_bulk) {
+            assert(coord_neigh[d] >= 1 && coord_neigh[d] <= local_L[d]);
+        }
+
         size_t idx_minus = coord_to_index(N_dim, local_L_halo.data(), coord_neigh.data());
         en -= conf[idx_minus] * conf[idx_center];
     }
-    
+
     return en;
 }
-inline int computeEnSiteDebug(const vector<int8_t>& conf, 
+inline int computeEnSiteDebug(const vector<int8_t>& conf,
                          const size_t& iSite_local,
                          const vector<size_t>& local_L,
-                         const vector<size_t>& local_L_halo,bool condPrint) {
-    
+                         const vector<size_t>& local_L_halo,
+                         bool condPrint,
+                         bool is_bulk) {
+
     static thread_local vector<size_t> coord_site(N_dim);
     static thread_local vector<size_t> coord_halo(N_dim);
     static thread_local vector<size_t> coord_neigh(N_dim);
-    
+
     if (coord_site.size() != N_dim) {
         coord_site.resize(N_dim);
         coord_halo.resize(N_dim);
         coord_neigh.resize(N_dim);
     }
-    
+
     // Converti iSite_local (senza halo) in coordinate locali
     index_to_coord(iSite_local, N_dim, local_L.data(), coord_site.data());
     if (condPrint){
-            cout<<"coord[x]"<<static_cast<size_t>(coord_site.data()[0])<<endl;
-            cout<<"coord[y]"<<static_cast<size_t>(coord_site.data()[1])<<endl;
+            cout<<"coord[x]"<<static_cast<size_t>(coord_site[0])<<endl;
+            cout<<"coord[y]"<<static_cast<size_t>(coord_site[1])<<endl;
    }
-    
+
     // Aggiungi offset +1 per l'halo (le celle interne iniziano da 1)
     for (size_t d = 0; d < N_dim; ++d) {
         coord_halo[d] = coord_site[d] + 1;
@@ -88,15 +105,21 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
             cout<<"coord_halo["<<d<<"]"<<coord_halo[d]<<endl;
         }
     }
-    
+
     // Indice nel conf_local (con halo)
     size_t idx_center = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
-    
+
     int en = 0;
     for (size_t d = 0; d < N_dim; ++d) {
         // Vicino +1
         memcpy(coord_neigh.data(), coord_halo.data(), N_dim * sizeof(size_t));
         coord_neigh[d] = coord_halo[d] + 1;
+
+        // Per siti bulk, verifica che non accediamo all'halo
+        if (is_bulk) {
+            assert(coord_neigh[d] >= 1 && coord_neigh[d] <= local_L[d]);
+        }
+
         if (condPrint){
             cout<<"coord_neigh["<<d<<"]"<<coord_neigh[d]<<endl;
         }
@@ -111,10 +134,16 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
         if (condPrint){
             cout<<"en1 "<<en<<endl;
         }
-        
+
         // Vicino -1
         memcpy(coord_neigh.data(), coord_halo.data(), N_dim * sizeof(size_t));
         coord_neigh[d] = coord_halo[d] - 1;
+
+        // Per siti bulk, verifica che non accediamo all'halo
+        if (is_bulk) {
+            assert(coord_neigh[d] >= 1 && coord_neigh[d] <= local_L[d]);
+        }
+
         if (condPrint){
             cout<<"coord_neigh1["<<d<<"]"<<coord_neigh[d]<<endl;
         }
@@ -122,10 +151,10 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
         en -= conf[idx_minus] * conf[idx_center];
         if (condPrint){
             cout<<"en2 "<<en<<endl;
-        }  
+        }
 
     }
-    
+
     return en;
 }
 
