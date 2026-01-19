@@ -89,17 +89,26 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
         }
     }
     if (condPrint){
+        cout << "=== Configuration (with halo) ===" << endl;
+        cout << "   ";
+        for (size_t x = 0; x < local_L_halo[0]; ++x) {
+            printf("%zu ", x);
+        }
+        printf("\n");
         for (size_t y = 0; y < local_L_halo[1]; ++y) {
-            printf("  ");
+            printf("%zu: ", y);
             for (size_t x = 0; x < local_L_halo[0]; ++x) {
                 size_t idx_halo = x + y * local_L_halo[0];
-                //cout << "idx_halo" << idx_halo << endl;
-                //cout << "conf[idx_halo]" << static_cast<int>(conf[idx_halo]) << endl;
-                printf("%c ", conf[idx_halo] > 0 ? '+' : '-');
-                //cout << endl;
+                // Mark the current site with brackets
+                if (x == coord_halo[0] && y == coord_halo[1]) {
+                    printf("[%c]", conf[idx_halo] > 0 ? '+' : '-');
+                } else {
+                    printf(" %c ", conf[idx_halo] > 0 ? '+' : '-');
+                }
             }
             printf("\n");
         }
+        cout << "Current site: (" << coord_halo[0] << ", " << coord_halo[1] << ")" << endl;
     }
 
 
