@@ -93,10 +93,10 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
             printf("  ");
             for (size_t x = 0; x < local_L_halo[0]; ++x) {
                 size_t idx_halo = x + y * local_L_halo[0];
-                cout << "idx_halo" << idx_halo << endl;
-                cout << "conf[idx_halo]" << static_cast<int>(conf[idx_halo]) << endl;
+                //cout << "idx_halo" << idx_halo << endl;
+                //cout << "conf[idx_halo]" << static_cast<int>(conf[idx_halo]) << endl;
                 printf("%c ", conf[idx_halo] > 0 ? '+' : '-');
-                cout << endl;
+                //cout << endl;
             }
             printf("\n");
         }
