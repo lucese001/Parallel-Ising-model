@@ -69,14 +69,14 @@ inline void metropolis_update(vector<int8_t>& conf_local,
 
             const int8_t oldVal = conf_local[iSite_halo];
             int enBefore;
-//            if ( global_idx == 3 ) {
+            if ( global_idx == 3 ) {
                 enBefore = computeEnSiteDebug(conf_local, iSite,
                                               local_L, local_L_halo, true, is_bulk);
-            // }
-            // if ( global_idx != 3 ) {
-            //     enBefore = computeEnSiteDebug(conf_local, iSite,
-            //                                   local_L, local_L_halo, false, is_bulk);
-            // }
+            }
+            if ( global_idx != 3 ) {
+                 enBefore = computeEnSiteDebug(conf_local, iSite,
+                                               local_L, local_L_halo, false, is_bulk);
+            }
 
             // Philox é un counter-based RNG. In questo modo l'ordine in cui
             // vengono aggiornati i siti non influenza i numeri estratti

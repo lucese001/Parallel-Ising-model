@@ -157,8 +157,6 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
             if (condPrint){
             cout<<"coord[x]"<<static_cast<size_t>(coord_site[0])<<endl;
             cout<<"coord[y]"<<static_cast<size_t>(coord_site[1])<<endl;
-            cout<<"coord[x]"<<static_cast<size_t>(coord_halo[0])<<endl;
-            cout<<"coord[y]"<<static_cast<size_t>(coord_halo[1])<<endl;
    }
 
         int en = 0;
