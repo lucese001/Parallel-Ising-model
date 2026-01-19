@@ -122,7 +122,7 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
         en -= conf[idx_minus] * conf[idx_center];
         if (condPrint){
             cout<<"idx_minus:"<<  static_cast<size_t>(idx_minus) << endl;
-            cout<<"idx_minus:"<<  static_cast<size_t>(idx_center) << endl;
+            cout<<"idx_center:"<<  static_cast<size_t>(idx_center) << endl;
             cout<<"conf_idx_minus:"<<  static_cast<int>(conf[idx_minus]) << endl;
             cout<<"conf_idx_center:"<<  static_cast<int>(conf[idx_center]) << endl;
             cout<<"en2 "<<en<<endl;
