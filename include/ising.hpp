@@ -93,7 +93,7 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
             printf("  ");
             for (size_t x = 0; x < local_L_halo[1]; ++x) {
                 size_t idx_halo = coord_halo[0] + coord_halo[1] * local_L_halo[0];
-                printf("%c ", coord_halo[idx_halo] > 0 ? '+' : '-');
+                printf("%c ", conf[idx_halo] > 0 ? '+' : '-');
             }
             printf("\n");
         }
