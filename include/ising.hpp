@@ -185,7 +185,7 @@ inline int computeEn(const vector<int8_t>& conf, size_t N_local,
     long long en = 0;
 #pragma omp parallel for reduction(+:en)
     for (size_t iSite = 0; iSite < N_local; ++iSite) {
-        en += computeEnSite(conf, iSite, local_L, local_L_halo);
+        en += computeEnSite(conf, iSite, local_L, local_L_halo,false);
     }
     return (int)(en / 2);
 }
