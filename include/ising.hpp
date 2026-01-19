@@ -33,29 +33,10 @@ inline int computeEnSite(const vector<int8_t>& conf,
         coord_halo.resize(N_dim);
         coord_neigh.resize(N_dim);
     }
-    if is_bulk=true{
+
     // Converti iSite_local (senza halo) in coordinate locali
-    size_t idx_center= iSite_local;
-        index_to_coord(iSite_local, N_dim, local_L.data(), coord_site.data());
-            int en = 0;
-        for (size_t d = 0; d < N_dim; ++d) {
-            // Vicino +1
-            memcpy(coord_neigh.data(), coord_site.data(), N_dim * sizeof(size_t));
-            coord_neigh[d] = coord_site[d] + 1;
-            size_t idx_plus = coord_to_index(N_dim, local_L.data(), coord_neigh.data());
-            en -= conf[idx_plus] * conf[idx_center];
+    index_to_coord(iSite_local, N_dim, local_L.data(), coord_site.data());
 
-            // Vicino -1
-            memcpy(coord_neigh.data(), coord_site.data(), N_dim * sizeof(size_t));
-            coord_neigh[d] = coord_site[d] - 1;
-            size_t idx_minus = coord_to_index(N_dim, local_L.data(), coord_neigh.data());
-            en -= conf[idx_minus] * conf[idx_center];
-        }
-        return en;
-    }
-
-    if is_bulk=false{
-        
     // Aggiungi offset +1 per l'halo (le celle interne iniziano da 1)
     for (size_t d = 0; d < N_dim; ++d) {
         coord_halo[d] = coord_site[d] + 1;
@@ -92,7 +73,6 @@ inline int computeEnSite(const vector<int8_t>& conf,
     }
 
     return en;
-   }
 }
 inline int computeEnSiteDebug(const vector<int8_t>& conf,
                          const size_t& iSite_local,
