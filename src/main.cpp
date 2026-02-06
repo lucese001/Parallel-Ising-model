@@ -28,6 +28,7 @@
 using namespace std;
 
 int world_rank; // Rank (id) del processo
+int world_size; // Numero di rank
 
 // Parametri della simulazione
 size_t N = 1;              // numero totale di siti
@@ -45,7 +46,6 @@ int main(int argc, char** argv) {
     timer totalTime, computeTime, mpiTime, ioTime,setupTime;
     totalTime.start();
     setupTime.start();
-    int world_size; // Numero di processi
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
     if (world_rank != 0) {
         arr.resize(N_dim);
     }
-    MPI_Bcast(arr.data(), N_dim, MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD);
+    MPI_Bcast(arr.data(), N_dim*sizeof(size_t), MPI_BYTE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&nConfs, 1, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(&nThreads, 1, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(&Beta, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -74,16 +74,9 @@ int main(int argc, char** argv) {
     for (size_t i = 0; i < N_dim; ++i) {
         N *= arr[i];
     }
-    if (world_rank != 0) {
-        arr.resize(N_dim);
-    }
 
-    //Broadcast dati agli altri processi
+    //Broadcast numero totale di siti
     MPI_Bcast(&N, 1, MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD);
-    MPI_Bcast(arr.data(), N_dim, MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD);
-    MPI_Bcast(&nConfs, 1, MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD);
-    MPI_Bcast(&nThreads, 1, MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD);
-    MPI_Bcast(&Beta, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     
     vector<int> Chunks(N_dim); //numero di processi allocati lungo ogni dimensione
     vector<size_t> local_L(N_dim); //dimensioni locali del nodo
@@ -178,7 +171,7 @@ int main(int argc, char** argv) {
 
     //Genera la prima configurazione (usa indice globale per riproducibilità)
     initialize_configuration(conf_local, N_local, N_dim, local_L, local_L_halo,
-                             global_offset, arr, seed);
+                             global_offset, arr, gen, seed);
     
 
     // Classificazione dei siti in bulk/boundary e Rosso/Nero

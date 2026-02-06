@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstddef>
 #include <omp.h>
+#include <mpi.h>
 #include <cstdint>
 #include <cstring>
 #include <random>
@@ -15,6 +16,8 @@ using namespace std;
 
 // Variabili globali esterne (definite in new_ising.cpp)
 extern size_t N_dim;
+extern int world_rank;
+extern int world_size;
 
 // computeEnSite: energia locale attorno a iSite
 inline int computeEnSite(const vector<int8_t>& conf, 
@@ -60,7 +63,7 @@ inline int computeEnSite(const vector<int8_t>& conf,
     
     return en;
 }
-inline int computeEnSiteDebug(const vector<int8_t>& conf, 
+/*inline int computeEnSiteDebug(const vector<int8_t>& conf, 
                          const size_t& iSite_local,
                          const vector<size_t>& local_L,
                          const vector<size_t>& local_L_halo,bool condPrint) {
@@ -160,9 +163,10 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
     }
     
     return en;
-}
+}*/
 
 // computeEn: energia totale (riduzione parallela)
+
 inline int computeEn(const vector<int8_t>& conf, size_t N_local,
                      const vector<size_t>& local_L,
                      const vector<size_t>& local_L_halo) {
@@ -200,14 +204,27 @@ inline double computeMagnetization_local(const vector<int8_t>& conf, size_t N_lo
 
 // Crea una configurazione iniziale casuale usando l'indice globale 
 // (per garantire riproducibilità) indipendente dal numero di rank/thread
-inline void initialize_configuration(vector<int8_t>& conf_local,
+/*inline void initialize_configuration(vector<int8_t>& conf_local,
                                      size_t N_local,
                                      size_t N_dim,
                                      const vector<size_t>& local_L,
                                      const vector<size_t>& local_L_halo,
                                      const vector<size_t>& global_offset,
                                      const vector<size_t>& arr,
+                                     PhiloxRNG& gen,
                                      uint64_t base_seed) {
+
+
+//Debug
+for (int rank = 0; rank < world_size; rank++) {
+    if (world_rank == rank) {
+        printf("[INIT START] Rank=%d, N_local=%zu\n", world_rank, N_local);
+        fflush(stdout);
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
+}
+
+    std::fill(conf_local.begin(), conf_local.end(), 0);
     // Inizializza tutto a 0
     std::fill(conf_local.begin(), conf_local.end(), 0);
     
@@ -224,8 +241,10 @@ inline void initialize_configuration(vector<int8_t>& conf_local,
             size_t global_index = compute_global_index(i, local_L, global_offset, arr, N_dim,
                                                        coord_local.data(), coord_global.data());
             uint64_t site_seed = base_seed + global_index;
-            prng_engine site_gen(site_seed);
-            int8_t spin = (site_gen() & 1) ? 1 : -1;
+            uint32_t rand_val = gen.get1(global_index, 0, 0, false);
+            int8_t spin = (rand_val & 1) ? 1 : -1;
+
+
             
             // Converti l'indice locale (senza halo) in indice con halo
             index_to_coord(i, N_dim, local_L.data(), coord_local.data());
@@ -237,5 +256,81 @@ inline void initialize_configuration(vector<int8_t>& conf_local,
             // Memorizza lo spin
             conf_local[idx_halo] = spin;
         }
+    }
+    // Debug ordinato per rank
+    for (int r = 0; r < world_size; ++r) {
+        if (world_rank == r) {
+            printf("[INIT] Rank=%d, N_local=%zu, first 5 global_idx: ", world_rank, N_local);
+            for (size_t i = 0; i < conf_local.size(); ++i) {
+                printf("%zu(%c) ", de[i], debug_spins[i] > 0 ? '+' : '-');
+            }
+            printf("\n");
+            fflush(stdout);
+        }
+        MPI_Barrier(MPI_COMM_WORLD);
+    }
+}*/
+
+
+inline void initialize_configuration(vector<int8_t>& conf_local,
+                                     size_t N_local,
+                                     size_t N_dim,
+                                     const vector<size_t>& local_L,
+                                     const vector<size_t>& local_L_halo,
+                                     const vector<size_t>& global_offset,
+                                     const vector<size_t>& arr,
+                                     PhiloxRNG& gen,
+                                     uint64_t base_seed) {
+    // Inizializza
+    std::fill(conf_local.begin(), conf_local.end(), 0);
+    
+    // Buffer per debug (fuori dal parallelo)
+    vector<size_t> debug_global_idx;
+    vector<int8_t> debug_spins;
+    
+    #pragma omp parallel
+    {
+        vector<size_t> coord_local(N_dim);
+        vector<size_t> coord_halo(N_dim);
+        vector<size_t> coord_global(N_dim);
+        
+        #pragma omp for
+        for (size_t i = 0; i < N_local; ++i) {
+
+            size_t global_index = compute_global_index(i, local_L, global_offset, arr, N_dim,
+                                                       coord_local.data(), coord_global.data());
+            uint32_t rand_val = gen.get1(global_index, 0, 0, false);
+            int8_t spin = (rand_val & 1) ? 1 : -1;
+            
+            // Salva per debug (solo primi 5)
+            #pragma omp critical
+            {
+                if (debug_global_idx.size() < 5) {
+                    debug_global_idx.push_back(global_index);
+                    debug_spins.push_back(spin);
+                }
+            }
+            
+            // Converti in coordinate con halo
+            index_to_coord(i, N_dim, local_L.data(), coord_local.data());
+            for (size_t d = 0; d < N_dim; ++d) {
+                coord_halo[d] = coord_local[d] + 1;
+            }
+            size_t idx_halo = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
+            conf_local[idx_halo] = spin;
+        }
+    }
+    
+    // STAMPA ORDINATA PER RANK (fuori dal parallelo)
+    for (int r = 0; r < world_size; ++r) {
+        if (world_rank == r) {
+            printf("[INIT] Rank=%d, N_local=%zu, first 5 global_idx: ", world_rank, N_local);
+            for (size_t i = 0; i < debug_global_idx.size(); ++i) {
+                printf("%zu(%c) ", debug_global_idx[i], debug_spins[i] > 0 ? '+' : '-');
+            }
+            printf("\n");
+            fflush(stdout);
+        }
+        MPI_Barrier(MPI_COMM_WORLD); // Aspetta che questo rank finisca
     }
 }

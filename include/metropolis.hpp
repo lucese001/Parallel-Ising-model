@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <omp.h>
 
+
 #ifdef USE_PHILOX
 #include "philox_rng.hpp"
 #else
@@ -68,8 +69,8 @@ inline void metropolis_update(vector<int8_t>& conf_local,
             const int8_t oldVal = conf_local[iSite_halo];
             int enBefore;
 //            if ( global_idx == 3 ) {
-                enBefore = computeEnSiteDebug(conf_local, iSite,
-                                              local_L, local_L_halo, true);
+                enBefore = computeEn(conf_local, iSite,
+                                              local_L, local_L_halo);
             // }
             //  if ( global_idx != 3 ) {
             //      enBefore = computeEnSiteDebug(conf_local, iSite,
