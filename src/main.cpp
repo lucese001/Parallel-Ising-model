@@ -27,6 +27,8 @@
 
 using namespace std;
 
+int world_rank; // Rank (id) del processo
+
 // Parametri della simulazione
 size_t N = 1;              // numero totale di siti
 double Beta;               // inverso della temperatura
@@ -44,11 +46,10 @@ int main(int argc, char** argv) {
     totalTime.start();
     setupTime.start();
     int world_size; // Numero di processi
-    int world_rank; // Rank (id) del processo
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
-    printf("world_size  %d rank %d\n", world_size, world_rank);
+      master_printf("world_size  %d rank %d\n", world_size, world_rank);
     
     // Lettura del file di input
     if (world_rank == 0) {
@@ -130,7 +131,7 @@ int main(int argc, char** argv) {
                        rank_coords, global_offset, local_L);
 
     //Calcolo del numero di configurazioni locali
-    size_t local_Nconfs;
+    //size_t local_Nconfs;
     /*local_Nconfs = nConfs / world_size;
     if (world_rank < (nConfs % world_size)) {
         local_Nconfs++;
@@ -192,7 +193,7 @@ int main(int argc, char** argv) {
     // Salva gli indici dei siti che appartengono a ogni faccia
     vector<FaceCache> face_cache = build_face_cache(faces,local_L,local_L_halo,N_dim);
 
-    static int global_conf_count = 0; //Numero di configurazioni globali
+    //static int global_conf_count = 0; //Numero di configurazioni globali
     vector<MPI_Request> requests; //definizione richieste processi MPI
     HaloBuffers buffers; //definizione buffers
     buffers.resize(N_dim);
@@ -218,76 +219,50 @@ int main(int argc, char** argv) {
         //8)update Boundary nero
         
         mpiTime.start();
-        // Inizia l' halo exchange nero (paritá 1)
-        start_halo_exchange(conf_local, local_L, local_L_halo, 
-                           neighbors, cart_comm, N_dim, 
-                           buffers, faces, requests, face_cache,1, true);
-        mpiTime.stop();
-        
-        computeTime.start();
-        // Update Bulk rosso (parità 0)
-        metropolis_update(conf_local, bulk_red_sites, 
-                          bulk_red_indices,
-                          local_L, local_L_halo, gen, 
-                          iConf, nThreads, N_local, 0, arr);
         computeTime.stop();
-        
+	for(int updPar=0;updPar<2;updPar++)
+	  {
+	    const int commPar=1-updPar;
+	    
+	    // Inizia l' halo exchange nero/rosso
+	    start_halo_exchange(conf_local, local_L, local_L_halo, 
+				neighbors, cart_comm, N_dim, 
+				buffers, faces, requests, face_cache,commPar, true);
+	    mpiTime.stop();
+	    
+	    computeTime.start();
+	    // Update Bulk rosso/nero
+	    metropolis_update(conf_local, bulk_red_sites, 
+			      bulk_red_indices,
+			      local_L, local_L_halo, gen, 
+			      iConf, nThreads, N_local, updPar, arr);
+	    computeTime.stop();
+	    
+	    mpiTime.start();
+	    // Completa lo scambio halo
+	    finish_halo_exchange(requests);
+	    // Scrivi gli halo
+	    write_halo_data(conf_local, buffers, faces, local_L, 
+			    local_L_halo, N_dim, face_cache, commPar);
+	    mpiTime.stop();
+	    
+	    computeTime.start();
+	    // Update boundary rossa/nero
+	    metropolis_update(conf_local, boundary_red_sites, 
+			      boundary_red_indices,
+			      local_L, local_L_halo, gen, 
+			      iConf, nThreads, N_local, updPar, arr);
+	    computeTime.stop();
+	    mpiTime.start();
+	  }
+        // Si calcolano la magnetizzazione e l'energia globali
         mpiTime.start();
-        // Completa lo scambio halo
-        finish_halo_exchange(requests);
-        // Scrivi gli halo
-        write_halo_data(conf_local, buffers, faces, local_L, 
-                        local_L_halo, N_dim, face_cache, 1);
-        mpiTime.stop();
-        
-        computeTime.start();
-        // Update boundary rossa
-        metropolis_update(conf_local, boundary_red_sites, 
-                          boundary_red_indices,
-                          local_L, local_L_halo, gen, 
-                          iConf, nThreads, N_local, 0, arr);
-        computeTime.stop();        
-        mpiTime.start();
-        // Inizia l' halo exchange rosso (paritá 0)
-        start_halo_exchange(conf_local, local_L, local_L_halo, 
-                           neighbors, cart_comm, N_dim, 
-                           buffers, faces, requests, face_cache, 0, true);
-        mpiTime.stop();
-        
-        computeTime.start();
-        // Update Bulk nero (paritá 1)
-        metropolis_update(conf_local, bulk_black_sites, 
-                          bulk_black_indices,
-                          local_L, local_L_halo, gen, 
-                          iConf, nThreads, N_local, 1, arr);
-        computeTime.stop();
-        
-        mpiTime.start();
-
-        // Completa lo scambio halo
-        finish_halo_exchange(requests);
-        // Scrivi gli halo rossi (paritá 0)
-        write_halo_data(conf_local, buffers, faces, local_L, 
-                        local_L_halo, N_dim, face_cache, 0);
-        mpiTime.stop();
-        
-        computeTime.start();
-        // Update boundary nera (paritá 1)
-        metropolis_update(conf_local, boundary_black_sites, 
-                          boundary_black_indices,
-                          local_L, local_L_halo, gen, 
-                          iConf, nThreads, N_local, 1, arr);
-        
+        double global_mag, global_en;
         // Si misura la magnetizzazione e l'energia in ogni nodo
         double local_mag = computeMagnetization_local(conf_local, N_local, 
                                                       local_L, local_L_halo);
         double local_en = computeEn(conf_local, N_local, 
                                     local_L, local_L_halo);
-        computeTime.stop();
-        
-        // Si calcolano la magnetizzazione e l'energia globali
-        mpiTime.start();
-        double global_mag, global_en;
         MPI_Reduce(&local_mag, &global_mag, 1, MPI_DOUBLE, MPI_SUM, 0, cart_comm);
         MPI_Reduce(&local_en, &global_en, 1, MPI_DOUBLE, MPI_SUM, 0, cart_comm);
         mpiTime.stop();

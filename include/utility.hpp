@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <vector>
 #include <cstddef>
 #include <chrono>
@@ -7,6 +8,31 @@ using std::vector;
 using std::chrono::high_resolution_clock;
 using std::chrono::nanoseconds;
 using std::chrono::duration_cast;
+
+
+extern     int world_rank;
+
+template <typename...Args>
+auto master_printf(const char* fmt,
+		   const Args&...args)
+{
+  if(world_rank==0)
+    printf(fmt,args...);
+}
+
+struct Couter
+{
+  template <typename T>
+  Couter& operator<<(T&& t)
+  {
+    if(world_rank==0)
+      std::cout<<t;
+
+    return *this;
+  }
+};
+
+inline Couter master_cout;
 
 // Creazione di un timer per misurare le prestazioni
 struct timer {

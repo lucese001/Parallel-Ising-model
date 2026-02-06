@@ -8,6 +8,7 @@
 
 #include "include/Random123/philox.h"
 #include <cstdint>
+#include "utility.hpp"
 
 class PhiloxRNG {
 private:
@@ -68,7 +69,7 @@ public:
         philox4x32_key_t key = {{base_key0_, base_key1_}};
         //philox4x32_key_t key = {{ctr4, ctr5}};
         if (flagPrint){
-          std::cout <<"ctr"<<ctr<<"   key"<<key<<std::endl;
+          master_cout <<"ctr"<<ctr<<"   key"<<key<<"\n";
         }
         philox4x32_ctr_t result = philox4x32(ctr, key);
 

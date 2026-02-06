@@ -38,7 +38,7 @@ inline bool read_input_file(const char* filename,
         }
     }
     
-    if (fscanf(fp, "%d", &nConfs) != 1) {
+    if (fscanf(fp, "%zu", &nConfs) != 1) {
         fprintf(stderr, "Errore lettura nConfs\n");
         fclose(fp);
         return false;
@@ -65,11 +65,11 @@ inline bool read_input_file(const char* filename,
     fclose(fp);
     
     // Stampa ció che hai letto in caso (debug)
-    printf("Rank 0 ha letto: N_dim=%zu, nConfs=%d, nThreads=%zu, Beta=%lg, seed=%zu\n", 
+    master_printf("Rank 0 ha letto: N_dim=%zu, nConfs=%zu, nThreads=%zu, Beta=%lg, seed=%zu\n", 
            N_dim, nConfs, nThreads, Beta, seed);
-    printf("Dimensioni: ");
-    for (size_t i = 0; i < N_dim; ++i) printf("%zu ", arr[i]);
-    printf("\n");
+    master_printf("Dimensioni: ");
+    for (size_t i = 0; i < N_dim; ++i) master_printf("%zu ", arr[i]);
+    master_printf("\n");
     
     return true;
 }
@@ -79,16 +79,16 @@ inline void print_performance_summary(double total, double compute,
                                        double mpi, double io, double init,
                                        int nConfs) {
     double overhead = total - compute - mpi - io;
-    printf("\n");
-    printf("          PERFORMANCE PROFILING        \n");
-    printf("Total runtime:             %10.3f s (100.0%%)\n", total);
-    printf("Computation time:          %10.3f s (%5.1f%%)\n", compute, 100.0*compute/total);
-    printf("MPI Communication:         %10.3f s (%5.1f%%)\n", mpi, 100.0*mpi/total);
-    printf("I/O (file write):          %10.3f s (%5.1f%%)\n", io, 100.0*io/total);
-    printf("Initialitation time:       %10.3f s (%5.1f%%)\n", init, 100.0*init/total);
-    printf("Overhead:                  %10.3f s (%5.1f%%)\n", overhead, 100.0*overhead/total);
-    printf("Configurations:               %d\n", nConfs);
-    printf("Time per config:           %10.3f s\n", total/nConfs);
+    master_printf("\n");
+    master_printf("          PERFORMANCE PROFILING        \n");
+    master_printf("Total runtime:             %10.3f s (100.0%%)\n", total);
+    master_printf("Computation time:          %10.3f s (%5.1f%%)\n", compute, 100.0*compute/total);
+    master_printf("MPI Communication:         %10.3f s (%5.1f%%)\n", mpi, 100.0*mpi/total);
+    master_printf("I/O (file write):          %10.3f s (%5.1f%%)\n", io, 100.0*io/total);
+    master_printf("Initialitation time:       %10.3f s (%5.1f%%)\n", init, 100.0*init/total);
+    master_printf("Overhead:                  %10.3f s (%5.1f%%)\n", overhead, 100.0*overhead/total);
+    master_printf("Configurations:               %d\n", nConfs);
+    master_printf("Time per config:           %10.3f s\n", total/nConfs);
 }
 
 // Scrive una misura nel file di output
@@ -107,7 +107,7 @@ inline void write_measurement(FILE* measFile, double mag, double en, size_t N) {
             global_progress += r_done;
         }
 
-        printf("Progress: %d/%d (%.1f%%)\n", 
+        master_printf("Progress: %d/%d (%.1f%%)\n", 
                global_progress, nConfs, 100.0 * global_progress / nConfs);
     }
 }*/
@@ -115,12 +115,12 @@ inline void write_measurement(FILE* measFile, double mag, double en, size_t N) {
 // Stampa le informazioni sulla simulazione
 inline void print_simulation_info(size_t N_dim, size_t N, size_t nThreads, int nConfs, 
                                    double Beta, size_t rng_memory, bool parallel_rng) {
-    printf("N_dim: %zu, Npunti: %zu, NThreads: %zu, nConfs: %d, Beta: %lg\n", 
+    master_printf("N_dim: %zu, Npunti: %zu, NThreads: %zu, nConfs: %d, Beta: %lg\n", 
            N_dim, N, nThreads, nConfs, Beta);
     if (parallel_rng) {
-        printf("Memory usage of the rng: %zu Bytes\n", rng_memory);
+        master_printf("Memory usage of the rng: %zu Bytes\n", rng_memory);
     } else {
-        printf("Memory usage of the rng: %zu MB\n", rng_memory / (1 << 20));
+        master_printf("Memory usage of the rng: %zu MB\n", rng_memory / (1 << 20));
     }
 }
 
@@ -131,27 +131,27 @@ inline void print_mpi_topology(int world_rank, int world_size, size_t N_dim,
                                 const vector<size_t>& local_L) {
     for (int r = 0; r < world_size; ++r) {
         if (world_rank == r) {
-            printf("RANK %d \n", world_rank);
-            printf("  rank_coords: [");
+            master_printf("RANK %d \n", world_rank);
+            master_printf("  rank_coords: [");
             for (size_t d = 0; d < N_dim; ++d) {
-                printf("%d", rank_coords[d]);
-                if (d < N_dim-1) printf(", ");
+                master_printf("%d", rank_coords[d]);
+                if (d < N_dim-1) master_printf(", ");
             }
-            printf("]\n");
+            master_printf("]\n");
         
-            printf("  global_offset: [");
+            master_printf("  global_offset: [");
             for (size_t d = 0; d < N_dim; ++d) {
-                printf("%zu", global_offset[d]);
-                if (d < N_dim-1) printf(", ");
+                master_printf("%zu", global_offset[d]);
+                if (d < N_dim-1) master_printf(", ");
             }
-            printf("]\n");
+            master_printf("]\n");
 
-            printf("  local_L: [");
+            master_printf("  local_L: [");
             for (size_t d = 0; d < N_dim; ++d) {
-                printf("%zu", local_L[d]);
-                if (d < N_dim-1) printf(", ");
+                master_printf("%zu", local_L[d]);
+                if (d < N_dim-1) master_printf(", ");
             }
-            printf("]\n");
+            master_printf("]\n");
         }
         MPI_Barrier(MPI_COMM_WORLD);
     }
@@ -167,43 +167,43 @@ inline void print_configuration_debug(const vector<int8_t>& conf_local,
                                        int iConf, MPI_Comm comm) {
     for (int r = 0; r < world_size; ++r) {
         if (world_rank == r) {
-            printf("RANK %d, Conf %d\n", world_rank, iConf);
+            master_printf("RANK %d, Conf %d\n", world_rank, iConf);
             
             if (N_dim == 2) {
                 // Stampa come matrice 2D
                 for (size_t y = 0; y < local_L[1]; ++y) {
-                    printf("  ");
+                    master_printf("  ");
                     for (size_t x = 0; x < local_L[0]; ++x) {
                         // Converti coordinate locali (senza halo) in coordinate con halo
                         size_t coord_halo[2] = {x + 1, y + 1};
                         size_t idx_halo = coord_halo[0] + coord_halo[1] * local_L_halo[0];
                         // Stampa '+' per spin +1, '-' per spin -1
-                        printf("%c ", conf_local[idx_halo] > 0 ? '+' : '-');
+                        master_printf("%c ", conf_local[idx_halo] > 0 ? '+' : '-');
                     }
-                    printf("\n");
+                    master_printf("\n");
                 }
             } else {
                 // Per altre dimensioni, stampa linearmente
                 vector<size_t> coord_local(N_dim);
                 vector<size_t> coord_halo(N_dim);
-                printf("  Spins: ");
+                master_printf("  Spins: ");
                 for (size_t i = 0; i < N_local; ++i) {
                     index_to_coord(i, N_dim, local_L.data(), coord_local.data());
                     for (size_t d = 0; d < N_dim; ++d) {
                         coord_halo[d] = coord_local[d] + 1;
                     }
                     size_t idx_halo = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
-                    printf("%+d ", (int)conf_local[idx_halo]);
-                    if ((i + 1) % 16 == 0 && i + 1 < N_local) printf("\n        ");
+                    master_printf("%+d ", (int)conf_local[idx_halo]);
+                    if ((i + 1) % 16 == 0 && i + 1 < N_local) master_printf("\n        ");
                 }
-                printf("\n");
+                master_printf("\n");
             }
             fflush(stdout);
         }
         MPI_Barrier(comm);
     }
     if (world_rank == 0) {
-        printf("-----------------------------------\n");
+        master_printf("-----------------------------------\n");
         fflush(stdout);
     }
     MPI_Barrier(comm);
@@ -272,25 +272,25 @@ inline void print_global_configuration_debug(const vector<int8_t>& conf_local,
         }
         
         // Stampa la configurazione globale
-        printf("=== GLOBAL CONFIG, Conf %d ===\n", iConf);
+        master_printf("=== GLOBAL CONFIG, Conf %d ===\n", iConf);
         if (N_dim == 2) {
             for (size_t y = 0; y < arr[1]; ++y) {
-                printf("  ");
+                master_printf("  ");
                 for (size_t x = 0; x < arr[0]; ++x) {
                     size_t idx = x + y * arr[0];
-                    printf("%c ", global_conf[idx] > 0 ? '+' : '-');
+                    master_printf("%c ", global_conf[idx] > 0 ? '+' : '-');
                 }
-                printf("\n");
+                master_printf("\n");
             }
         } else {
-            printf("  ");
+            master_printf("  ");
             for (size_t i = 0; i < N_global; ++i) {
-                printf("%+d ", (int)global_conf[i]);
-                if ((i + 1) % 16 == 0 && i + 1 < N_global) printf("\n  ");
+                master_printf("%+d ", (int)global_conf[i]);
+                if ((i + 1) % 16 == 0 && i + 1 < N_global) master_printf("\n  ");
             }
-            printf("\n");
+            master_printf("\n");
         }
-        printf("==============================\n");
+        master_printf("==============================\n");
         fflush(stdout);
     } else {
         // Invia i miei dati a rank 0

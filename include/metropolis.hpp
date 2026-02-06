@@ -99,7 +99,8 @@ inline void metropolis_update(vector<int8_t>& conf_local,
             const int enAfter = computeEnSite(conf_local, iSite,
                                              local_L, local_L_halo);
             if ( global_idx == 3 ) {    
-                cout<< "enAfter" <<   enAfter << "   enBefore"   <<   enBefore << endl;
+	      if(omp_get_thread_num()==0)
+		master_cout<< "enAfter" <<   enAfter << "   enBefore"   <<   enBefore << "\n";
             }                   
             const int eDiff = enAfter - enBefore;
             const double pAcc = std::min(1.0, exp(-Beta * (double)eDiff));
@@ -110,7 +111,7 @@ inline void metropolis_update(vector<int8_t>& conf_local,
 
             // DEBUG PRINT: Show complete RNG state for this siteç
             /*if ( global_idx == 3 ) {  
-            cout << "PHILOX_DEBUG: iConf=" << iConf
+            master_cout << "PHILOX_DEBUG: iConf=" << iConf
 //                 << "global coord:"<< index_to_coord(global_idx, N_dim, arr.data(), coord_buf.data()) [0]
 //                 <<","<<index_to_coord(global_idx, N_dim, arr.data(), coord_buf.data())[1]
                  << " global_idx=" << global_idx
@@ -119,7 +120,7 @@ inline void metropolis_update(vector<int8_t>& conf_local,
                  << " | rand1=" << rand1
                  << " p_uniform=" << rand_uniform
                  << " pAcc=" << pAcc
-                 << " acc=" << acc << endl;
+                 << " acc=" << acc << "\n";
             }*/
             if (!acc) conf_local[iSite_halo] = oldVal;
         }

@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <cstddef>
+#include <omp.h>
 #include <cstdint>
 #include <cstring>
 #include <random>
@@ -63,7 +64,8 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
                          const size_t& iSite_local,
                          const vector<size_t>& local_L,
                          const vector<size_t>& local_L_halo,bool condPrint) {
-    
+
+  condPrint&=omp_get_thread_num()==0;
     static thread_local vector<size_t> coord_site(N_dim);
     static thread_local vector<size_t> coord_halo(N_dim);
     static thread_local vector<size_t> coord_neigh(N_dim);
@@ -77,38 +79,41 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
     // Converti iSite_local (senza halo) in coordinate locali
     index_to_coord(iSite_local, N_dim, local_L.data(), coord_site.data());
     if (condPrint){
-            cout<<"coord[x]"<<static_cast<size_t>(coord_site.data()[0])<<endl;
-            cout<<"coord[y]"<<static_cast<size_t>(coord_site.data()[1])<<endl;
+      if(world_rank==0)
+	{
+	  master_cout<<"coord[x]"<<static_cast<size_t>(coord_site.data()[0])<<"\n";
+	  master_cout<<"coord[y]"<<static_cast<size_t>(coord_site.data()[1])<<"\n";
+	}
    }
     
     // Aggiungi offset +1 per l'halo (le celle interne iniziano da 1)
     for (size_t d = 0; d < N_dim; ++d) {
         coord_halo[d] = coord_site[d] + 1;
         if (condPrint){
-            cout<<"coord_halo["<<d<<"]"<<coord_halo[d]<<endl;
+            master_cout<<"coord_halo["<<d<<"]"<<coord_halo[d]<<"\n";
         }
     }
     if (condPrint){
-        cout << "=== Configuration (with halo) ===" << endl;
-        cout << "   ";
+        master_cout << "=== Configuration (with halo) ===" << "\n";
+        master_cout << "   ";
         for (size_t x = 0; x < local_L_halo[0]; ++x) {
-            printf("%zu ", x);
+            master_printf("%zu ", x);
         }
-        printf("\n");
+        master_printf("\n");
         for (size_t y = 0; y < local_L_halo[1]; ++y) {
-            printf("%zu: ", y);
+            master_printf("%zu: ", y);
             for (size_t x = 0; x < local_L_halo[0]; ++x) {
                 size_t idx_halo = x + y * local_L_halo[0];
                 // Mark the current site with brackets
                 if (x == coord_halo[0] && y == coord_halo[1]) {
-                    printf("[%c]", conf[idx_halo] > 0 ? '+' : '-');
+                    master_printf("[%c]", conf[idx_halo] > 0 ? '+' : '-');
                 } else {
-                    printf(" %c ", conf[idx_halo] > 0 ? '+' : '-');
+                    master_printf(" %c ", conf[idx_halo] > 0 ? '+' : '-');
                 }
             }
-            printf("\n");
+            master_printf("\n");
         }
-        cout << "Current site: (" << coord_halo[0] << ", " << coord_halo[1] << ")" << endl;
+        master_cout << "Current site: (" << coord_halo[0] << ", " << coord_halo[1] << ")" << "\n";
     }
 
 
@@ -122,34 +127,34 @@ inline int computeEnSiteDebug(const vector<int8_t>& conf,
         memcpy(coord_neigh.data(), coord_halo.data(), N_dim * sizeof(size_t));
         coord_neigh[d] = coord_halo[d] + 1;
         if (condPrint){
-            cout<<"coord_neigh["<<d<<"]"<<coord_neigh[d]<<endl;
+            master_cout<<"coord_neigh["<<d<<"]"<<coord_neigh[d]<<"\n";
         }
         size_t idx_plus = coord_to_index(N_dim, local_L_halo.data(), coord_neigh.data());
         if (condPrint){
-            cout<<"idx_plus:"<<  static_cast<size_t>(idx_plus) << endl;
-            cout<<"idx_center:"<<  static_cast<size_t>(idx_center) << endl;
-            cout<<"conf_idx_plus:"<<  static_cast<int>(conf[idx_plus]) << endl;
-            cout<<"conf_idx_center:"<<  static_cast<int>(conf[idx_center]) << endl;
+            master_cout<<"idx_plus:"<<  static_cast<size_t>(idx_plus) << "\n";
+            master_cout<<"idx_center:"<<  static_cast<size_t>(idx_center) << "\n";
+            master_cout<<"conf_idx_plus:"<<  static_cast<int>(conf[idx_plus]) << "\n";
+            master_cout<<"conf_idx_center:"<<  static_cast<int>(conf[idx_center]) << "\n";
         }
         en -= conf[idx_plus] * conf[idx_center];
         if (condPrint){
-            cout<<"en1 "<<en<<endl;
+            master_cout<<"en1 "<<en<<"\n";
         }
         
         // Vicino -1
         memcpy(coord_neigh.data(), coord_halo.data(), N_dim * sizeof(size_t));
         coord_neigh[d] = coord_halo[d] - 1;
         if (condPrint){
-            cout<<"coord_neigh1["<<d<<"]"<<coord_neigh[d]<<endl;
+            master_cout<<"coord_neigh1["<<d<<"]"<<coord_neigh[d]<<"\n";
         }
         size_t idx_minus = coord_to_index(N_dim, local_L_halo.data(), coord_neigh.data());
         en -= conf[idx_minus] * conf[idx_center];
         if (condPrint){
-            cout<<"idx_minus:"<<  static_cast<size_t>(idx_minus) << endl;
-            cout<<"idx_center:"<<  static_cast<size_t>(idx_center) << endl;
-            cout<<"conf_idx_minus:"<<  static_cast<int>(conf[idx_minus]) << endl;
-            cout<<"conf_idx_center:"<<  static_cast<int>(conf[idx_center]) << endl;
-            cout<<"en2 "<<en<<endl;
+            master_cout<<"idx_minus:"<<  static_cast<size_t>(idx_minus) << "\n";
+            master_cout<<"idx_center:"<<  static_cast<size_t>(idx_center) << "\n";
+            master_cout<<"conf_idx_minus:"<<  static_cast<int>(conf[idx_minus]) << "\n";
+            master_cout<<"conf_idx_center:"<<  static_cast<int>(conf[idx_center]) << "\n";
+            master_cout<<"en2 "<<en<<"\n";
         }  
 
     }
