@@ -68,9 +68,8 @@ inline void metropolis_update(vector<int8_t>& conf_local,
 
             const int8_t oldVal = conf_local[iSite_halo];
             int enBefore;
-//            if ( global_idx == 3 ) {
-                enBefore = computeEn(conf_local, iSite,
-                                              local_L, local_L_halo);
+            enBefore = computeEnSite(conf_local, iSite,
+                                    local_L, local_L_halo);
             // }
             //  if ( global_idx != 3 ) {
             //      enBefore = computeEnSiteDebug(conf_local, iSite,
@@ -81,50 +80,55 @@ inline void metropolis_update(vector<int8_t>& conf_local,
             // vengono aggiornati i siti non influenza i numeri estratti
             // (dipendono solo dall'indice globale e dalla configurazione)
 
-            // DEBUG: Get raw random numbers for both samples
+            //Genera i due numeri casuali: 1 per la proposta 
+            //di spin, l'altro per l'accettazione
             uint32_t rand0, rand1;
-//            if ( global_idx == 3 ) {
-                rand0 = gen.get1(global_idx, iConf, 0, false);
-                rand1 = gen.get1(global_idx, iConf, 1, false);
-
-            // } else {
-            //     rand0 = gen.get1(global_idx, iConf, 0, false);
-            //     rand1 = gen.get1(global_idx, iConf, 1, false);
-            // }
-
+            rand0 = gen.get1(global_idx, iConf, 0, false);
+            rand1 = gen.get1(global_idx, iConf, 1, false);
 
             // Sample 0: Proposta di spin
             int8_t proposed_spin = (rand0 & 1) ? 1 : -1;
             conf_local[iSite_halo] = proposed_spin;
 
             const int enAfter = computeEnSite(conf_local, iSite,
-                                             local_L, local_L_halo);
-            if ( global_idx == 3 ) {    
-	      if(omp_get_thread_num()==0)
-		master_cout<< "enAfter" <<   enAfter << "   enBefore"   <<   enBefore << "\n";
-            }                   
+                                             local_L, local_L_halo);                 
             const int eDiff = enAfter - enBefore;
             const double pAcc = std::min(1.0, exp(-Beta * (double)eDiff));
 
             // Sample 1: Probabilitá di accetazione
             const double rand_uniform = (double)rand1 / 4294967296.0;
             const int acc = (rand_uniform < pAcc) ? 1 : 0;
+            
+            // DEBUG PRINT: Show complete RNG state for this site
+            #pragma omp critical
+            {
 
-            // DEBUG PRINT: Show complete RNG state for this siteç
-            /*if ( global_idx == 3 ) {  
-            master_cout << "PHILOX_DEBUG: iConf=" << iConf
-//                 << "global coord:"<< index_to_coord(global_idx, N_dim, arr.data(), coord_buf.data()) [0]
-//                 <<","<<index_to_coord(global_idx, N_dim, arr.data(), coord_buf.data())[1]
+            std::cout << "PHILOX_DEBUG: iConf=" << iConf 
+            /*"global coord:" <<index_to_coord(global_idx, N_dim, arr.data(), coord_buf.data()) [0]
+            <<","<<index_to_coord(global_idx, N_dim, arr.data(), coord_buf.data())[1]*/
                  << " global_idx=" << global_idx
                  << " | rand0=" << rand0
                  << " spin=" << (int)proposed_spin
                  << " | rand1=" << rand1
                  << " p_uniform=" << rand_uniform
                  << " pAcc=" << pAcc
-                 << " acc=" << acc << "\n";
-            }*/
-            if (!acc) conf_local[iSite_halo] = oldVal;
+                 << " acc=" << acc
+                 << "oldVal= "<< +oldVal
+                 << "proposed spin= "<< +proposed_spin;
+            }
+            if (acc==0)
+            {
+                conf_local[iSite_halo] = oldVal;
+            }
+            if (acc!=1 && acc!=0 ){
+                std::cout<<"ERRORE IN CONF:"<<iConf
+                <<"global_idx"<<"global_idx="<<global_idx<<"\n";
+            }
+            int conf_finale=conf_local[iSite_halo];
+             std::cout << "conf finale=" <<conf_finale <<"\n";
+            
         }
+
     }
 }
 

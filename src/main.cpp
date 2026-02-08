@@ -164,10 +164,9 @@ int main(int argc, char** argv) {
     vector<int8_t> conf_local(N_alloc); //Vettore che contiene la configurazione locale (int8_t per risparmiare memoria)
     
     // Vettori separati per siti Rosso/Nero Bulk e Boundary
-    vector<size_t> bulk_red_sites, bulk_black_sites;
-    vector<size_t> bulk_red_indices, bulk_black_indices;
-    vector<size_t> boundary_red_sites, boundary_black_sites;
-    vector<size_t> boundary_red_indices, boundary_black_indices;
+    vector<size_t> bulk_sites[2], bulk_indices[2];       // [0]=rossi, [1]=neri
+    vector<size_t> boundary_sites[2], boundary_indices[2]; // [0]=rossi, [1]=neri
+
 
     //Genera la prima configurazione (usa indice globale per riproducibilità)
     initialize_configuration(conf_local, N_local, N_dim, local_L, local_L_halo,
@@ -175,16 +174,14 @@ int main(int argc, char** argv) {
     
 
     // Classificazione dei siti in bulk/boundary e Rosso/Nero
-    classify_sites(N_local, N_dim, local_L, global_offset, arr,
-                   bulk_red_sites, bulk_red_indices,
-                   bulk_black_sites, bulk_black_indices,
-                   boundary_red_sites, boundary_red_indices,
-                   boundary_black_sites, boundary_black_indices);
+    classify_sites(N_local, N_dim, local_L, global_offset, 
+                   arr,bulk_sites, bulk_indices,
+                   boundary_sites, boundary_indices);
     
     // Costruisce le dimensioni delle facce e la sua posizione
     vector<FaceInfo> faces = build_faces(local_L, N_dim);
     // Salva gli indici dei siti che appartengono a ogni faccia
-    vector<FaceCache> face_cache = build_face_cache(faces,local_L,local_L_halo,N_dim);
+    vector<FaceCache> face_cache = build_face_cache(faces,local_L,local_L_halo,global_offset, N_dim);
 
     //static int global_conf_count = 0; //Numero di configurazioni globali
     vector<MPI_Request> requests; //definizione richieste processi MPI
@@ -225,8 +222,8 @@ int main(int argc, char** argv) {
 	    
 	    computeTime.start();
 	    // Update Bulk rosso/nero
-	    metropolis_update(conf_local, bulk_red_sites, 
-			      bulk_red_indices,
+	    metropolis_update(conf_local, bulk_sites[updPar], 
+			      bulk_indices[updPar],
 			      local_L, local_L_halo, gen, 
 			      iConf, nThreads, N_local, updPar, arr);
 	    computeTime.stop();
@@ -241,8 +238,8 @@ int main(int argc, char** argv) {
 	    
 	    computeTime.start();
 	    // Update boundary rossa/nero
-	    metropolis_update(conf_local, boundary_red_sites, 
-			      boundary_red_indices,
+	    metropolis_update(conf_local, boundary_sites[updPar], 
+			      boundary_indices[updPar],
 			      local_L, local_L_halo, gen, 
 			      iConf, nThreads, N_local, updPar, arr);
 	    computeTime.stop();

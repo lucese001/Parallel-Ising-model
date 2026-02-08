@@ -112,14 +112,11 @@ inline void classify_sites(size_t N_local, size_t N_dim,
                            const vector<size_t>& local_L,
                            const vector<size_t>& global_offset,
                            const vector<size_t>& arr,
-                           vector<size_t>& bulk_red_sites,
-                           vector<size_t>& bulk_red_indices,
-                           vector<size_t>& bulk_black_sites,
-                           vector<size_t>& bulk_black_indices,
-                           vector<size_t>& boundary_red_sites,
-                           vector<size_t>& boundary_red_indices,
-                           vector<size_t>& boundary_black_sites,
-                           vector<size_t>& boundary_black_indices) {
+                           vector<size_t> bulk_sites[2],
+                           vector<size_t> bulk_indices[2],
+                           vector<size_t> boundary_sites[2],
+                           vector<size_t> boundary_indices[2]) 
+    {
     
     vector<size_t> coord_buf(N_dim);
     vector<size_t> coord_global(N_dim);  // buffer per compute_global_index
@@ -148,22 +145,15 @@ inline void classify_sites(size_t N_local, size_t N_dim,
         int parity = sum_global % 2; // 0 = Rosso, 1 = Nero
         
         // Classifica il sito
-        if (!is_boundary) { // Bulk
-            if (parity == 0) {
-                bulk_red_sites.push_back(iSite);
-                bulk_red_indices.push_back(global_idx);
-            } else {
-                bulk_black_sites.push_back(iSite);
-                bulk_black_indices.push_back(global_idx);
+        if (!is_boundary) // Bulk
+            { 
+                bulk_sites[parity].push_back(iSite);
+                bulk_indices[parity].push_back(global_idx);
+            } 
+            else // Boundary
+            { 
+                boundary_sites[parity].push_back(iSite);
+                boundary_indices[parity].push_back(global_idx);
             }
-        } else { // Boundary
-            if (parity == 0) {
-                boundary_red_sites.push_back(iSite);
-                boundary_red_indices.push_back(global_idx);
-            } else {
-                boundary_black_sites.push_back(iSite);
-                boundary_black_indices.push_back(global_idx);
-            }
-        }
     }
 }

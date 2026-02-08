@@ -56,10 +56,10 @@ inline vector<FaceCache>
 build_face_cache(const vector<FaceInfo>& faces,
                  const vector<size_t>& local_L,
                  const vector<size_t>& local_L_halo,
+                 const vector<size_t>& global_offset,
                  size_t N_dim)
 {
     vector<FaceCache> cache(N_dim);
-
     vector<size_t> coord_face;
     vector<size_t> coord_full(N_dim);
 
@@ -69,42 +69,52 @@ build_face_cache(const vector<FaceInfo>& faces,
         const vector<size_t>& face_to_full = faces[d].map;
 
         size_t face_size = 1;
-        for (size_t i = 0; i < face_dims.size(); ++i)
+        for (size_t i = 0; i < face_dims.size(); ++i) {
             face_size *= face_dims[i];
+        }
 
         cache[d].face_size = face_size;
 
         for (int p = 0; p < 2; ++p) {
-            cache[d].idx_minus[p].reserve(face_size/2);
-            cache[d].idx_plus[p].reserve(face_size/2);
-            cache[d].idx_halo_minus[p].reserve(face_size/2);
-            cache[d].idx_halo_plus[p].reserve(face_size/2);
+            cache[d].idx_minus[p].reserve(face_size/2+1);
+            cache[d].idx_plus[p].reserve(face_size/2+1);
+            cache[d].idx_halo_minus[p].reserve(face_size/2+1);
+            cache[d].idx_halo_plus[p].reserve(face_size/2+1);
         }
 
         coord_face.resize(face_dims.size());
 
         for (size_t i = 0; i < face_size; ++i) {
 
+            //Coordinate del sito (locali rispetto alla faccia)
             index_to_coord(i, face_dims.size(),
                            face_dims.data(), coord_face.data());
 
-            // copia coordinate della faccia
-            for (size_t j = 0; j < face_to_full.size(); ++j)
+            // Copia le coordinate del sito (locali rispetto
+            //che adesso include peró pure l'halo)
+            //face_to_full[j] indica le coordinate intese come
+            // come es: [x,y,z] [0,1,2], eccetera...
+            size_t base=0;
+            for (size_t j = 0; j < face_to_full.size(); ++j){
                 coord_full[face_to_full[j]] = coord_face[j] + 1;
+                base+= coord_face[j]+global_offset[face_to_full[j]];
+            }
+            
+            int par_pos_face=(base+global_offset[d]+local_L[d]-1) %2;
+            int par_pos_face_halo=(base+global_offset[d]+local_L[d]) %2;
+            int par_neg_face=(base+global_offset[d]) %2;
+            int par_neg_face_halo=(base+global_offset[d]+1) %2;
 
             // faccia meno
             coord_full[d] = 1;
             size_t idx_inner_minus =
                 coord_to_index(N_dim, local_L_halo.data(), coord_full.data());
 
-            size_t gidx = compute_global_index(coord_full);
-            int parity = gidx & 1;
-
-            cache[d].idx_minus[parity].push_back(idx_inner_minus);
+            cache[d].idx_minus[par_neg_face].push_back(idx_inner_minus);
 
             // halo meno
             coord_full[d] = 0;
-            cache[d].idx_halo_minus[parity].push_back(
+            cache[d].idx_halo_minus[par_neg_face_halo].push_back(
                 coord_to_index(N_dim, local_L_halo.data(), coord_full.data())
             );
 
@@ -113,14 +123,11 @@ build_face_cache(const vector<FaceInfo>& faces,
             size_t idx_inner_plus =
                 coord_to_index(N_dim, local_L_halo.data(), coord_full.data());
 
-            gidx = compute_global_index(coord_full);
-            parity = gidx & 1;
-
-            cache[d].idx_plus[parity].push_back(idx_inner_plus);
+            cache[d].idx_plus[par_pos_face].push_back(idx_inner_plus);
 
             // halo più
             coord_full[d] = local_L[d] + 1;
-            cache[d].idx_halo_plus[parity].push_back(
+            cache[d].idx_halo_plus[par_pos_face_halo].push_back(
                 coord_to_index(N_dim, local_L_halo.data(), coord_full.data())
             );
         }
@@ -159,23 +166,29 @@ inline void start_halo_exchange(
     for (size_t d = 0; d < N_dim; ++d) {
 
         // Calcola la dimensione della faccia (tiene conto della parità)
-        const size_t face_size = cache[d].idx_minus[parity].size();
+        const size_t send_minus_size = cache[d].idx_minus[parity].size();
+        const size_t send_plus_size  = cache[d].idx_plus[parity].size();
+        const size_t recv_minus_size = cache[d].idx_halo_minus[parity].size();
+        const size_t recv_plus_size  = cache[d].idx_halo_plus[parity].size();
 
         // Alloca i buffer
-        buffers.send_minus[d].resize(face_size);
-        buffers.send_plus[d].resize(face_size);
-        buffers.recv_minus[d].resize(face_size);
-        buffers.recv_plus[d].resize(face_size);
+        buffers.send_minus[d].resize(send_minus_size);
+        buffers.send_plus[d].resize(send_plus_size);
+        buffers.recv_minus[d].resize(recv_minus_size);
+        buffers.recv_plus[d].resize(recv_plus_size);
 
         // Prepara i buffer con le configurazioni
         // (solo siti della parità richiesta)
-        for (size_t i = 0; i < face_size; ++i) {
+        for (size_t i = 0; i < send_minus_size; ++i) {
             buffers.send_minus[d][i] = conf_local[cache[d].idx_minus[parity][i]];
+        }
+
+        for (size_t i = 0; i < send_plus_size; ++i) {
             buffers.send_plus[d][i] = conf_local[cache[d].idx_plus[parity][i]];
         }
 
         // DEBUG: Print face data being sent
-        if (debug_print) {
+        /*if (debug_print) {
             const char* dim_name = (d == 0) ? "X" : (d == 1) ? "Y" : "Z";
 
             master_printf("[Rank %d] === SENDING dim=%zu (%s), parity=%d ===\n", rank, d, dim_name, parity);
@@ -211,7 +224,7 @@ inline void start_halo_exchange(
             }
             if (face_size > 10) master_printf("...");
             master_printf("\n");
-        }
+        }*/
 
         int tag_minus = 100 + d;
         int tag_plus  = 200 + d;
@@ -220,28 +233,28 @@ inline void start_halo_exchange(
 
         // Ricevi da vicino "dietro"
         MPI_Irecv(buffers.recv_minus[d].data(),
-                  face_size, MPI_INT8_T,
+                  recv_minus_size, MPI_INT8_T,
                   neighbors[d][0], tag_plus,
                   cart_comm, &req);
         requests.push_back(req);
 
         // Ricevi da vicino "davanti"
         MPI_Irecv(buffers.recv_plus[d].data(),
-                  face_size, MPI_INT8_T,
+                  recv_plus_size, MPI_INT8_T,
                   neighbors[d][1], tag_minus,
                   cart_comm, &req);
         requests.push_back(req);
 
         // Invia a vicino "dietro"
         MPI_Isend(buffers.send_minus[d].data(),
-                  face_size, MPI_INT8_T,
+                  send_minus_size, MPI_INT8_T,
                   neighbors[d][0], tag_minus,
                   cart_comm, &req);
         requests.push_back(req);
 
         // Invia a vicino "davanti"
         MPI_Isend(buffers.send_plus[d].data(),
-                  face_size, MPI_INT8_T,
+                  send_plus_size, MPI_INT8_T,
                   neighbors[d][1], tag_plus,
                   cart_comm, &req);
         requests.push_back(req);
@@ -276,10 +289,11 @@ inline void write_halo_data(
     for (size_t d = 0; d < N_dim; ++d) {
 
         // Determina la dimensione della faccia (considerando la parità)
-        const size_t face_size = cache[d].idx_halo_minus[parity].size();
+        const size_t halo_minus_size = cache[d].idx_halo_minus[parity].size();
+        const size_t halo_plus_size  = cache[d].idx_halo_plus[parity].size();
 
         // DEBUG: Print received data before writing
-        if (debug_print) {
+        /*if (debug_print) {
             const char* dim_name = (d == 0) ? "X" : (d == 1) ? "Y" : "Z";
 
             master_printf("[Rank %d] === RECEIVED dim=%zu (%s), parity=%d ===\n", rank, d, dim_name, parity);
@@ -311,16 +325,18 @@ inline void write_halo_data(
             for (size_t i = 0; i < face_size && i < 10; ++i) {
                 master_printf("%c ", buffers.recv_plus[d][i] > 0 ? '+' : '-');
             }
-            if (face_size > 10) master_printf("...");
-            master_printf("\n");
-        }
+            //if (face_size > 10) master_printf("...");
+            //master_printf("\n");
+        }*/
 
-        for (size_t i = 0; i < face_size; ++i) {
+        for (size_t i = 0; i < halo_minus_size; ++i) {
 
             // Scrive i dati ricevuti negli halo meno
             conf_local[cache[d].idx_halo_minus[parity][i]] = buffers.recv_minus[d][i];
+        }
+        for (size_t i = 0; i < halo_plus_size; ++i) {
 
-            // Scrive i dati ricevuti negli halo più
+            // Scrive i dati ricevuti negli halo meno
             conf_local[cache[d].idx_halo_plus[parity][i]] = buffers.recv_plus[d][i];
         }
     }
