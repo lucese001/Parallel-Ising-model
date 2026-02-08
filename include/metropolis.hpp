@@ -99,13 +99,15 @@ inline void metropolis_update(vector<int8_t>& conf_local,
             const double rand_uniform = (double)rand1 / 4294967296.0;
             const int acc = (rand_uniform < pAcc) ? 1 : 0;
             
-            // DEBUG PRINT: Show complete RNG state for this site
-            #pragma omp critical
-            {
+            // DEBUG PRINT per verificare riproducibilitá
+            #ifdef DEBUG_PRINT
 
-            std::cout << "PHILOX_DEBUG: iConf=" << iConf 
-            /*"global coord:" <<index_to_coord(global_idx, N_dim, arr.data(), coord_buf.data()) [0]
-            <<","<<index_to_coord(global_idx, N_dim, arr.data(), coord_buf.data())[1]*/
+                #pragma omp critical
+                {
+
+                std::cout << "PHILOX_DEBUG: iConf=" << iConf 
+                /*"global coord:" <<index_to_coord(global_idx, N_dim, arr.data(), coord_buf.data()) [0]
+                <<","<<index_to_coord(global_idx, N_dim, arr.data(), coord_buf.data())[1]*/
                  << " global_idx=" << global_idx
                  << " | rand0=" << rand0
                  << " spin=" << (int)proposed_spin
@@ -115,18 +117,15 @@ inline void metropolis_update(vector<int8_t>& conf_local,
                  << " acc=" << acc
                  << "oldVal= "<< +oldVal
                  << "proposed spin= "<< +proposed_spin;
-            }
-            if (acc==0)
-            {
-                conf_local[iSite_halo] = oldVal;
-            }
-            if (acc!=1 && acc!=0 ){
-                std::cout<<"ERRORE IN CONF:"<<iConf
-                <<"global_idx"<<"global_idx="<<global_idx<<"\n";
-            }
-            int conf_finale=conf_local[iSite_halo];
-             std::cout << "conf finale=" <<conf_finale <<"\n";
+                }
+                if (acc==0)
+                {
+                    conf_local[iSite_halo] = oldVal;
+                }
+                int conf_finale=conf_local[iSite_halo];
+                std::cout << "conf finale=" <<conf_finale <<"\n";
             
+            #endif
         }
 
     }

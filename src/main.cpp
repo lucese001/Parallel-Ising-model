@@ -1,6 +1,4 @@
 #define PARALLEL_RNG
-#define DEBUG_PRINT
-
 #ifdef USE_PHILOX
 #include "philox_rng.hpp"
 #else
@@ -189,13 +187,13 @@ int main(int argc, char** argv) {
     buffers.resize(N_dim);
 
     for (int iConf = 0; iConf < (int)nConfs; ++iConf) {
-#ifdef DEBUG_PRINT
-        // Stampa la configurazione globale per debug (utile 
-        // per verificare riproducibilità)
-        print_global_configuration_debug(conf_local, local_L, local_L_halo, global_offset, arr,
-                                          N_dim, N_local, N_global, world_rank, world_size, 
-                                          iConf, cart_comm);
-#endif
+        #ifdef DEBUG_PRINT
+            // Stampa la configurazione globale per debug (utile 
+            // per verificare riproducibilità)
+            print_global_configuration_debug(conf_local, local_L, local_L_halo, global_offset, arr,
+                                            N_dim, N_local, N_global, world_rank, world_size, 
+                                            iConf, cart_comm);
+        #endif
 
         // Aggiornamento Rosso/Nero.
         // L'ordine dei processi é il seguente:
