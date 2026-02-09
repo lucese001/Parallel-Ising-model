@@ -225,11 +225,17 @@ int main(int argc, char** argv) {
     // Apertura del file di output per le misure
     FILE* measFile = nullptr;
     if (world_rank == 0) {
-        measFile = fopen("output/meas.txt", "w");
+        string fname = "output/meas_" + to_string(world_size) + "rank";
+        for (int d = 0; d < N_dim; ++d)
+            fname += (d == 0 ? "_" : "x") + to_string(arr[d]);
+        fname += ".txt";
+
+        measFile = fopen(fname.c_str(), "w");
         if (!measFile) {
-            perror("Errore apertura output/meas.txt");
+            perror(("Errore apertura " + fname).c_str());
             MPI_Abort(MPI_COMM_WORLD, 1);
         }
+        master_printf("Output file: %s\n", fname.c_str());
     }
 
     // Debug per vedere la topologia MPI

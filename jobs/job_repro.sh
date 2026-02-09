@@ -1,0 +1,67 @@
+#!/bin/bash
+#PBS -N ising_repro
+#PBS -l nodes=1:ppn=64
+#PBS -l walltime=00:30:00
+#PBS -j oe
+
+cd $PBS_O_WORKDIR
+mkdir -p logs output
+
+# Setup MPI
+unset LD_LIBRARY_PATH
+export MPI_ROOT=/storage/local/exp_soft/local_sl7/mpi/openmpi-4.0.5
+export PATH=$MPI_ROOT/bin:$PATH
+export LD_LIBRARY_PATH=$MPI_ROOT/lib
+export OMP_PROC_BIND=close
+export OMP_PLACES=cores
+
+echo "=== Test riproducibilita ==="
+echo "Start: $(date)"
+
+# Parametri del test
+LATTICE="120 120"
+NCONFS=1000
+BETA=0.45
+SEED=124634
+
+# Test con 1, 2, 4 rank (threads = 64/ranks)
+for NRANKS in 1 2 4; do
+    NTHREADS=$((64 / NRANKS))
+
+    cat > input/dimensioni.txt << EOF
+2
+$LATTICE
+$NCONFS
+$NTHREADS
+$BETA
+$SEED
+EOF
+
+    echo "--- $NRANKS rank x $NTHREADS threads ---"
+    mpirun -n $NRANKS ./ising_philox.exe 2>&1 | tee logs/repro_${NRANKS}rank.log
+    echo ""
+done
+
+# Confronta gli output
+echo "Confronto output"
+REF="output/meas_1rank_120x120.txt"
+PASS=true
+
+for NRANKS in 2 4; do
+    FILE="output/meas_${NRANKS}rank_120x120.txt"
+    if diff -q "$REF" "$FILE" > /dev/null 2>&1; then
+        echo "OK: 1 rank vs $NRANKS rank -> IDENTICI"
+    else
+        echo "ERRORE: 1 rank vs $NRANKS rank -> DIVERSI!"
+        diff "$REF" "$FILE" | head -5
+        PASS=false
+    fi
+done
+
+if $PASS; then
+    echo "RIPRODUCIBILITA PASSATA"
+else
+    echo "RIPRODUCIBILITA FALLITA"
+fi
+
+echo "Fine: $(date)"
