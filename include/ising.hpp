@@ -15,54 +15,22 @@ using std::mt19937_64;
 using namespace std;
 
 // Variabili globali esterne (definite in new_ising.cpp)
-extern size_t N_dim;
+extern int N_dim;
 extern int world_rank;
 extern int world_size;
 
-// computeEnSite: energia locale attorno a iSite
-inline int computeEnSite(const vector<int8_t>& conf, 
-                         const size_t& iSite_local,
-                         const vector<size_t>& local_L,
-                         const vector<size_t>& local_L_halo) {
-    
-    static thread_local vector<size_t> coord_site(N_dim);
-    static thread_local vector<size_t> coord_halo(N_dim);
-    static thread_local vector<size_t> coord_neigh(N_dim);
-    
-    if (coord_site.size() != N_dim) {
-        coord_site.resize(N_dim);
-        coord_halo.resize(N_dim);
-        coord_neigh.resize(N_dim);
-    }
-    
-    // Converti iSite_local (senza halo) in coordinate locali
-    index_to_coord(iSite_local, N_dim, local_L.data(), coord_site.data());
-    
-    // Aggiungi offset +1 per l'halo (le celle interne iniziano da 1)
-    for (size_t d = 0; d < N_dim; ++d) {
-        coord_halo[d] = coord_site[d] + 1;
-    }
-    
-    // Indice nel conf_local (con halo)
-    size_t idx_center = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
-    
+inline int computeEnSite(const vector<int8_t>& conf,
+                         size_t idx, //indice halo
+                         const vector<size_t>& stride_halo,
+                         int N_dim) {
     int en = 0;
-    for (size_t d = 0; d < N_dim; ++d) {
-        // Vicino +1
-        memcpy(coord_neigh.data(), coord_halo.data(), N_dim * sizeof(size_t));
-        coord_neigh[d] = coord_halo[d] + 1;
-        size_t idx_plus = coord_to_index(N_dim, local_L_halo.data(), coord_neigh.data());
-        en -= conf[idx_plus] * conf[idx_center];
-        
-        // Vicino -1
-        memcpy(coord_neigh.data(), coord_halo.data(), N_dim * sizeof(size_t));
-        coord_neigh[d] = coord_halo[d] - 1;
-        size_t idx_minus = coord_to_index(N_dim, local_L_halo.data(), coord_neigh.data());
-        en -= conf[idx_minus] * conf[idx_center];
+    for (int d = 0; d < N_dim; ++d) {
+        en -= conf[idx + stride_halo[d]] * conf[idx];
+        en -= conf[idx - stride_halo[d]] * conf[idx];
     }
-    
     return en;
 }
+
 /*inline int computeEnSiteDebug(const vector<int8_t>& conf, 
                          const size_t& iSite_local,
                          const vector<size_t>& local_L,
@@ -90,7 +58,7 @@ inline int computeEnSite(const vector<int8_t>& conf,
    }
     
     // Aggiungi offset +1 per l'halo (le celle interne iniziano da 1)
-    for (size_t d = 0; d < N_dim; ++d) {
+    for (int d = 0; d < N_dim; ++d) {
         coord_halo[d] = coord_site[d] + 1;
         if (condPrint){
             master_cout<<"coord_halo["<<d<<"]"<<coord_halo[d]<<"\n";
@@ -125,7 +93,7 @@ inline int computeEnSite(const vector<int8_t>& conf,
     size_t idx_center = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
     
     int en = 0;
-    for (size_t d = 0; d < N_dim; ++d) {
+    for (int d = 0; d < N_dim; ++d) {
         // Vicino +1
         memcpy(coord_neigh.data(), coord_halo.data(), N_dim * sizeof(size_t));
         coord_neigh[d] = coord_halo[d] + 1;
@@ -165,49 +133,37 @@ inline int computeEnSite(const vector<int8_t>& conf,
     return en;
 }*/
 
-// computeEn: energia totale (riduzione parallela)
-
-inline int computeEn(const vector<int8_t>& conf, size_t N_local,
-                     const vector<size_t>& local_L,
-                     const vector<size_t>& local_L_halo) {
+// computeEn: somma parziale dell'energia sui siti specificati
+// Restituisce la somma GREZZA (ogni coppia contata 2 volte).
+// Il chiamante divide per 2 dopo aver sommato tutti i contributi.
+inline long long computeEn(const vector<int8_t>& conf,
+                           const vector<size_t>& sites,
+                           const vector<size_t>& stride_halo,
+                           int N_dim) {
     long long en = 0;
 #pragma omp parallel for reduction(+:en)
-    for (size_t iSite = 0; iSite < N_local; ++iSite) {
-        
-        en += computeEnSite(conf, iSite, local_L, local_L_halo);
+    for (size_t i = 0; i < sites.size(); ++i) {
+        en += computeEnSite(conf, sites[i], stride_halo, N_dim);
     }
-    return (int)(en / 2);
+    return en;
 }
 
-// computeMagnetization_local: magnetizzazione locale
-inline double computeMagnetization_local(const vector<int8_t>& conf, size_t N_local,
-                                         const vector<size_t>& local_L,
-                                         const vector<size_t>& local_L_halo) {
+// computeMagnetization_local: magnetizzazione parziale sui siti specificati
+inline long long computeMagnetization_local(const vector<int8_t>& conf,
+                                            const vector<size_t>& sites) {
     long long mag = 0;
-    
-#pragma omp parallel reduction(+:mag)
-    {
-        vector<size_t> coord_local(N_dim);
-        vector<size_t> coord_halo(N_dim);
-        
-#pragma omp for
-        for (size_t iSite = 0; iSite < N_local; ++iSite) {
-            index_to_coord(iSite, N_dim, local_L.data(), coord_local.data());
-            for (size_t d = 0; d < N_dim; ++d) {
-                coord_halo[d] = coord_local[d] + 1;
-            }
-            size_t idx_halo = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
-            mag += conf[idx_halo];
-        }
+#pragma omp parallel for reduction(+:mag)
+    for (size_t i = 0; i < sites.size(); ++i) {
+        mag += conf[sites[i]];
     }
-    return (double) mag;
+    return mag;
 }
 
 // Crea una configurazione iniziale casuale usando l'indice globale 
 // (per garantire riproducibilità) indipendente dal numero di rank/thread
 /*inline void initialize_configuration(vector<int8_t>& conf_local,
                                      size_t N_local,
-                                     size_t N_dim,
+                                     int N_dim,
                                      const vector<size_t>& local_L,
                                      const vector<size_t>& local_L_halo,
                                      const vector<size_t>& global_offset,
@@ -249,7 +205,7 @@ for (int rank = 0; rank < world_size; rank++) {
             
             // Converti l'indice locale (senza halo) in indice con halo
             index_to_coord(i, N_dim, local_L.data(), coord_local.data());
-            for (size_t d = 0; d < N_dim; ++d) {
+            for (int d = 0; d < N_dim; ++d) {
                 coord_halo[d] = coord_local[d] + 1;  // +1 per saltare l'halo
             }
             size_t idx_halo = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
@@ -275,7 +231,7 @@ for (int rank = 0; rank < world_size; rank++) {
 
 inline void initialize_configuration(vector<int8_t>& conf_local,
                                      size_t N_local,
-                                     size_t N_dim,
+                                     int N_dim,
                                      const vector<size_t>& local_L,
                                      const vector<size_t>& local_L_halo,
                                      const vector<size_t>& global_offset,
@@ -314,7 +270,7 @@ inline void initialize_configuration(vector<int8_t>& conf_local,
             
             // Converti in coordinate con halo
             index_to_coord(i, N_dim, local_L.data(), coord_local.data());
-            for (size_t d = 0; d < N_dim; ++d) {
+            for (int d = 0; d < N_dim; ++d) {
                 coord_halo[d] = coord_local[d] + 1;
             }
             size_t idx_halo = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());

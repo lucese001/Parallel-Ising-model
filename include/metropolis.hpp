@@ -20,33 +20,33 @@
 using namespace std;
 
 // Variabili globali esterne (definite in main.cpp)
-extern size_t N_dim;
-extern size_t N;
+extern int N_dim;
+extern long long N;
 extern double Beta;
 
-// metropolis_update: esegue uno sweep Metropolis completo
+// metropolis_update: esegue uno sweep Metropolis
 // con aggiornamento a scacchiera sui siti specificati
+// sites[] contiene gli indici HALO (pronti per accedere a conf_local)
 
 #ifdef USE_PHILOX
 
-// Philox RNG: riproducible per update Bulk-Boundary (non dipende dalla
+// Philox RNG: riproducibile per update Bulk-Boundary (non dipende dalla
 // sequenza estratta).
-inline void metropolis_update(vector<int8_t>& conf_local,
+void metropolis_update(vector<int8_t>& conf_local,
                               const vector<size_t>& sites,
                               const vector<size_t>& sites_global_indices,
-                              const vector<size_t>& local_L,
-                              const vector<size_t>& local_L_halo,
+                              const vector<size_t>& stride_halo,
+                              const vector<double>& expTable,
+                              long long &DeltaE,
+                              long long &DeltaMag,
                               PhiloxRNG& gen,
                               int iConf,
-                              size_t nThreads,
-                              size_t N_local,
-                              int target_parity,
-                              vector<size_t>& arr )
+                              size_t nThreads)
 {
-    vector<size_t> coord_buf(N_dim);
-    vector<size_t> coord_tmp(N_dim);
+        long long local_dE = 0; // Variazione di energia locale a ogni thread
+        long long local_dM = 0; // Variazione di magnetizzazione locale a ogni thread
+#pragma omp parallel reduction(+:local_dE, local_dM)
 
-    #pragma omp parallel firstprivate(coord_buf, coord_tmp)
     {
         const size_t iThread = omp_get_thread_num();
         const size_t chunkSize = (sites.size() + nThreads - 1) / nThreads;
@@ -54,81 +54,65 @@ inline void metropolis_update(vector<int8_t>& conf_local,
         const size_t end = std::min(sites.size(), beg + chunkSize);
 
         for (size_t idx = beg; idx < end; ++idx) {
-            size_t iSite = sites[idx];
-            size_t global_idx = sites_global_indices[idx];
-
-            // Converti iSite in coord per trovare halo index vicini
-            index_to_coord(iSite, N_dim, local_L.data(), coord_buf.data());
-
-            for (size_t d = 0; d < N_dim; ++d) {
-                coord_tmp[d] = coord_buf[d] + 1;
-            }
-            size_t iSite_halo = coord_to_index(N_dim, local_L_halo.data(),
-                                              coord_tmp.data());
+            const size_t iSite_halo = sites[idx];
+            const size_t global_idx = sites_global_indices[idx];
 
             const int8_t oldVal = conf_local[iSite_halo];
-            int enBefore;
-            enBefore = computeEnSite(conf_local, iSite,
-                                    local_L, local_L_halo);
-            // }
-            //  if ( global_idx != 3 ) {
-            //      enBefore = computeEnSiteDebug(conf_local, iSite,
-            //                                    local_L, local_L_halo, false);
-            //  }
 
-            // Philox é un counter-based RNG. In questo modo l'ordine in cui
+            // Philox e' un counter-based RNG. L'ordine in cui
             // vengono aggiornati i siti non influenza i numeri estratti
             // (dipendono solo dall'indice globale e dalla configurazione)
 
-            //Genera i due numeri casuali: 1 per la proposta 
-            //di spin, l'altro per l'accettazione
-            uint32_t rand0, rand1;
-            rand0 = gen.get1(global_idx, iConf, 0, false);
-            rand1 = gen.get1(global_idx, iConf, 1, false);
-
-            // Sample 0: Proposta di spin
+            // Proposta di spin: se é uguale a quello precedente
+            // salta al prossimo sito
+            uint32_t rand0 = gen.get1(global_idx, iConf, 0, false);
             int8_t proposed_spin = (rand0 & 1) ? 1 : -1;
-            conf_local[iSite_halo] = proposed_spin;
+            if (proposed_spin == oldVal) continue;
 
-            const int enAfter = computeEnSite(conf_local, iSite,
-                                             local_L, local_L_halo);                 
-            const int eDiff = enAfter - enBefore;
-            const double pAcc = std::min(1.0, exp(-Beta * (double)eDiff));
-
-            // Sample 1: Probabilitá di accetazione
-            const double rand_uniform = (double)rand1 / 4294967296.0;
-            const int acc = (rand_uniform < pAcc) ? 1 : 0;
+            const int enBefore = computeEnSite(conf_local, iSite_halo,
+                                               stride_halo, N_dim);
+            const int eDiff = - 2*enBefore; // Se flippa l'energia cambia segno           
             
-            // DEBUG PRINT per verificare riproducibilitá
+            // Accettazione
+            bool accept;
+            if (eDiff <= 0) {
+                // L'energia diminuisce quindi il flip viene accettato
+                accept = true;
+            } else {
+                // eDiff > 0: valori possibili 4, 8, ..., 4*N_dim
+                // Lookup: expTable[eDiff/4 - 1] = exp(-Beta*eDiff)
+                uint32_t rand1 = gen.get1(global_idx, iConf, 1, false);
+                // Questa parte non mi è 100% chiara
+                const double rand_uniform = (double)rand1 / 4294967296.0;
+                accept = (rand_uniform < expTable[eDiff / 4 - 1]);
+            }
+
+            if (accept) {
+                conf_local[iSite_halo] = proposed_spin;
+                local_dE += eDiff;
+                local_dM += proposed_spin - oldVal;
+            }
+
             #ifdef DEBUG_PRINT
-
-                #pragma omp critical
-                {
-
-                std::cout << "PHILOX_DEBUG: iConf=" << iConf 
-                /*"global coord:" <<index_to_coord(global_idx, N_dim, arr.data(), coord_buf.data()) [0]
-                <<","<<index_to_coord(global_idx, N_dim, arr.data(), coord_buf.data())[1]*/
-                 << " global_idx=" << global_idx
-                 << " | rand0=" << rand0
-                 << " spin=" << (int)proposed_spin
-                 << " | rand1=" << rand1
-                 << " p_uniform=" << rand_uniform
-                 << " pAcc=" << pAcc
-                 << " acc=" << acc
-                 << "oldVal= "<< +oldVal
-                 << "proposed spin= "<< +proposed_spin;
-                }
-                if (acc==0)
-                {
-                    conf_local[iSite_halo] = oldVal;
-                }
-                int conf_finale=conf_local[iSite_halo];
-                std::cout << "conf finale=" <<conf_finale <<"\n";
-            
+            #pragma omp critical
+            {
+                std::cout << "PHILOX_DEBUG: iConf=" << iConf
+                << " global_idx=" << global_idx
+                << " rand0=" << rand0
+                << " spin=" << (int)proposed_spin
+                << " E iniziale=" << enBefore
+                << " DeltaE=" << eDiff
+                << " acc=" << accept
+                << " oldVal=" << +oldVal
+                << " proposed_spin=" << +proposed_spin
+                << " conf_finale=" << +conf_local[iSite_halo] << "\n";
+            }
             #endif
         }
-
     }
+    // Somma delle energie per thread
+    DeltaE += local_dE;
+    DeltaMag += local_dM;
 }
 
 #else  // Versione originale prng_engine (dipende dalla sequenza estratta)
@@ -136,18 +120,12 @@ inline void metropolis_update(vector<int8_t>& conf_local,
 inline void metropolis_update(vector<int8_t>& conf_local,
                               const vector<size_t>& sites,
                               const vector<size_t>& sites_global_indices,
-                              const vector<size_t>& local_L,
-                              const vector<size_t>& local_L_halo,
+                              const vector<size_t>& stride_halo,
                               prng_engine& gen,
                               int iConf,
-                              size_t nThreads,
-                              size_t N_local,
-                              int target_parity)
+                              size_t nThreads)
 {
-    vector<size_t> coord_buf(N_dim);
-    vector<size_t> coord_tmp(N_dim);
-
-    #pragma omp parallel firstprivate(coord_buf, coord_tmp)
+    #pragma omp parallel
     {
         const size_t iThread = omp_get_thread_num();
         const size_t chunkSize = (sites.size() + nThreads - 1) / nThreads;
@@ -155,30 +133,21 @@ inline void metropolis_update(vector<int8_t>& conf_local,
         const size_t end = std::min(sites.size(), beg + chunkSize);
 
         for (size_t idx = beg; idx < end; ++idx) {
-            size_t iSite = sites[idx];
-            size_t global_idx = sites_global_indices[idx];
+            const size_t iSite_halo = sites[idx];
+            const size_t global_idx = sites_global_indices[idx];
 
             // discard basato sull'indice globale
             prng_engine genView = gen;
             genView.discard(2 * 2 * (global_idx + N * iConf));
 
-            // Converti iSite in coord per trovare halo index vicini
-            index_to_coord(iSite, N_dim, local_L.data(), coord_buf.data());
-
-            for (size_t d = 0; d < N_dim; ++d) {
-                coord_tmp[d] = coord_buf[d] + 1;
-            }
-            size_t iSite_halo = coord_to_index(N_dim, local_L_halo.data(),
-                                              coord_tmp.data());
-
             const int8_t oldVal = conf_local[iSite_halo];
-            const int enBefore = computeEnSite(conf_local, iSite,
-                                              local_L, local_L_halo);
+            const int enBefore = computeEnSite(conf_local, iSite_halo,
+                                               stride_halo, N_dim);
 
             conf_local[iSite_halo] = (int8_t)(binomial_distribution<int>(1, 0.5)(genView) * 2 - 1);
 
-            const int enAfter = computeEnSite(conf_local, iSite,
-                                             local_L, local_L_halo);
+            const int enAfter = computeEnSite(conf_local, iSite_halo,
+                                              stride_halo, N_dim);
             const int eDiff = enAfter - enBefore;
             const double pAcc = std::min(1.0, exp(-Beta * (double)eDiff));
             const int acc = binomial_distribution<int>(1, pAcc)(genView);
@@ -188,4 +157,4 @@ inline void metropolis_update(vector<int8_t>& conf_local,
     }
 }
 
-#endif 
+#endif

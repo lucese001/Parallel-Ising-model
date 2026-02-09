@@ -11,10 +11,10 @@ using std::vector;
 // Legge i parametri di simulazione dal file dimensioni.txt
 // Restituisce true se la lettura è andata a buon fine, false altrimenti
 inline bool read_input_file(const char* filename,
-                            size_t& N_dim,
+                            int& N_dim,
                             vector<size_t>& arr,
-                            size_t& nConfs,
-                            size_t& nThreads,
+                            int& nConfs,
+                            int& nThreads,
                             double& Beta,size_t& seed) {
     FILE* fp = fopen(filename, "r");
     if (!fp) {
@@ -23,14 +23,14 @@ inline bool read_input_file(const char* filename,
         return false;
     }
 
-    if (fscanf(fp, "%zu", &N_dim) != 1) {
+    if (fscanf(fp, "%d", &N_dim) != 1) {
         fprintf(stderr, "Errore lettura N_dim\n");
         fclose(fp);
         return false;
     }   
     arr.resize(N_dim);
 
-    for (size_t i = 0; i < N_dim; ++i) {
+    for (int i = 0; i < N_dim; ++i) {
         if (fscanf(fp, "%zu", &arr[i]) != 1) {
             fprintf(stderr, "Errore lettura arr[%zu]\n", i);
             fclose(fp);
@@ -38,13 +38,13 @@ inline bool read_input_file(const char* filename,
         }
     }
     
-    if (fscanf(fp, "%zu", &nConfs) != 1) {
+    if (fscanf(fp, "%d", &nConfs) != 1) {
         fprintf(stderr, "Errore lettura nConfs\n");
         fclose(fp);
         return false;
     }
     
-    if (fscanf(fp, "%zu", &nThreads) != 1) {
+    if (fscanf(fp, "%d", &nThreads) != 1) {
         fprintf(stderr, "Errore lettura nThreads\n");
         fclose(fp);
         return false;
@@ -65,10 +65,10 @@ inline bool read_input_file(const char* filename,
     fclose(fp);
     
     // Stampa ció che hai letto in caso (debug)
-    master_printf("Rank 0 ha letto: N_dim=%zu, nConfs=%zu, nThreads=%zu, Beta=%lg, seed=%zu\n", 
+    master_printf("Rank 0 ha letto: N_dim=%d, nConfs=%zu, nThreads=%d, Beta=%lg, seed=%zu\n", 
            N_dim, nConfs, nThreads, Beta, seed);
     master_printf("Dimensioni: ");
-    for (size_t i = 0; i < N_dim; ++i) master_printf("%zu ", arr[i]);
+    for (int i = 0; i < N_dim; ++i) master_printf("%zu ", arr[i]);
     master_printf("\n");
     
     return true;
@@ -92,8 +92,12 @@ inline void print_performance_summary(double total, double compute,
 }
 
 // Scrive una misura nel file di output
-inline void write_measurement(FILE* measFile, double mag, double en, size_t N) {
-    fprintf(measFile, "%lg %lg\n", mag/N, en/N);
+inline void write_measurement(FILE* measFile, long long Mag, 
+                              long long En, size_t N) {
+
+    double mag = (double)Mag / (double)N;
+    double en  = (double)En / (double)N;
+    fprintf(measFile, "%lg %lg\n", mag, en);
     fflush(measFile);
 }
 
@@ -113,9 +117,9 @@ inline void write_measurement(FILE* measFile, double mag, double en, size_t N) {
 }*/
 
 // Stampa le informazioni sulla simulazione
-inline void print_simulation_info(size_t N_dim, size_t N, size_t nThreads, int nConfs, 
+inline void print_simulation_info(int N_dim, long long N, size_t nThreads, int nConfs, 
                                    double Beta, size_t rng_memory, bool parallel_rng) {
-    master_printf("N_dim: %zu, Npunti: %zu, NThreads: %zu, nConfs: %d, Beta: %lg\n", 
+    master_printf("N_dim: %d, Npunti: %zu, NThreads: %d, nConfs: %d, Beta: %lg\n", 
            N_dim, N, nThreads, nConfs, Beta);
     if (parallel_rng) {
         master_printf("Memory usage of the rng: %zu Bytes\n", rng_memory);
@@ -125,7 +129,7 @@ inline void print_simulation_info(size_t N_dim, size_t N, size_t nThreads, int n
 }
 
 // Stampa la topologia MPI per debug
-inline void print_mpi_topology(int world_rank, int world_size, size_t N_dim,
+inline void print_mpi_topology(int world_rank, int world_size, int N_dim,
                                 const vector<int>& rank_coords,
                                 const vector<size_t>& global_offset,
                                 const vector<size_t>& local_L) {
@@ -133,21 +137,21 @@ inline void print_mpi_topology(int world_rank, int world_size, size_t N_dim,
         if (world_rank == r) {
             master_printf("RANK %d \n", world_rank);
             master_printf("  rank_coords: [");
-            for (size_t d = 0; d < N_dim; ++d) {
+            for (int d = 0; d < N_dim; ++d) {
                 master_printf("%d", rank_coords[d]);
                 if (d < N_dim-1) master_printf(", ");
             }
             master_printf("]\n");
         
             master_printf("  global_offset: [");
-            for (size_t d = 0; d < N_dim; ++d) {
+            for (int d = 0; d < N_dim; ++d) {
                 master_printf("%zu", global_offset[d]);
                 if (d < N_dim-1) master_printf(", ");
             }
             master_printf("]\n");
 
             master_printf("  local_L: [");
-            for (size_t d = 0; d < N_dim; ++d) {
+            for (int d = 0; d < N_dim; ++d) {
                 master_printf("%zu", local_L[d]);
                 if (d < N_dim-1) master_printf(", ");
             }
@@ -162,9 +166,10 @@ inline void print_mpi_topology(int world_rank, int world_size, size_t N_dim,
 inline void print_configuration_debug(const vector<int8_t>& conf_local,
                                        const vector<size_t>& local_L,
                                        const vector<size_t>& local_L_halo,
-                                       size_t N_dim, size_t N_local,
+                                       int N_dim, size_t N_local,
                                        int world_rank, int world_size,
                                        int iConf, MPI_Comm comm) {
+
     for (int r = 0; r < world_size; ++r) {
         if (world_rank == r) {
             master_printf("RANK %d, Conf %d\n", world_rank, iConf);
@@ -216,7 +221,7 @@ inline void print_global_configuration_debug(const vector<int8_t>& conf_local,
                                               const vector<size_t>& local_L_halo,
                                               const vector<size_t>& global_offset,
                                               const vector<size_t>& arr,
-                                              size_t N_dim, size_t N_local, size_t N_global,
+                                              int N_dim, size_t N_local, size_t N_global,
                                               int world_rank, int world_size,
                                               int iConf, MPI_Comm comm) {
     // Alloca buffer per la configurazione globale su rank 0
@@ -241,7 +246,8 @@ inline void print_global_configuration_debug(const vector<int8_t>& conf_local,
         
         // Leggi spin dalla posizione con halo
         index_to_coord(i, N_dim, local_L.data(), coord_local.data());
-        for (size_t d = 0; d < N_dim; ++d) {
+
+        for (int d = 0; d < N_dim; ++d) {
             coord_halo[d] = coord_local[d] + 1;
         }
         size_t idx_halo = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());

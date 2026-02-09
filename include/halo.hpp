@@ -13,7 +13,7 @@ struct HaloBuffers {
     vector<vector<int8_t>> send_minus, send_plus; 
     vector<vector<int8_t>> recv_minus, recv_plus; 
     
-    void resize(size_t N_dim) {
+    void resize(int N_dim) {
         send_minus.resize(N_dim);  
         send_plus.resize(N_dim);
         recv_minus.resize(N_dim);
@@ -39,11 +39,12 @@ struct FaceCache {
 };
 
 // Costruisce le informazioni delle facce per lo scambio halo
-inline vector<FaceInfo> build_faces(const vector<size_t>& local_L, size_t N_dim) {
-    vector<FaceInfo> faces(N_dim);
+inline vector<FaceInfo> build_faces(const vector<size_t>& local_L, 
+                                    int N_dim) {
 
-    for (size_t d = 0; d < N_dim; ++d) {
-        for (size_t k = 0; k < N_dim; ++k) {
+    vector<FaceInfo> faces(N_dim);
+    for (int d = 0; d < N_dim; ++d) {
+        for (int k = 0; k < N_dim; ++k) {
             if (k == d) continue;
             faces[d].dims.push_back(local_L[k]);
             faces[d].map.push_back(k);
@@ -57,13 +58,13 @@ build_face_cache(const vector<FaceInfo>& faces,
                  const vector<size_t>& local_L,
                  const vector<size_t>& local_L_halo,
                  const vector<size_t>& global_offset,
-                 size_t N_dim)
+                 int N_dim)
 {
     vector<FaceCache> cache(N_dim);
     vector<size_t> coord_face;
     vector<size_t> coord_full(N_dim);
 
-    for (size_t d = 0; d < N_dim; ++d) {
+    for (int d = 0; d < N_dim; ++d) {
 
         const vector<size_t>& face_dims    = faces[d].dims;
         const vector<size_t>& face_to_full = faces[d].map;
@@ -143,7 +144,7 @@ inline void start_halo_exchange(
     const vector<size_t>& local_L_halo,
     const vector<vector<int>>& neighbors,
     MPI_Comm cart_comm,
-    size_t N_dim,
+    int N_dim,
     HaloBuffers& buffers,
     const vector<FaceInfo>& faces,
     vector<MPI_Request>& requests,
@@ -163,7 +164,7 @@ inline void start_halo_exchange(
         MPI_Comm_rank(cart_comm, &rank);
     }
 
-    for (size_t d = 0; d < N_dim; ++d) {
+    for (int d = 0; d < N_dim; ++d) {
 
         // Calcola la dimensione della faccia (tiene conto della parità)
         const size_t send_minus_size = cache[d].idx_minus[parity].size();
@@ -186,45 +187,6 @@ inline void start_halo_exchange(
         for (size_t i = 0; i < send_plus_size; ++i) {
             buffers.send_plus[d][i] = conf_local[cache[d].idx_plus[parity][i]];
         }
-
-        // DEBUG: Print face data being sent
-        /*if (debug_print) {
-            const char* dim_name = (d == 0) ? "X" : (d == 1) ? "Y" : "Z";
-
-            master_printf("[Rank %d] === SENDING dim=%zu (%s), parity=%d ===\n", rank, d, dim_name, parity);
-
-            // Print MINUS face (sending to neighbor behind)
-            master_printf("[Rank %d] FACE MINUS (dim %s, coord=%zu=1) -> neighbor %d:\n",
-                   rank, dim_name, d, neighbors[d][0]);
-            master_printf("[Rank %d]   indices: ", rank);
-            for (size_t i = 0; i < face_size && i < 10; ++i) {
-                master_printf("%zu ", cache[d].idx_minus[parity][i]);
-            }
-            if (face_size > 10) master_printf("...");
-            master_printf("\n");
-            master_printf("[Rank %d]   values:  ", rank);
-            for (size_t i = 0; i < face_size && i < 10; ++i) {
-                master_printf("%c ", buffers.send_minus[d][i] > 0 ? '+' : '-');
-            }
-            if (face_size > 10) master_printf("...");
-            master_printf("\n");
-
-            // Print PLUS face (sending to neighbor ahead)
-            master_printf("[Rank %d] FACE PLUS (dim %s, coord=%zu=%zu) -> neighbor %d:\n",
-                   rank, dim_name, d, local_L[d], neighbors[d][1]);
-            master_printf("[Rank %d]   indices: ", rank);
-            for (size_t i = 0; i < face_size && i < 10; ++i) {
-                master_printf("%zu ", cache[d].idx_plus[parity][i]);
-            }
-            if (face_size > 10) master_printf("...");
-            master_printf("\n");
-            master_printf("[Rank %d]   values:  ", rank);
-            for (size_t i = 0; i < face_size && i < 10; ++i) {
-                master_printf("%c ", buffers.send_plus[d][i] > 0 ? '+' : '-');
-            }
-            if (face_size > 10) master_printf("...");
-            master_printf("\n");
-        }*/
 
         int tag_minus = 100 + d;
         int tag_plus  = 200 + d;
@@ -275,7 +237,7 @@ inline void write_halo_data(
     const vector<FaceInfo>& faces,
     const vector<size_t>& local_L,
     const vector<size_t>& local_L_halo,
-    size_t N_dim,
+    int N_dim,
     const vector<FaceCache>& cache,
     int parity,
     MPI_Comm cart_comm = MPI_COMM_WORLD,
@@ -286,48 +248,11 @@ inline void write_halo_data(
         MPI_Comm_rank(cart_comm, &rank);
     }
 
-    for (size_t d = 0; d < N_dim; ++d) {
+    for (int d = 0; d < N_dim; ++d) {
 
         // Determina la dimensione della faccia (considerando la parità)
         const size_t halo_minus_size = cache[d].idx_halo_minus[parity].size();
         const size_t halo_plus_size  = cache[d].idx_halo_plus[parity].size();
-
-        // DEBUG: Print received data before writing
-        /*if (debug_print) {
-            const char* dim_name = (d == 0) ? "X" : (d == 1) ? "Y" : "Z";
-
-            master_printf("[Rank %d] === RECEIVED dim=%zu (%s), parity=%d ===\n", rank, d, dim_name, parity);
-
-            // Print MINUS halo (received from neighbor behind)
-            master_printf("[Rank %d] HALO MINUS (dim %s, coord=%zu=0):\n", rank, dim_name, d);
-            master_printf("[Rank %d]   halo indices: ", rank);
-            for (size_t i = 0; i < face_size && i < 10; ++i) {
-                master_printf("%zu ", cache[d].idx_halo_minus[parity][i]);
-            }
-            if (face_size > 10) master_printf("...");
-            master_printf("\n");
-            master_printf("[Rank %d]   recv values:  ", rank);
-            for (size_t i = 0; i < face_size && i < 10; ++i) {
-                master_printf("%c ", buffers.recv_minus[d][i] > 0 ? '+' : '-');
-            }
-            if (face_size > 10) master_printf("...");
-            master_printf("\n");
-
-            // Print PLUS halo (received from neighbor ahead)
-            master_printf("[Rank %d] HALO PLUS (dim %s, coord=%zu=%zu):\n", rank, dim_name, d, local_L[d] + 1);
-            master_printf("[Rank %d]   halo indices: ", rank);
-            for (size_t i = 0; i < face_size && i < 10; ++i) {
-                master_printf("%zu ", cache[d].idx_halo_plus[parity][i]);
-            }
-            if (face_size > 10) master_printf("...");
-            master_printf("\n");
-            master_printf("[Rank %d]   recv values:  ", rank);
-            for (size_t i = 0; i < face_size && i < 10; ++i) {
-                master_printf("%c ", buffers.recv_plus[d][i] > 0 ? '+' : '-');
-            }
-            //if (face_size > 10) master_printf("...");
-            //master_printf("\n");
-        }*/
 
         for (size_t i = 0; i < halo_minus_size; ++i) {
 
