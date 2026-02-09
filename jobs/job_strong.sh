@@ -27,6 +27,11 @@ BETA=0.45
 SEED=124634
 RANKS=(1 2 4 8 16 32 64)
 
+# Compila
+mpicxx -O3 -std=c++17 -fopenmp -DUSE_PHILOX \
+    -Iinclude -Irandom123/include \
+    src/main.cpp -o ising_philox.exe
+    
 for NRANKS in "${RANKS[@]}"; do
     NTHREADS=$((64 / NRANKS))
 

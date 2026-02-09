@@ -23,6 +23,10 @@ LATTICE="120 120"
 NCONFS=1000
 BETA=0.45
 SEED=124634
+#  Compilazione
+mpicxx -O3 -std=c++17 -fopenmp -DUSE_PHILOX \
+    -Iinclude -Irandom123/include \
+    src/main.cpp -o ising_philox.exe
 
 # Test con 1, 2, 4 rank (threads = 64/ranks)
 for NRANKS in 1 2 4; do

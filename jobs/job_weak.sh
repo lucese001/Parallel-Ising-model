@@ -29,6 +29,11 @@ SEED=124634
 RANKS=(1    4    16   64)
 SIDES=(1875 3750 7500 15000)
 
+# Compila
+mpicxx -O3 -std=c++17 -fopenmp -DUSE_PHILOX \
+    -Iinclude -Irandom123/include \
+    src/main.cpp -o ising_philox.exe
+
 for i in "${!RANKS[@]}"; do
     NRANKS=${RANKS[$i]}
     SIDE=${SIDES[$i]}
