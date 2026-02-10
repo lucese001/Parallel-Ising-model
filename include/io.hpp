@@ -78,7 +78,7 @@ inline bool read_input_file(const char* filename,
 inline void print_performance_summary(double total, double compute, 
                                        double mpi, double io, double init,
                                        int nConfs) {
-    double overhead = total - compute - mpi - io;
+    double overhead = total - compute - mpi - io- init;
     master_printf("\n");
     master_printf("          PERFORMANCE PROFILING        \n");
     master_printf("Total runtime:             %10.3f s (100.0%%)\n", total);

@@ -1,6 +1,6 @@
 #!/bin/bash
 #PBS -N ising_strong
-#PBS -l nodes=1:ppn=32
+#PBS -l nodes=1:ppn=64
 #PBS -l walltime=02:00:00
 #PBS -j oe
 
@@ -21,14 +21,14 @@ echo ""
 
 # Parametri fissi
 NDIM=2
-L0=8000
-L1=8000
+L0=16000
+L1=16000
 NCONFS=100
 BETA=0.45
 SEED=124634
 
 # Divisori di 32 (ranks x threads = 32)
-RANKS=(1 2 4 8 16 32)
+RANKS=(1 2 4 6 8 10 12 14 16)
 
 # Compila
 mpicxx -O3 -std=c++17 -fopenmp -DUSE_PHILOX \

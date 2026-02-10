@@ -28,8 +28,6 @@ BETA=0.45
 SEED=124634
 
 # Array paralleli: ranks, L0, L1
-# Calcolati da MPI_Dims_create(nranks, 2):
-# 1->1x1, 2->2x1, 4->2x2, 8->4x2, 16->4x4, 32->8x4
 RANKS=(1    2    4    8    16   32)
 L0S=(  1500 3000 3000 6000 6000 12000)
 L1S=(  1500 1500 3000 3000 6000 6000)
@@ -47,7 +45,6 @@ for i in "${!RANKS[@]}"; do
 
     echo "=== $NRANKS rank x $NTHREADS threads, reticolo ${L0}x${L1} ==="
     echo "    Siti totali: $((L0 * L1)), per rank: $((L0 * L1 / NRANKS))"
-    # CLI: <N_dim> <L0> <L1> <nConfs> <nThreads> <Beta> <seed>
     mpirun -n $NRANKS ./ising_philox.exe \
         $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED \
         2>&1 | tee logs/weak_${NRANKS}rank_${L0}x${L1}.log

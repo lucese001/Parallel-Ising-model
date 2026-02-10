@@ -279,15 +279,17 @@ inline void initialize_configuration(vector<int8_t>& conf_local,
     }
     
     // STAMPA ORDINATA PER RANK (fuori dal parallelo)
-    for (int r = 0; r < world_size; ++r) {
-        if (world_rank == r) {
-            printf("[INIT] Rank=%d, N_local=%zu, first 5 global_idx: ", world_rank, N_local);
-            for (size_t i = 0; i < debug_global_idx.size(); ++i) {
-                printf("%zu(%c) ", debug_global_idx[i], debug_spins[i] > 0 ? '+' : '-');
+    #ifdef DEBUG
+        for (int r = 0; r < world_size; ++r) {
+            if (world_rank == r) {
+                printf("[INIT] Rank=%d, N_local=%zu, first 5 global_idx: ", world_rank, N_local);
+                for (size_t i = 0; i < debug_global_idx.size(); ++i) {
+                    printf("%zu(%c) ", debug_global_idx[i], debug_spins[i] > 0 ? '+' : '-');
+                }
+                printf("\n");
+                fflush(stdout);
             }
-            printf("\n");
-            fflush(stdout);
+            MPI_Barrier(MPI_COMM_WORLD); // Aspetta che questo rank finisca
         }
-        MPI_Barrier(MPI_COMM_WORLD); // Aspetta che questo rank finisca
-    }
+    #endif
 }
