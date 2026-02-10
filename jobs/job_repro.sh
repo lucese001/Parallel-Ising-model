@@ -1,6 +1,6 @@
 #!/bin/bash
 #PBS -N ising_repro
-#PBS -l nodes=1:ppn=64
+#PBS -l nodes=1:ppn=32
 #PBS -l walltime=00:30:00
 #PBS -j oe
 
@@ -15,34 +15,32 @@ export LD_LIBRARY_PATH=$MPI_ROOT/lib
 export OMP_PROC_BIND=close
 export OMP_PLACES=cores
 
-echo "=== Test riproducibilita ==="
+echo "Test riproducibilita "
 echo "Start: $(date)"
 
 # Parametri del test
-LATTICE="120 120"
+NDIM=2
+SIDE=120
 NCONFS=1000
 BETA=0.45
 SEED=124634
-#  Compilazione
+
+# Compilazione
 mpicxx -O3 -std=c++17 -fopenmp -DUSE_PHILOX \
     -Iinclude -Irandom123/include \
     src/main.cpp -o ising_philox.exe
 
-# Test con 1, 2, 4 rank (threads = 64/ranks)
-for NRANKS in 1 2 4; do
-    NTHREADS=$((64 / NRANKS))
+grep Cpus_allowed_list /proc/self/status
 
-    cat > input/dimensioni.txt << EOF
-2
-$LATTICE
-$NCONFS
-$NTHREADS
-$BETA
-$SEED
-EOF
+# Test con 1, 2, 4 rank (threads = 32/ranks)
+for NRANKS in 1 2 4; do
+    NTHREADS=$((32 / NRANKS))
 
     echo "--- $NRANKS rank x $NTHREADS threads ---"
-    mpirun -n $NRANKS ./ising_philox.exe 2>&1 | tee logs/repro_${NRANKS}rank.log
+    # CLI: <N_dim> <L0> <L1> <nConfs> <nThreads> <Beta> <seed>
+    mpirun -n $NRANKS ./ising_philox.exe \
+        $NDIM $SIDE $SIDE $NCONFS $NTHREADS $BETA $SEED \
+        2>&1 | tee logs/repro_${NRANKS}rank.log
     echo ""
 done
 

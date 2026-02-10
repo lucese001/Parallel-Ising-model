@@ -1,6 +1,6 @@
 #!/bin/bash
 #PBS -N ising_weak
-#PBS -l nodes=1:ppn=64
+#PBS -l nodes=1:ppn=32
 #PBS -l walltime=02:00:00
 #PBS -j oe
 
@@ -16,18 +16,23 @@ export OMP_PROC_BIND=close
 export OMP_PLACES=cores
 
 echo "Weak Scaling Test"
-echo "Volume per rank costante: 1875x1875 = 3515625 siti/rank"
+echo "Volume per rank costante: 1500x1500 = 2250000 siti/rank"
 echo "Start: $(date)"
 echo ""
 
-# 1875 * sqrt(NRANKS) = lato totale
+# Parametri fissi
+NDIM=2
+LOCAL_L=1500       # lato locale per rank
 NCONFS=100
 BETA=0.45
 SEED=124634
 
-# Array paralleli: (ranks, lato totale)
-RANKS=(1    4    16   64)
-SIDES=(1875 3750 7500 15000)
+# Array paralleli: ranks, L0, L1
+# Calcolati da MPI_Dims_create(nranks, 2):
+# 1->1x1, 2->2x1, 4->2x2, 8->4x2, 16->4x4, 32->8x4
+RANKS=(1    2    4    8    16   32)
+L0S=(  1500 3000 3000 6000 6000 12000)
+L1S=(  1500 1500 3000 3000 6000 6000)
 
 # Compila
 mpicxx -O3 -std=c++17 -fopenmp -DUSE_PHILOX \
@@ -36,23 +41,18 @@ mpicxx -O3 -std=c++17 -fopenmp -DUSE_PHILOX \
 
 for i in "${!RANKS[@]}"; do
     NRANKS=${RANKS[$i]}
-    SIDE=${SIDES[$i]}
-    NTHREADS=$((64 / NRANKS))
+    L0=${L0S[$i]}
+    L1=${L1S[$i]}
+    NTHREADS=$((32 / NRANKS))
 
-    cat > input/dimensioni.txt << EOF
-2
-$SIDE $SIDE
-$NCONFS
-$NTHREADS
-$BETA
-$SEED
-EOF
-
-    echo "=== $NRANKS rank x $NTHREADS threads, reticolo ${SIDE}x${SIDE} ==="
-    echo "    Siti totali: $((SIDE * SIDE)), per rank: $((SIDE * SIDE / NRANKS))"
-    mpirun -n $NRANKS ./ising_philox.exe 2>&1 | tee logs/weak_${NRANKS}rank_${SIDE}x${SIDE}.log
+    echo "=== $NRANKS rank x $NTHREADS threads, reticolo ${L0}x${L1} ==="
+    echo "    Siti totali: $((L0 * L1)), per rank: $((L0 * L1 / NRANKS))"
+    # CLI: <N_dim> <L0> <L1> <nConfs> <nThreads> <Beta> <seed>
+    mpirun -n $NRANKS ./ising_philox.exe \
+        $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED \
+        2>&1 | tee logs/weak_${NRANKS}rank_${L0}x${L1}.log
     echo ""
 done
 
-echo " Weak Scaling Completato "
+echo "Weak Scaling Completato"
 echo "Fine: $(date)"

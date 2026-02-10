@@ -57,12 +57,30 @@ int main(int argc, char** argv) {
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
       master_printf("world_size  %d rank %d\n", world_size, world_rank);
     
-    // Lettura del file di input
+    // Lettura parametri: da riga di comando o da file
+    // Uso: ./ising_philox.exe <N_dim> <L0> [L1 ...] <nConfs> <nThreads> <Beta> <seed>
     if (world_rank == 0) {
-        if (!read_input_file("input/dimensioni.txt", N_dim, 
-            arr, nConfs, nThreads, Beta,seed)) {
-            MPI_Abort(MPI_COMM_WORLD, 1);
-            return 1;
+        if (argc > 1) {
+            N_dim = atoi(argv[1]);
+            int expected = N_dim + 6;
+            if (argc != expected) {
+                fprintf(stderr, "Uso: %s <N_dim> <L0> [L1 ...] <nConfs> <nThreads> <Beta> <seed>\n", argv[0]);
+                MPI_Abort(MPI_COMM_WORLD, 1);
+                return 1;
+            }
+            arr.resize(N_dim);
+            for (int d = 0; d < N_dim; ++d)
+                arr[d] = (size_t)atoll(argv[2 + d]);
+            nConfs = atoi(argv[2 + N_dim]);
+            nThreads = atoi(argv[3 + N_dim]);
+            Beta = atof(argv[4 + N_dim]);
+            seed = (size_t)atoll(argv[5 + N_dim]);
+        } else {
+            if (!read_input_file("input/dimensioni.txt", N_dim,
+                arr, nConfs, nThreads, Beta, seed)) {
+                MPI_Abort(MPI_COMM_WORLD, 1);
+                return 1;
+            }
         }
     }
     
@@ -75,7 +93,7 @@ int main(int argc, char** argv) {
     MPI_Bcast(&nConfs, 1, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(&nThreads, 1, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(&Beta, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Bcast(&seed, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&seed, sizeof(size_t), MPI_BYTE, 0, MPI_COMM_WORLD);
 
     omp_set_num_threads((int)nThreads);
     

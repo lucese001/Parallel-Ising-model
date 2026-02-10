@@ -1,6 +1,6 @@
 #!/bin/bash
 #PBS -N ising_strong
-#PBS -l nodes=1:ppn=64
+#PBS -l nodes=1:ppn=32
 #PBS -l walltime=02:00:00
 #PBS -j oe
 
@@ -16,39 +16,38 @@ export OMP_PROC_BIND=close
 export OMP_PLACES=cores
 
 echo "Strong Scaling Test"
-echo "Reticolo fisso 10000x10000, 100 configurazioni"
 echo "Start: $(date)"
 echo ""
 
 # Parametri fissi
-LATTICE="10000 10000"
+NDIM=2
+L0=8000
+L1=8000
 NCONFS=100
 BETA=0.45
 SEED=124634
-RANKS=(1 2 4 8 16 32 64)
+
+# Divisori di 32 (ranks x threads = 32)
+RANKS=(1 2 4 8 16 32)
 
 # Compila
 mpicxx -O3 -std=c++17 -fopenmp -DUSE_PHILOX \
     -Iinclude -Irandom123/include \
     src/main.cpp -o ising_philox.exe
-    
+
+echo "Reticolo fisso ${L0}x${L1}, $NCONFS configurazioni"
+echo ""
+
 for NRANKS in "${RANKS[@]}"; do
-    NTHREADS=$((64 / NRANKS))
+    NTHREADS=$((32 / NRANKS))
 
-    cat > input/dimensioni.txt << EOF
-2
-$LATTICE
-$NCONFS
-$NTHREADS
-$BETA
-$SEED
-EOF
-
-    echo "$NRANKS rank x $NTHREADS threads"
-    mpirun -n $NRANKS ./ising_philox.exe 2>&1 | tee logs/strong_${NRANKS}rank.log
+    echo "=== $NRANKS rank x $NTHREADS threads ==="
+    # CLI: <N_dim> <L0> <L1> <nConfs> <nThreads> <Beta> <seed>
+    mpirun -n $NRANKS ./ising_philox.exe \
+        $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED \
+        2>&1 | tee logs/strong_${NRANKS}rank.log
     echo ""
 done
 
 echo "Strong Scaling Completato"
 echo "Fine: $(date)"
-echo ""
