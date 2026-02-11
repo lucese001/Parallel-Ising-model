@@ -33,13 +33,13 @@ STEP=T_F/T_IN
 # Compila
 mpicxx -O3 -std=c++17 -fopenmp -ROWING \
     -Iinclude -Irandom123/include \
-    src/main.cpp -o ising_philox.exe
+    src/main.cpp -o ising_rowing.exe
 
 for i in "${!T[@]}"; do
 
     BETA=1/T
     echo "===  ==="
-    mpirun -n $NRANKS ./ising_philox.exe \
+    mpirun -n $NRANKS ./ising_rowing.exe \
         $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED \
         2>&1 | tee FINITE SIZE-SCALING ${NRANKS}rank_${L0}x${L1}.log
         $T={T}
