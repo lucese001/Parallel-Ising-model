@@ -156,17 +156,10 @@ int main(int argc, char** argv) {
                   boundary_sites, boundary_indices);
 
     //Inizializzazione RNG
-#ifdef USE_PHILOX
     // Philox RNG: riproducible per update Bulk-Boundary
     PhiloxRNG gen(seed + 104729);
     print_simulation_info(N_dim, N, nThreads, nConfs, Beta,
                           sizeof(PhiloxRNG), true);
-#else
-    // prng_engine: non riproducibile per update Bulk-Boundary
-    prng_engine gen(seed + world_rank * 104729);
-    print_simulation_info(N_dim, N, nThreads, nConfs, Beta,
-                          sizeof(prng_engine), true);
-#endif
     // Vettore che contiene la configurazione locale a ogni rank
     // (1 byte per sito). Contiene celle halo
     vector<int8_t> conf_local(N_alloc); 
