@@ -114,9 +114,9 @@ inline void classify_sites(size_t N_local, int N_dim,
                            const vector<size_t>& global_offset,
                            const vector<size_t>& arr,
                            vector<uint32_t> bulk_sites[2],
-                           vector<uint32_t> bulk_indices[2],
+                           vector<size_t> bulk_indices[2],
                            vector<uint32_t> boundary_sites[2],
-                           vector<uint32_t> boundary_indices[2])
+                           vector<size_t> boundary_indices[2])
 
     {
     
@@ -136,7 +136,7 @@ inline void classify_sites(size_t N_local, int N_dim,
         }
         
         // Calcola l'indice globale e coordinate globali
-        uint32_t global_idx = compute_global_index(iSite, local_L, 
+        size_t global_idx = compute_global_index(iSite, local_L,
                                                 global_offset, arr, 
                                                 N_dim,coord_buf.data(), 
                                                 coord_global.data());
