@@ -1,10 +1,4 @@
-#define PARALLEL_RNG
-#ifdef USE_PHILOX
 #include "philox_rng.hpp"
-#else
-#include "prng_engine.hpp"
-#endif
-
 #include "utility.hpp"
 #include "ising.hpp"
 #include "metropolis.hpp"
