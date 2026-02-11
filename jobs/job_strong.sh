@@ -31,7 +31,7 @@ SEED=124634
 RANKS=(1 2 4 6 8 10 12 14 16)
 
 # Compila
-mpicxx -O3 -std=c++17 -fopenmp -ROWING \
+mpicxx -O3 -std=c++17 -fopenmp -DROWING \
     -Iinclude -Irandom123/include \
     src/main.cpp -o ising_rowing.exe
 

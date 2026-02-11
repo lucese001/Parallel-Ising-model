@@ -147,8 +147,10 @@ int main(int argc, char** argv) {
 
     // Vettori separati in Rosso (0)/Nero (1) e Interni (bulk)/Confine (border)
     //La paritá é calcolata in modo globale
-    vector<uint32_t> bulk_sites[2], bulk_indices[2];
-    vector<uint32_t> boundary_sites[2], boundary_indices[2];
+    vector<uint32_t> bulk_sites[2];
+    vector<size_t> bulk_indices[2];
+    vector<uint32_t> boundary_sites[2];
+    vector<size_t> boundary_indices[2];
 
     // Classificazione dei siti in Bulk/Boundary e Rosso/Nero
     classify_sites(N_local, N_dim, local_L, local_L_halo, 
@@ -352,7 +354,8 @@ int main(int argc, char** argv) {
         // Somma delle variazion locali a ogni rank per ottenere
         // le variazioni di energia e magnetizzazione globali
         mpiTime.start();
-        long long DeltaE_glob = 0, DeltaMag_glob = 0;
+        long long DeltaE_glob = 0;
+        long long DeltaMag_glob = 0;
         MPI_Reduce(&DeltaE, &DeltaE_glob, 1, MPI_LONG_LONG, MPI_SUM, 0, cart_comm);
         MPI_Reduce(&DeltaMag, &DeltaMag_glob, 1, MPI_LONG_LONG, MPI_SUM, 0, cart_comm);
         mpiTime.stop();

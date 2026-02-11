@@ -33,7 +33,7 @@ L0S=(  1500 3000 3000 6000 6000 12000)
 L1S=(  1500 1500 3000 3000 6000 6000)
 
 # Compila
-mpicxx -O3 -std=c++17 -fopenmp -ROWING \
+mpicxx -O3 -std=c++17 -fopenmp -DROWING \
     -Iinclude -Irandom123/include \
     src/main.cpp -o ising_rowing.exe
 

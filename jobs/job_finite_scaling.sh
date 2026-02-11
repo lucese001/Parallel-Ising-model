@@ -31,7 +31,7 @@ T= (0.40, 0.405, 0.41, 0.415, 0.42, 0.425, 0.43, 0.435, 0.44, 0.445,
 STEP=T_F/T_IN
 
 # Compila
-mpicxx -O3 -std=c++17 -fopenmp -ROWING \
+mpicxx -O3 -std=c++17 -fopenmp -DROWING \
     -Iinclude -Irandom123/include \
     src/main.cpp -o ising_rowing.exe
 

@@ -25,7 +25,7 @@ extern double Beta;
 // sequenza estratta).
 
 void metropolis_update(vector<int8_t>& conf_local,
-                              const vector<size_t>& sites,
+                              const vector<uint_32t>& sites,
                               const vector<size_t>& sites_global_indices,
                               const vector<uint32_t>& stride_halo,
                               const vector<double>& expTable,
