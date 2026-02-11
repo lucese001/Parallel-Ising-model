@@ -113,15 +113,15 @@ inline void classify_sites(size_t N_local, int N_dim,
                            const vector<size_t>& local_L_halo, 
                            const vector<size_t>& global_offset,
                            const vector<size_t>& arr,
-                           vector<size_t> bulk_sites[2],
-                           vector<size_t> bulk_indices[2],
-                           vector<size_t> boundary_sites[2],
-                           vector<size_t> boundary_indices[2])
+                           vector<uint32_t> bulk_sites[2],
+                           vector<uint32_t> bulk_indices[2],
+                           vector<uint32_t> boundary_sites[2],
+                           vector<uint32_t> boundary_indices[2])
 
     {
     
-    vector<size_t> coord_buf(N_dim);
-    vector<size_t> coord_global(N_dim);  // buffer per compute_global_index
+    vector<size_t> coord_buf(N_dim);     // Buffer per precomputare l'indice locale
+    vector<size_t> coord_global(N_dim);  // Buffer per precomputare l'indice globale
     
     for (size_t iSite = 0; iSite < N_local; ++iSite) {
         index_to_coord(iSite, N_dim, local_L.data(), coord_buf.data());
@@ -136,13 +136,13 @@ inline void classify_sites(size_t N_local, int N_dim,
         }
         
         // Calcola l'indice globale e coordinate globali
-        size_t global_idx = compute_global_index(iSite, local_L, 
+        uint32_t global_idx = compute_global_index(iSite, local_L, 
                                                 global_offset, arr, 
                                                 N_dim,coord_buf.data(), 
                                                 coord_global.data());
         
         // Calcola parità globale
-        size_t sum_global = 0;
+        uint32_t sum_global = 0;
         for (int d = 0; d < N_dim; ++d) {
             sum_global += coord_global[d];
         }
@@ -151,13 +151,16 @@ inline void classify_sites(size_t N_local, int N_dim,
         for (int d = 0; d < N_dim; ++d){
              coord_buf[d] += 1;  // shift per halo
         }
-        size_t halo_idx = coord_to_index(N_dim, local_L_halo.data(), coord_buf.data());
+
+        uint32_t halo_idx = coord_to_index(N_dim, local_L_halo.data(), coord_buf.data());
         // Classifica il sito
-        if (!is_boundary) // Bulk
-            { 
-                bulk_sites[parity].push_back(halo_idx);
-                bulk_indices[parity].push_back(global_idx);
-            } 
+            if (!is_boundary) // Bulk
+                { 
+                    #ifdef IDX_ALLOC
+                        bulk_sites[parity].push_back(halo_idx);
+                        bulk_indices[parity].push_back(global_idx);
+                    #endif
+                } 
             else // Boundary
             { 
                 boundary_sites[parity].push_back(halo_idx);

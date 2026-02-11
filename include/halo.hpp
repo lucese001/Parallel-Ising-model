@@ -109,27 +109,31 @@ build_face_cache(const vector<FaceInfo>& faces,
             // faccia meno
             coord_full[d] = 1;
             size_t idx_inner_minus =
-                coord_to_index(N_dim, local_L_halo.data(), coord_full.data());
+                coord_to_index(N_dim, local_L_halo.data(), 
+                                coord_full.data());
 
             cache[d].idx_minus[par_neg_face].push_back(idx_inner_minus);
 
             // halo meno
             coord_full[d] = 0;
             cache[d].idx_halo_minus[par_neg_face_halo].push_back(
-                coord_to_index(N_dim, local_L_halo.data(), coord_full.data())
+                coord_to_index(N_dim, local_L_halo.data(), 
+                                coord_full.data())
             );
 
             // faccia più
             coord_full[d] = local_L[d];
-            size_t idx_inner_plus =
-                coord_to_index(N_dim, local_L_halo.data(), coord_full.data());
+            size_t idx_inner_plus =coord_to_index(N_dim, 
+                                                    local_L_halo.data(), 
+                                                    coord_full.data());
 
             cache[d].idx_plus[par_pos_face].push_back(idx_inner_plus);
 
             // halo più
             coord_full[d] = local_L[d] + 1;
             cache[d].idx_halo_plus[par_pos_face_halo].push_back(
-                coord_to_index(N_dim, local_L_halo.data(), coord_full.data())
+                coord_to_index(N_dim, local_L_halo.data(), 
+                                coord_full.data())
             );
         }
     }
@@ -224,14 +228,8 @@ inline void start_halo_exchange(
 }
 
 
-// Aspetta il completamento dello scambio halo
-inline void finish_halo_exchange(vector<MPI_Request>& reqs) {
-    MPI_Waitall(reqs.size(), reqs.data(), MPI_STATUSES_IGNORE);
-    reqs.clear();
-}
-
 // Scrive i dati ricevuti nelle regioni halo
-inline void write_halo_data(
+void write_halo_data(
     vector<int8_t>& conf_local,
     const HaloBuffers& buffers,
     const vector<FaceInfo>& faces,
@@ -240,13 +238,12 @@ inline void write_halo_data(
     int N_dim,
     const vector<FaceCache>& cache,
     int parity,
-    MPI_Comm cart_comm = MPI_COMM_WORLD,
-    bool debug_print = false)
+    vector<MPI_Request>& requests)
 {
+    // Aspetta la finalizzazione della comunicazione MPI
+    MPI_Waitall(requests.size(), requests.data(), MPI_STATUSES_IGNORE);
+    requests.clear();
     int rank;
-    if (debug_print) {
-        MPI_Comm_rank(cart_comm, &rank);
-    }
 
     for (int d = 0; d < N_dim; ++d) {
 

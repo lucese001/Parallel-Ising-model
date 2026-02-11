@@ -138,17 +138,23 @@ int main(int argc, char** argv) {
         global_offset[d] = rank_coords[d] * local_L[d]; 
     }
 
-    //Precalcola gli stride per trovare i vicini lungo una dimensione
-    vector<size_t> stride_halo(N_dim);
+    //Precalcola gli stride locali a ogni rank
+    vector<uint32_t> stride_halo(N_dim);
     stride_halo[0] = 1;
     for (int d = 1; d < N_dim; ++d){
         stride_halo[d] = stride_halo[d-1] * local_L_halo[d-1];
     }
+    //Precalcola gli stride globali
+    vector<long long> stride_global(N_dim);
+    stride_global[0] = 1;
+    for (int d = 1; d < N_dim; ++d){
+        stride_global[d] = stride_global[d-1] * arr[d-1];
+    }
 
     // Vettori separati in Rosso (0)/Nero (1) e Interni (bulk)/Confine (border)
     //La paritá é calcolata in modo globale
-    vector<size_t> bulk_sites[2], bulk_indices[2];
-    vector<size_t> boundary_sites[2], boundary_indices[2];
+    vector<uint32_t> bulk_sites[2], bulk_indices[2];
+    vector<uint32_t> boundary_sites[2], boundary_indices[2];
 
     // Classificazione dei siti in Bulk/Boundary e Rosso/Nero
     classify_sites(N_local, N_dim, local_L, local_L_halo, 
@@ -187,47 +193,29 @@ int main(int argc, char** argv) {
     vector<MPI_Request> requests; //definizione richieste processi MPI
     HaloBuffers buffers; //definizione buffers
     buffers.resize(N_dim);
-    
+
     //Halo exchange per calcolo energia e magnetizzazione iniziale
     start_halo_exchange(conf_local, local_L, local_L_halo,
                         neighbors, cart_comm, N_dim, buffers,
                         faces, requests, face_cache, 0, true);
-    finish_halo_exchange(requests);
     write_halo_data(conf_local, buffers, faces, local_L,
-                    local_L_halo, N_dim, face_cache, 0);
+                    local_L_halo, N_dim, face_cache, 0, requests);
     start_halo_exchange(conf_local, local_L, local_L_halo,
                         neighbors, cart_comm, N_dim, buffers,
                         faces, requests, face_cache, 1, true);
-    finish_halo_exchange(requests);
     write_halo_data(conf_local, buffers, faces, local_L,
-                    local_L_halo, N_dim, face_cache, 1);
+                    local_L_halo, N_dim, face_cache, 1, requests);
     
-    long long E_local = 0; // Energia locale 
-    long long Mag_local = 0; // Magnetizzazione locale
-    {
-        vector<size_t> coord(N_dim);
-        for (size_t iSite = 0; iSite < N_local; ++iSite) {
-
-            // Conversione indice locale in coordinate locali
-            index_to_coord(iSite, N_dim, local_L.data(), coord.data());
-
-            // Conversione in coordinate locali con halo
-            for (int d = 0; d < N_dim; ++d) {
-                coord[d] += 1;
-            }
-            // Indice del sito nel reticolo locale con halo
-            size_t halo_idx = coord_to_index(N_dim, local_L_halo.data(), coord.data());
-            E_local += computeEnSite(conf_local, halo_idx, stride_halo, N_dim);
-            Mag_local += conf_local[halo_idx];
-        }
-        E_local /= 2;  // Si divide dato che ogni coppia viene contata 2 volte
-    }
+    long long E_rank = computeEn_rank(conf_local, stride_halo, 
+                                        local_L, N_dim);
+    long long Mag_rank = compute_Mag_rank(conf_local, stride_halo, 
+                                            local_L, N_dim);
 
     // Riduzione per calcolo di energia e magnetizzazione iniziale (globale)
     long long E = 0;
     long long Mag = 0;
-    MPI_Reduce(&E_local, &E, 1, MPI_LONG_LONG, MPI_SUM, 0, cart_comm);
-    MPI_Reduce(&Mag_local, &Mag, 1, MPI_LONG_LONG, MPI_SUM, 0, cart_comm);
+    MPI_Reduce(&E_rank, &E, 1, MPI_LONG_LONG, MPI_SUM, 0, cart_comm);
+    MPI_Reduce(&Mag_rank, &Mag, 1, MPI_LONG_LONG, MPI_SUM, 0, cart_comm);
 
     // Lookup table per precalcolare l'esponenziale usata in Metropolis
     // Le differenze di energia positive non 0 possibili sono N_dim
@@ -290,43 +278,89 @@ int main(int argc, char** argv) {
         long long DeltaE = 0;
         long long DeltaMag = 0;
 
-	    for(int updPar=0;updPar<2;updPar++){
 
-	        const int commPar=1-updPar;
+        #ifdef IDX_ALLOC
+
+	        for(int updPar=0;updPar<2;updPar++){
+
+	            const int commPar=1-updPar;
 	    
-	        // Inizia l' halo exchange nero/rosso
-            mpiTime.start();
-	        start_halo_exchange(conf_local, local_L, 
+	            // Inizia l' halo exchange nero/rosso
+                mpiTime.start();
+	            start_halo_exchange(conf_local, local_L, 
                                 local_L_halo, neighbors, 
                                 cart_comm, N_dim, buffers, 
                                 faces, requests, 
                                 face_cache,commPar, true);
-	        mpiTime.stop();
+	            mpiTime.stop();
 	    
-	        computeTime.start();
-	        // Update Bulk rosso/nero
-	        metropolis_update(conf_local, bulk_sites[updPar],
+	            computeTime.start();
+	             // Update Bulk rosso/nero
+	            metropolis_update(conf_local, bulk_sites[updPar],
 			                  bulk_indices[updPar], stride_halo, 
                               expTable, DeltaE,DeltaMag, gen, 
                               iConf, nThreads);
 
-	        computeTime.stop();
-	        mpiTime.start();
-	        // Completa lo scambio halo
-	        finish_halo_exchange(requests);
-	        // Scrivi gli halo
-	        write_halo_data(conf_local, buffers, faces, 
+	            computeTime.stop();
+	            mpiTime.start();
+	            // Scrivi gli halo
+	            write_halo_data(conf_local, buffers, faces, 
                             local_L, local_L_halo, N_dim, 
-                            face_cache, commPar);
-	        mpiTime.stop();
-	        computeTime.start();
-	        // Update boundary rossa/nero
-	        metropolis_update(conf_local, boundary_sites[updPar],
+                            face_cache, commPar, requests);
+	            mpiTime.stop();
+	            computeTime.start();
+	            // Update boundary rossa/nero
+	            metropolis_update(conf_local, boundary_sites[updPar],
 			                  boundary_indices[updPar], stride_halo,
                               expTable, DeltaE,DeltaMag, gen, 
                               iConf, nThreads);
-            computeTime.stop();
-        } //Fine loop sulle paritá
+                computeTime.stop();
+            } //Fine loop sulle paritá
+
+        #endif //IDX_ALLOC
+
+        #ifdef ROWING
+
+            for(int updPar=0;updPar<2;updPar++){
+
+        	    const int commPar=1-updPar;
+	            // Inizia l' halo exchange nero/rosso
+                mpiTime.start();
+	            start_halo_exchange(conf_local, local_L, 
+                                local_L_halo, neighbors, 
+                                cart_comm, N_dim, buffers, 
+                                faces, requests, 
+                                face_cache,commPar, true);
+	            mpiTime.stop();
+	    
+	            computeTime.start();
+	             // Update Bulk rosso/nero
+                metropolis_update_bulk(conf_local,updPar,                           
+                                        local_L, local_L_halo,
+                                        global_offset, arr, 
+                                        stride_halo, expTable, 
+                                        DeltaE,  DeltaMag, gen, 
+                                        iConf);
+
+	            computeTime.stop();
+	            mpiTime.start();
+
+	            // Scrivi gli halo
+	            write_halo_data(conf_local, buffers, faces, 
+                            local_L, local_L_halo, N_dim, 
+                            face_cache, commPar, requests);
+	            mpiTime.stop();
+	            computeTime.start();
+	            // Update boundary rossa/nero
+	            metropolis_update(conf_local, boundary_sites[updPar],
+			                  boundary_indices[updPar], stride_halo,
+                              expTable, DeltaE,DeltaMag, gen, 
+                              iConf, nThreads);
+                computeTime.stop();
+            } //Fine loop sulle paritá
+
+        #endif //ROWING
+            
 
         // Somma delle variazion locali a ogni rank per ottenere
         // le variazioni di energia e magnetizzazione globali
