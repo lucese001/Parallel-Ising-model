@@ -1,7 +1,7 @@
 #!/bin/bash
-#PBS -N ising_repro
+#PBS -N ising_compare
 #PBS -l nodes=1:ppn=32
-#PBS -l walltime=00:30:00
+#PBS -l walltime=01:00:00
 #PBS -j oe
 
 cd $PBS_O_WORKDIR
@@ -14,56 +14,52 @@ export PATH=$MPI_ROOT/bin:$PATH
 export LD_LIBRARY_PATH=$MPI_ROOT/lib
 export OMP_PROC_BIND=close
 export OMP_PLACES=cores
+# Disabilita la ricerca di InfiniBand
+export OMPI_MCA_btl=tcp,self
 
-echo "Test riproducibilita "
+echo "Confronto IDX_ALLOC vs ROWING"
 echo "Start: $(date)"
+echo ""
 
-# Parametri del test
+# Parametri
 NDIM=2
-SIDE=120
-NCONFS=1000
+NCONFS=100
 BETA=0.45
 SEED=124634
 
-# Compilazione
-mpicxx -O3 -std=c++17 -fopenmp -Drowing \
+# Compila entrambe le versioni
+echo "Compilazione IDX_ALLOC..."
+mpicxx -O3 -std=c++17 -fopenmp -DIDX_ALLOC \
     -Iinclude -Irandom123/include \
-    src/main.cpp -o ising_philox.exe
+    src/main.cpp -o ising_idx.exe
 
-grep Cpus_allowed_list /proc/self/status
+echo "Compilazione ROWING..."
+mpicxx -O3 -std=c++17 -fopenmp -DROWING \
+    -Iinclude -Irandom123/include \
+    src/main.cpp -o ising_rowing.exe
+echo ""
 
-# Test con 1, 2, 4 rank (threads = 32/ranks)
-for NRANKS in 1 2 4; do
+# STRONG SCALING: reticolo fisso 8400x8400
+echo "========== STRONG SCALING =========="
+echo "Reticolo fisso: 16000x16000"
+echo ""
+
+L0=16000
+L1=16000
+
+for NRANKS in 1 2 4 ; do
     NTHREADS=$((32 / NRANKS))
 
-    echo "--- $NRANKS rank x $NTHREADS threads ---"
-    # CLI: <N_dim> <L0> <L1> <nConfs> <nThreads> <Beta> <seed>
-    mpirun -n $NRANKS ./ising_philox.exe \
-        $NDIM $SIDE $SIDE $NCONFS $NTHREADS $BETA $SEED \
-        2>&1 | tee logs/repro_${NRANKS}rank.log
+    echo "--- Strong: $NRANKS rank x $NTHREADS threads ---"
+
+    for MODE in idx rowing; do
+        echo "  [$MODE]"
+        mpirun -n $NRANKS ./ising_${MODE}.exe \
+            $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED \
+            2>&1 | tee logs/strong_${MODE}_${NRANKS}rank.log
+    done
     echo ""
 done
 
-# Confronta gli output
-echo "Confronto output"
-REF="output/meas_1rank_120x120.txt"
-PASS=true
-
-for NRANKS in 2 4; do
-    FILE="output/meas_${NRANKS}rank_120x120.txt"
-    if diff -q "$REF" "$FILE" > /dev/null 2>&1; then
-        echo "OK: 1 rank vs $NRANKS rank -> IDENTICI"
-    else
-        echo "ERRORE: 1 rank vs $NRANKS rank -> DIVERSI!"
-        diff "$REF" "$FILE" | head -5
-        PASS=false
-    fi
-done
-
-if $PASS; then
-    echo "RIPRODUCIBILITA PASSATA"
-else
-    echo "RIPRODUCIBILITA FALLITA"
-fi
-
+echo "Confronto completato"
 echo "Fine: $(date)"
