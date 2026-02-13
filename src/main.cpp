@@ -153,16 +153,8 @@ int main(int argc, char** argv) {
         // Path IDX_ALLOC: anche i bulk sono pre-allocati
         vector<uint32_t> bulk_sites[2];
         vector<size_t> bulk_indices[2];
-        classify_sites(N_local, N_dim, local_L, local_L_halo,
-                       global_offset, arr, bulk_sites, bulk_indices,
-                       boundary_sites, boundary_indices);
-    #elif defined(ROWING)
-        // Path ROWING: classifica solo i boundary (bulk calcolato al volo)
-        classify_boundary_sites(N_dim, local_L, local_L_halo,
-                                global_offset, arr,
-                                boundary_sites, boundary_indices);
-    #else
-        #error "Definire IDX_ALLOC o ROWING"
+        classify_bulk(N_dim, local_L, local_L_halo,
+              global_offset, arr, bulk_sites, bulk_indices)
     #endif
 
     //Inizializzazione RNG
@@ -180,11 +172,14 @@ int main(int argc, char** argv) {
 
     // Costruisce le dimensioni delle facce e la sua posizione
     vector<FaceInfo> faces = build_faces(local_L, N_dim);
-    // Salva gli indici dei siti che appartengono a ogni faccia
-    vector<FaceCache> face_cache = build_face_cache(faces,local_L,
+    // Salva gli indici (locali e globali) dei siti che appartengono 
+    // a ogni faccia.
+    vector<FaceCache> face_cache = build_face_cache(faces, local_L,
                                                     local_L_halo,
-                                                    global_offset, 
-                                                    N_dim);
+                                                    global_offset,
+                                                    arr, N_dim,
+                                                    boundary_sites,
+                                                    boundary_indices);
 
     //static int global_conf_count = 0; //Numero di configurazioni globali
     vector<MPI_Request> requests; //definizione richieste processi MPI

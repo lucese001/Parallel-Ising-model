@@ -37,11 +37,7 @@ mpicxx -O3 -std=c++17 -fopenmp -DROWING \
     src/main.cpp -o ising_rowing.exe
 echo ""
 
-# ============================================================
 # WEAK SCALING: volume per rank costante 1500x1500
-# MPI_Dims_create(N, 2) decomposizioni:
-# 1:[1,1] 2:[2,1] 3:[3,1] 4:[2,2] 5:[5,1] 6:[3,2] 7:[7,1] 8:[4,2]
-# ============================================================
 echo "========== WEAK SCALING =========="
 echo "Volume per rank costante: 1500x1500 = 2250000 siti/rank"
 echo ""
@@ -67,13 +63,7 @@ for i in "${!RANKS_W[@]}"; do
     echo ""
 done
 
-# ============================================================
 # STRONG SCALING: reticolo fisso 8400x8400
-# L=8400 = 420*20, divisibile per tutti i dims[0] e dims[1]
-# dei rank 1-8 (LCM dei fattori di decomposizione = 420)
-# Nota: IDX_ALLOC con 1 rank alloca ~850 MB per gli indici bulk.
-# Se la memoria non basta, ridurre a L=4200.
-# ============================================================
 echo "========== STRONG SCALING =========="
 echo "Reticolo fisso: 8400x8400 = 70560000 siti"
 echo ""

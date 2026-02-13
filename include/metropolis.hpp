@@ -155,16 +155,17 @@ void metropolis_update(vector<int8_t>& conf_local,
             size_t base_global = 0;  // Contributo per l' indice globale 
             size_t parity_sum  = 0;  // Contributo per la paritá globale
             size_t tmp = row;
+            div_time.start()
             for (int d = 1; d < N_dim; d++) {
                 size_t range_d = local_L[d] - 2; // Quante coordinate valide
                 size_t x_d = 1 + tmp % range_d;    // Coordinata locale ∈ [1, local_L[d]-2]
                 tmp /= range_d;
-
                 //+ 1 perché l'halo aggiunge +1 in ogni dimensione
                 base_halo   += (x_d + 1) * stride_halo[d];
                 base_global += (x_d + global_offset[d]) * stride_global[d];
                 parity_sum  += x_d + global_offset[d];
             }
+            dive_time.stop()
 
             // Determina x[0] di partenza correto con la paritá globale
             size_t x0 = 1;

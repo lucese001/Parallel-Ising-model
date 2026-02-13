@@ -77,8 +77,8 @@ inline bool read_input_file(const char* filename,
 // Stampa il riepilogo delle prestazioni alla fine della simulazione
 inline void print_performance_summary(double total, double compute, 
                                        double mpi, double io, double init,
-                                       int nConfs) {
-                                        
+                                       double div,int nConfs) {
+
     double overhead = total - compute - mpi - io- init;
     master_printf("\n");
     master_printf("          PERFORMANCE PROFILING        \n");
@@ -87,6 +87,7 @@ inline void print_performance_summary(double total, double compute,
     master_printf("MPI Communication:         %10.3f s (%5.1f%%)\n", mpi, 100.0*mpi/total);
     master_printf("I/O (file write):          %10.3f s (%5.1f%%)\n", io, 100.0*io/total);
     master_printf("Initialitation time:       %10.3f s (%5.1f%%)\n", init, 100.0*init/total);
+    master_printf ("Division time (rowing)")
     master_printf("Overhead:                  %10.3f s (%5.1f%%)\n", overhead, 100.0*overhead/total);
     master_printf("Configurations:               %d\n", nConfs);
     master_printf("Time per config:           %10.3f s\n", total/nConfs);
