@@ -154,7 +154,7 @@ int main(int argc, char** argv) {
         vector<uint32_t> bulk_sites[2];
         vector<size_t> bulk_indices[2];
         classify_bulk(N_dim, local_L, local_L_halo,
-              global_offset, arr, bulk_sites, bulk_indices)
+              global_offset, arr, bulk_sites, bulk_indices);
     #endif
 
     //Inizializzazione RNG
