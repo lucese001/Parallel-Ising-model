@@ -161,7 +161,7 @@ build_face_cache(const vector<FaceInfo>& faces,
                  const vector<size_t>& arr,
                  int N_dim,
                  vector<uint32_t> boundary_sites[2],
-                 vector<size_t> boundary_indices[2])
+                 vector<uint32_t> boundary_indices[2])
 {
     vector<FaceCache> cache(N_dim);
 
@@ -206,7 +206,7 @@ build_face_cache(const vector<FaceInfo>& faces,
         vector<vector<size_t>>  th_idx_halo_minus (2 * nT);
         vector<vector<size_t>>  th_idx_halo_plus  (2 * nT);
         vector<vector<uint32_t>> th_bsites (2 * nT);
-        vector<vector<size_t>>  th_bidx (2 * nT);
+        vector<vector<uint32_t>> th_bidx (2 * nT);
 
         #pragma omp parallel
         {
@@ -244,8 +244,8 @@ build_face_cache(const vector<FaceInfo>& faces,
 
                 // global_coord[d] = 0 + global_offset[d]
                 th_bsites   [par_neg_face * nT + tid].push_back((uint32_t)idx_inner_minus);
-                th_bidx [par_neg_face * nT + tid].push_back(base_global + global_offset[d] 
-                    * stride_global[d]);
+                th_bidx [par_neg_face * nT + tid].push_back((uint32_t)(base_global + global_offset[d]
+                    * stride_global[d]));
 
                 // halo meno: coord_halo[d] = 0
                 coord_full_t[d] = 0;
@@ -259,8 +259,8 @@ build_face_cache(const vector<FaceInfo>& faces,
 
                 // global_coord[d] = local_L[d]-1 + global_offset[d]
                 th_bsites [par_pos_face * nT + tid].push_back((uint32_t)idx_inner_plus);
-                th_bidx [par_pos_face * nT + tid].push_back(base_global + (local_L[d]
-                    - 1 + global_offset[d]) * stride_global[d]);
+                th_bidx [par_pos_face * nT + tid].push_back((uint32_t)(base_global + (local_L[d]
+                    - 1 + global_offset[d]) * stride_global[d]));
 
                 // halo più: coord_halo[d] = local_L[d]+1
                 coord_full_t[d] = local_L[d] + 1;

@@ -116,9 +116,9 @@ inline void classify_sites(size_t N_local, int N_dim,
                            const vector<size_t>& global_offset,
                            const vector<size_t>& arr,
                            vector<uint32_t> bulk_sites[2],
-                           vector<size_t> bulk_indices[2],
+                           vector<uint32_t> bulk_indices[2],
                            vector<uint32_t> boundary_sites[2],
-                           vector<size_t> boundary_indices[2])
+                           vector<uint32_t> boundary_indices[2])
 {
     // Precompute strides
     vector<size_t> stride_halo_sz(N_dim), stride_global(N_dim);
@@ -153,10 +153,10 @@ inline void classify_sites(size_t N_local, int N_dim,
 
         if (is_boundary) {
             boundary_sites[parity].push_back((uint32_t)halo_idx);
-            boundary_indices[parity].push_back(global_idx);
+            boundary_indices[parity].push_back((uint32_t)global_idx);
         } else {
             bulk_sites[parity].push_back((uint32_t)halo_idx);
-            bulk_indices[parity].push_back(global_idx);
+            bulk_indices[parity].push_back((uint32_t)global_idx);
         }
     }
 }
@@ -172,7 +172,7 @@ inline void classify_bulk(
     const vector<size_t>& global_offset,
     const vector<size_t>& arr,
     vector<uint32_t> bulk_sites[2],
-    vector<size_t>   bulk_indices[2])
+    vector<uint32_t> bulk_indices[2])
 {
     // Controlla se esistono siti bulk: ogni dimensione deve avere almeno 3 siti
     bool has_bulk = (local_L[0] >= 3);
@@ -198,7 +198,7 @@ inline void classify_bulk(
 
     // Accumulatori thread-local: indicizzati come [p * nT + tid]
     vector<vector<uint32_t>> th_bulk_sites(2 * nT);
-    vector<vector<size_t>> th_bulk_idx  (2 * nT);
+    vector<vector<uint32_t>> th_bulk_idx  (2 * nT);
 
     // Loop parallelo sulle righe bulk: ogni riga corrisponde a una combinazione fissa delle 
     // coordinate nelle dim 1..N-1, nel range interno [1, local_L[d]-2]. Si itera su tutte le righe 
@@ -230,7 +230,7 @@ inline void classify_bulk(
             int  parity = (int)((parity_rest + gc0) % 2);
 
             th_bulk_sites[parity * nT + tid].push_back((uint32_t)halo_idx);
-            th_bulk_idx  [parity * nT + tid].push_back(global_idx);
+            th_bulk_idx  [parity * nT + tid].push_back((uint32_t)global_idx);
         }
     }
 
@@ -241,7 +241,7 @@ inline void classify_bulk(
                                    th_bulk_sites[p * nT + t].begin(),
                                    th_bulk_sites[p * nT + t].end());
             bulk_indices[p].insert(bulk_indices[p].end(),
-                                   th_bulk_idx [p * nT + t].begin(),
+                                   th_bulk_idx  [p * nT + t].begin(),
                                    th_bulk_idx  [p * nT + t].end());
         }
 }

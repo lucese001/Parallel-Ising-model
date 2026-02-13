@@ -147,12 +147,12 @@ int main(int argc, char** argv) {
 
     // Vettori per siti al confine (Red/Black), usati da entrambi i path
     vector<uint32_t> boundary_sites[2];
-    vector<size_t> boundary_indices[2];
+    vector<uint32_t> boundary_indices[2];
 
     #ifdef IDX_ALLOC
         // Path IDX_ALLOC: anche i bulk sono pre-allocati
         vector<uint32_t> bulk_sites[2];
-        vector<size_t> bulk_indices[2];
+        vector<uint32_t> bulk_indices[2];
         classify_bulk(N_dim, local_L, local_L_halo,
               global_offset, arr, bulk_sites, bulk_indices);
     #endif

@@ -129,16 +129,17 @@ void initialize_configuration(vector<int8_t>& conf_local,
     // Inizializza
     std::fill(conf_local.begin(), conf_local.end(), 0);
     
-    // Buffer per debug (fuori dal parallelo)
+    #ifdef DEBUG
     vector<size_t> debug_global_idx;
     vector<int8_t> debug_spins;
-    
+    #endif
+
     #pragma omp parallel
     {
         vector<size_t> coord_local(N_dim);
         vector<size_t> coord_halo(N_dim);
         vector<size_t> coord_global(N_dim);
-        
+
         #pragma omp for
         for (size_t i = 0; i < N_local; ++i) {
 
@@ -146,8 +147,8 @@ void initialize_configuration(vector<int8_t>& conf_local,
                                                        coord_local.data(), coord_global.data());
             uint32_t rand_val = gen.get1(global_index, 0, 0, false);
             int8_t spin = (rand_val & 1) ? 1 : -1;
-            
-            // Salva per debug (solo primi 5)
+
+            #ifdef DEBUG
             #pragma omp critical
             {
                 if (debug_global_idx.size() < 5) {
@@ -155,18 +156,16 @@ void initialize_configuration(vector<int8_t>& conf_local,
                     debug_spins.push_back(spin);
                 }
             }
-            
-            // Converti in coordinate con halo
-            index_to_coord(i, N_dim, local_L.data(), coord_local.data());
-            for (int d = 0; d < N_dim; ++d) {
+            #endif
+
+            for (int d = 0; d < N_dim; ++d)
                 coord_halo[d] = coord_local[d] + 1;
-            }
             size_t idx_halo = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
             conf_local[idx_halo] = spin;
         }
     }
     
-    // STAMPA ORDINATA PER RANK (fuori dal parallelo)
+    // Stampa ordinata per rank
     #ifdef DEBUG
         for (int r = 0; r < world_size; ++r) {
             if (world_rank == r) {

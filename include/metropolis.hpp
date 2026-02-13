@@ -26,7 +26,7 @@ extern double Beta;
 
 void metropolis_update(vector<int8_t>& conf_local,
                               const vector<uint32_t>& sites,
-                              const vector<size_t>& sites_global_indices,
+                              const vector<uint32_t>& sites_global_indices,
                               const vector<uint32_t>& stride_halo,
                               const vector<double>& expTable,
                               long long &DeltaE,
@@ -46,8 +46,8 @@ void metropolis_update(vector<int8_t>& conf_local,
         const size_t end = std::min(sites.size(), beg + chunkSize);
 
         for (size_t idx = beg; idx < end; ++idx) {
-            const size_t iSite_halo = sites[idx];
-            const size_t global_idx = sites_global_indices[idx];
+            const uint32_t iSite_halo = sites[idx];
+            const uint32_t global_idx = sites_global_indices[idx];
 
             const int8_t oldVal = conf_local[iSite_halo];
 
