@@ -173,6 +173,16 @@ void metropolis_update(vector<int8_t>& conf_local,
             // Se x0 è fuori dal bulk, niente siti su questa riga
             if (x0 + 2 > local_L[0]) continue;
 
+            // Prefetch cache dei vicini
+            for (int d=1; d<N_dim;d++){
+                for (size_t pf = 0; pf < local_L[0] + 2; pf += 64) {
+                    // Vicino positivo
+                    __builtin_prefetch(&conf_local[base_halo + stride_halo[d] + pf], 0, 1);
+                    // Vicino negativo
+                    __builtin_prefetch(&conf_local[base_halo - stride_halo[d] + pf], 0, 1);
+                }
+            }    
+
             // Calcolo indici di partenza sulla riga
             size_t halo_idx   = base_halo   + (x0 + 1);
             size_t global_idx = base_global + (x0 + global_offset[0]);

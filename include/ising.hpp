@@ -127,7 +127,9 @@ void initialize_configuration(vector<int8_t>& conf_local,
                                      PhiloxRNG& gen,
                                      uint64_t base_seed) {
     // Inizializza
-    std::fill(conf_local.begin(), conf_local.end(), 0);
+
+    #pragma omp parallel for schedule(static)
+        for (size_t i = 0; i < conf_local.size(); ++i) conf_local[i] = 0;
     
     #ifdef DEBUG
     vector<size_t> debug_global_idx;
