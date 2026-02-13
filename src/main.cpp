@@ -36,7 +36,7 @@ timer timer::timerCost;
 
 int main(int argc, char** argv) {
 
-    timer totalTime, computeTime, mpiTime, ioTime,setupTime;
+    timer totalTime, computeTime, mpiTime, ioTime,setupTime, div_time;
     totalTime.start();
     setupTime.start();
 
@@ -145,17 +145,25 @@ int main(int argc, char** argv) {
         stride_global[d] = stride_global[d-1] * arr[d-1];
     }
 
-    // Vettori separati in Rosso (0)/Nero (1) e Interni (bulk)/Confine (border)
-    //La paritá é calcolata in modo globale
-    vector<uint32_t> bulk_sites[2];
-    vector<size_t> bulk_indices[2];
+    // Vettori per siti al confine (Red/Black), usati da entrambi i path
     vector<uint32_t> boundary_sites[2];
     vector<size_t> boundary_indices[2];
 
-    // Classificazione dei siti in Bulk/Boundary e Rosso/Nero
-    classify_sites(N_local, N_dim, local_L, local_L_halo, 
-                  global_offset, arr, bulk_sites, bulk_indices,
-                  boundary_sites, boundary_indices);
+    #ifdef IDX_ALLOC
+        // Path IDX_ALLOC: anche i bulk sono pre-allocati
+        vector<uint32_t> bulk_sites[2];
+        vector<size_t> bulk_indices[2];
+        classify_sites(N_local, N_dim, local_L, local_L_halo,
+                       global_offset, arr, bulk_sites, bulk_indices,
+                       boundary_sites, boundary_indices);
+    #elif defined(ROWING)
+        // Path ROWING: classifica solo i boundary (bulk calcolato al volo)
+        classify_boundary_sites(N_dim, local_L, local_L_halo,
+                                global_offset, arr,
+                                boundary_sites, boundary_indices);
+    #else
+        #error "Definire IDX_ALLOC o ROWING"
+    #endif
 
     //Inizializzazione RNG
     // Philox RNG: riproducible per update Bulk-Boundary
@@ -323,14 +331,15 @@ int main(int argc, char** argv) {
 	            mpiTime.stop();
 	    
 	            computeTime.start();
-	             // Update Bulk rosso/nero
-                metropolis_update_bulk(conf_local,updPar,                           
+	            div_time.start();
+	             // Update Bulk rosso/nero (include divisioni per righe)
+                metropolis_update_bulk(conf_local,updPar,
                                         local_L, local_L_halo,
-                                        global_offset, arr, 
-                                        stride_halo, expTable, 
-                                        DeltaE,  DeltaMag, gen, 
+                                        global_offset, arr,
+                                        stride_halo, expTable,
+                                        DeltaE,  DeltaMag, gen,
                                         iConf);
-
+	            div_time.stop();
 	            computeTime.stop();
 	            mpiTime.start();
 
@@ -378,9 +387,16 @@ int main(int argc, char** argv) {
     totalTime.stop();
     
     if (world_rank == 0) {
-        print_performance_summary(totalTime.get(), computeTime.get(), 
+        print_performance_summary(totalTime.get(), computeTime.get(),
                                   mpiTime.get(), ioTime.get(),
                                   setupTime.get(), nConfs);
+        #ifdef ROWING
+        master_printf("Bulk (rowing) time: %.6f s (%.6f s/conf) | "
+                      "Boundary time: %.6f s (%.6f s/conf)\n",
+                      div_time.get(), div_time.get() / nConfs,
+                      computeTime.get() - div_time.get(),
+                      (computeTime.get() - div_time.get()) / nConfs);
+        #endif
     }
 
     MPI_Comm_free(&cart_comm);

@@ -141,6 +141,171 @@ build_face_cache(const vector<FaceInfo>& faces,
     return cache;
 }
 
+// Overload esteso di build_face_cache: fonde il calcolo della face cache con la
+// classificazione dei siti boundary (Red/Black + indici globali per il RNG).
+// Rispetto all'overload base aggiunge:
+//   arr              → dimensioni globali del reticolo (per calcolare global_idx)
+//   boundary_sites   → output: indici halo dei siti boundary per parità
+//   boundary_indices → output: indici globali dei siti boundary per parità
+//
+// I siti agli angoli/spigoli (boundary in 2+ dimensioni) sono deduplicati
+// tramite un vettore seen[] di dimensione N_alloc = prod(local_L_halo).
+//
+// Il loop interno sul numero di siti per faccia è parallelizzato con OpenMP
+// tramite accumulatori thread-local; il merge e la dedup sono seriali.
+inline vector<FaceCache>
+build_face_cache(const vector<FaceInfo>& faces,
+                 const vector<size_t>& local_L,
+                 const vector<size_t>& local_L_halo,
+                 const vector<size_t>& global_offset,
+                 const vector<size_t>& arr,
+                 int N_dim,
+                 vector<uint32_t> boundary_sites[2],
+                 vector<size_t>   boundary_indices[2])
+{
+    vector<FaceCache> cache(N_dim);
+
+    // Stride globali per calcolare global_idx dei siti boundary
+    vector<size_t> stride_global(N_dim);
+    stride_global[0] = 1;
+    for (int d = 1; d < N_dim; ++d)
+        stride_global[d] = stride_global[d-1] * arr[d-1];
+
+    // seen[halo_idx] = true se il sito è già in boundary_sites.
+    // Evita inserimenti doppi per siti agli angoli/spigoli che compaiono
+    // come boundary in più dimensioni.
+    size_t N_alloc = 1;
+    for (int d = 0; d < N_dim; ++d) N_alloc *= local_L_halo[d];
+    vector<bool> seen(N_alloc, false);
+
+    const int nT = omp_get_max_threads();
+
+    for (int d = 0; d < N_dim; ++d) {
+
+        const vector<size_t>& face_dims    = faces[d].dims;
+        const vector<size_t>& face_to_full = faces[d].map;
+
+        size_t face_size = 1;
+        for (size_t i = 0; i < face_dims.size(); ++i)
+            face_size *= face_dims[i];
+
+        cache[d].face_size = face_size;
+
+        // Pre-riserva spazio nella face cache (evita riallocazioni nel merge)
+        for (int p = 0; p < 2; ++p) {
+            cache[d].idx_minus     [p].reserve(face_size / 2 + 1);
+            cache[d].idx_plus      [p].reserve(face_size / 2 + 1);
+            cache[d].idx_halo_minus[p].reserve(face_size / 2 + 1);
+            cache[d].idx_halo_plus [p].reserve(face_size / 2 + 1);
+        }
+
+        // Accumulatori thread-local per face cache e candidati boundary.
+        // Indicizzati come [p * nT + tid] per evitare false sharing.
+        vector<vector<size_t>>   th_idx_minus      (2 * nT);
+        vector<vector<size_t>>   th_idx_plus       (2 * nT);
+        vector<vector<size_t>>   th_idx_halo_minus (2 * nT);
+        vector<vector<size_t>>   th_idx_halo_plus  (2 * nT);
+        vector<vector<uint32_t>> th_bsites         (2 * nT);
+        vector<vector<size_t>>   th_bidx           (2 * nT);
+
+        #pragma omp parallel
+        {
+            int tid = omp_get_thread_num();
+            // Buffer per-thread per le coordinate (allocati una volta per thread)
+            vector<size_t> coord_face_t(face_dims.size());
+            vector<size_t> coord_full_t(N_dim);
+
+            #pragma omp for schedule(static)
+            for (size_t i = 0; i < face_size; ++i) {
+
+                index_to_coord(i, (int)face_dims.size(),
+                               face_dims.data(), coord_face_t.data());
+
+                // Calcola la parità base e l'indice globale base
+                // come somma dei contributi delle dimensioni k != d
+                size_t base        = 0;
+                size_t base_global = 0;
+                for (size_t j = 0; j < face_to_full.size(); ++j) {
+                    int    k  = (int)face_to_full[j];
+                    coord_full_t[k] = coord_face_t[j] + 1; // coord halo = local + 1
+                    size_t gc = coord_face_t[j] + global_offset[k];
+                    base        += gc;
+                    base_global += gc * stride_global[k];
+                }
+
+                int par_pos_face      = (int)((base + global_offset[d] + local_L[d] - 1) % 2);
+                int par_pos_face_halo = (int)((base + global_offset[d] + local_L[d]    ) % 2);
+                int par_neg_face      = (int)((base + global_offset[d]                 ) % 2);
+                int par_neg_face_halo = (int)((base + global_offset[d] + 1             ) % 2);
+
+                // --- faccia meno: coord_halo[d] = 1 (local coord[d] = 0) ---
+                coord_full_t[d] = 1;
+                size_t idx_inner_minus =
+                    coord_to_index(N_dim, local_L_halo.data(), coord_full_t.data());
+                th_idx_minus[par_neg_face * nT + tid].push_back(idx_inner_minus);
+                // global_coord[d] = 0 + global_offset[d]
+                th_bsites   [par_neg_face * nT + tid].push_back((uint32_t)idx_inner_minus);
+                th_bidx     [par_neg_face * nT + tid].push_back(
+                    base_global + global_offset[d] * stride_global[d]);
+
+                // --- halo meno: coord_halo[d] = 0 ---
+                coord_full_t[d] = 0;
+                th_idx_halo_minus[par_neg_face_halo * nT + tid].push_back(
+                    coord_to_index(N_dim, local_L_halo.data(), coord_full_t.data()));
+
+                // --- faccia più: coord_halo[d] = local_L[d] (local coord[d] = local_L[d]-1) ---
+                coord_full_t[d] = local_L[d];
+                size_t idx_inner_plus =
+                    coord_to_index(N_dim, local_L_halo.data(), coord_full_t.data());
+                th_idx_plus[par_pos_face * nT + tid].push_back(idx_inner_plus);
+                // global_coord[d] = local_L[d]-1 + global_offset[d]
+                th_bsites  [par_pos_face * nT + tid].push_back((uint32_t)idx_inner_plus);
+                th_bidx    [par_pos_face * nT + tid].push_back(
+                    base_global + (local_L[d] - 1 + global_offset[d]) * stride_global[d]);
+
+                // --- halo più: coord_halo[d] = local_L[d]+1 ---
+                coord_full_t[d] = local_L[d] + 1;
+                th_idx_halo_plus[par_pos_face_halo * nT + tid].push_back(
+                    coord_to_index(N_dim, local_L_halo.data(), coord_full_t.data()));
+            }
+        } // end omp parallel
+
+        // --- Merge face cache (seriale, O(face_size)) ---
+        for (int p = 0; p < 2; ++p)
+            for (int t = 0; t < nT; ++t) {
+                cache[d].idx_minus     [p].insert(cache[d].idx_minus     [p].end(),
+                    th_idx_minus     [p * nT + t].begin(), th_idx_minus     [p * nT + t].end());
+                cache[d].idx_plus      [p].insert(cache[d].idx_plus      [p].end(),
+                    th_idx_plus      [p * nT + t].begin(), th_idx_plus      [p * nT + t].end());
+                cache[d].idx_halo_minus[p].insert(cache[d].idx_halo_minus[p].end(),
+                    th_idx_halo_minus[p * nT + t].begin(), th_idx_halo_minus[p * nT + t].end());
+                cache[d].idx_halo_plus [p].insert(cache[d].idx_halo_plus [p].end(),
+                    th_idx_halo_plus [p * nT + t].begin(), th_idx_halo_plus [p * nT + t].end());
+            }
+
+        // --- Merge boundary con dedup tramite seen[] (seriale) ---
+        // La dedup è necessaria per i siti agli angoli/spigoli che compaiono
+        // nell'iterazione su più dimensioni d. All'interno della stessa d
+        // non ci sono duplicati (ogni posizione di faccia mappa su un sito unico).
+        for (int p = 0; p < 2; ++p)
+            for (int t = 0; t < nT; ++t) {
+                const auto& bs = th_bsites[p * nT + t];
+                const auto& bi = th_bidx  [p * nT + t];
+                for (size_t j = 0; j < bs.size(); ++j) {
+                    uint32_t h = bs[j];
+                    if (!seen[h]) {
+                        seen[h] = true;
+                        boundary_sites  [p].push_back(h);
+                        boundary_indices[p].push_back(bi[j]);
+                    }
+                }
+            }
+
+    } // fine loop su d
+
+    return cache;
+}
+
 // Inizia lo scambio halo non-blocking
 inline void start_halo_exchange(
     vector<int8_t>& conf_local,
