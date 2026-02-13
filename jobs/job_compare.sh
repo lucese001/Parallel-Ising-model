@@ -1,7 +1,7 @@
 #!/bin/bash
-#PBS -N ising_weak
+#PBS -N ising_compare
 #PBS -l nodes=1:ppn=32
-#PBS -l walltime=02:00:00
+#PBS -l walltime=01:00:00
 #PBS -j oe
 
 cd $PBS_O_WORKDIR
@@ -14,42 +14,78 @@ export PATH=$MPI_ROOT/bin:$PATH
 export LD_LIBRARY_PATH=$MPI_ROOT/lib
 export OMP_PROC_BIND=close
 export OMP_PLACES=cores
+# Disabilita la ricerca di InfiniBand
+export OMPI_MCA_btl=tcp,self
 
-echo "Weak Scaling Test"
-echo "Volume per rank costante: 1500x1500 = 2250000 siti/rank"
+echo "Confronto IDX_ALLOC vs ROWING"
 echo "Start: $(date)"
 echo ""
 
-# Parametri fissi
+# Parametri
 NDIM=2
-LOCAL_L=1500       # lato locale per rank
 NCONFS=100
 BETA=0.45
 SEED=124634
 
-# Array paralleli: ranks, L0, L1
-RANKS=(1    2    3    4    5    6    7     8)
-L0S=(  1500 3000 3000 6000 6000 12000)
-L1S=(  1500 1500 3000 3000 6000 6000)
+# Compila entrambe le versioni
+echo "Compilazione IDX_ALLOC..."
+mpicxx -O3 -std=c++17 -fopenmp -DIDX_ALLOC \
+    -Iinclude -Irandom123/include \
+    src/main.cpp -o ising_idx.exe
 
-# Compila
+echo "Compilazione ROWING..."
 mpicxx -O3 -std=c++17 -fopenmp -DROWING \
     -Iinclude -Irandom123/include \
     src/main.cpp -o ising_rowing.exe
+echo ""
 
-for i in "${!RANKS[@]}"; do
-    NRANKS=${RANKS[$i]}
-    L0=${L0S[$i]}
-    L1=${L1S[$i]}
+# WEAK SCALING: volume per rank costante 1500x1500 = 2.25M siti/rank
+echo "WEAK SCALING "
+echo "Volume per rank costante: 1500x1500 = 2250000 siti/rank"
+echo ""
+
+RANKS_W=(1     2     4     8     16   )
+L0_W=(   1500  3000  3000  6000  6000 )
+L1_W=(   1500  1500  3000  3000  6000 )
+
+for i in "${!RANKS_W[@]}"; do
+    NRANKS=${RANKS_W[$i]}
+    L0=${L0_W[$i]}
+    L1=${L1_W[$i]}
     NTHREADS=$((32 / NRANKS))
 
-    echo "=== $NRANKS rank x $NTHREADS threads, reticolo ${L0}x${L1} ==="
-    echo "    Siti totali: $((L0 * L1)), per rank: $((L0 * L1 / NRANKS))"
-    mpirun -n $NRANKS ./ising_rowing.exe \
-        $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED \
-        2>&1 | tee logs/weak_${NRANKS}rank_${L0}x${L1}.log
+    echo "--- Weak: $NRANKS rank x $NTHREADS threads, ${L0}x${L1} ---"
+
+    for MODE in idx rowing; do
+        echo "  [$MODE]"
+        mpirun -n $NRANKS ./ising_${MODE}.exe \
+            $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED \
+            2>&1 | tee logs/weak_${MODE}_${NRANKS}rank.log
+    done
     echo ""
 done
 
-echo "Weak Scaling Completato"
+# STRONG SCALING: reticolo fisso 8400x8400
+echo "========== STRONG SCALING =========="
+echo "Reticolo fisso: 16000x16000"
+echo ""
+
+L0=16000
+L1=16000
+
+for NRANKS in 1 2 4 8 16; do
+    NTHREADS=$((32 / NRANKS))
+
+    echo "--- Strong: $NRANKS rank x $NTHREADS threads ---"
+
+    for MODE in idx rowing; do
+        echo "  [$MODE]"
+        mpirun -n $NRANKS ./ising_${MODE}.exe \
+            $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED \
+            2>&1 | tee logs/strong_${MODE}_${NRANKS}rank.log
+    done
+    echo ""
+done
+
+echo "Confronto completato"
 echo "Fine: $(date)"
