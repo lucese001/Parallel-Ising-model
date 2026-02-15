@@ -6,7 +6,6 @@
 #include <random>
 #include <algorithm>
 #include <omp.h>
-#include "philox_rng.hpp"
 #include "utility.hpp"
 #include "ising.hpp"
 
@@ -31,7 +30,7 @@ void metropolis_update(vector<int8_t>& conf_local,
                               const vector<double>& expTable,
                               long long &DeltaE,
                               long long &DeltaMag,
-                              PhiloxRNG& gen,
+                              uint32_t rng_seed,
                               int iConf,
                               size_t nThreads)
 {
@@ -64,7 +63,7 @@ void metropolis_update(vector<int8_t>& conf_local,
             } else {
                 // eDiff > 0: valori possibili 4, 8, ..., 4*N_dim
                 // Lookup: expTable[eDiff/4 - 1] = exp(-Beta*eDiff)
-                uint32_t rand1 = gen.get1(global_idx, iConf, 0, false);
+                uint32_t rand1 = philox_rand(global_idx, iConf, rng_seed);
                 const double rand_uniform = (double)rand1 / 4294967296.0;
                 accept = (rand_uniform < expTable[eDiff / 4 - 1]);
             }
@@ -122,7 +121,7 @@ void metropolis_update(vector<int8_t>& conf_local,
         const vector<double>& expTable,
         size_t pf_limit,
         long long& DeltaE, long long& DeltaMag,
-        PhiloxRNG& gen, int iConf)  {
+        uint32_t rng_seed, int iConf)  {
 
         // Calcolo numero di righe
         size_t n_rows = 1;
@@ -200,7 +199,7 @@ void metropolis_update(vector<int8_t>& conf_local,
                 if (eDiff <= 0) {
                     accept = true;
                 } else {
-                    uint32_t rand1 = gen.get1(global_idx, iConf, 0, false);
+                    uint32_t rand1 = philox_rand(global_idx, iConf, rng_seed);
                     double rand_uniform = (double)rand1 / 4294967296.0;
                     accept = (rand_uniform < expTable[eDiff / 4 - 1]);
                 }

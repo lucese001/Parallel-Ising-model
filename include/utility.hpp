@@ -5,6 +5,13 @@
 #include <cstdint>
 #include <chrono>
 #include <omp.h>
+#include <cstdint>
+#ifndef R123_ASSERT
+#include <cassert>
+#define R123_ASSERT(x) assert(x)
+#endif
+
+#include "include/Random123/philox.h"
 
 using std::vector;
 using std::chrono::high_resolution_clock;
@@ -244,4 +251,16 @@ inline void classify_bulk(
                                    th_bulk_idx  [p * nT + t].begin(),
                                    th_bulk_idx  [p * nT + t].end());
         }
+}
+
+
+inline uint32_t philox_rand(uint64_t global_idx, uint32_t iConf, uint32_t seed) {
+    philox4x32_ctr_t ctr = {{
+        (uint32_t)(global_idx),
+        (uint32_t)(global_idx >> 32),
+        (uint32_t)iConf,
+        0
+    }};
+    philox4x32_key_t key = {{seed, 0}};
+    return philox4x32(ctr, key).v[0];
 }

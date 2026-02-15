@@ -1,4 +1,3 @@
-#include "philox_rng.hpp"
 #include "utility.hpp"
 #include "ising.hpp"
 #include "metropolis.hpp"
@@ -164,17 +163,18 @@ int main(int argc, char** argv) {
     #endif
 
     //Inizializzazione RNG
-    // Philox RNG: riproducible per update Bulk-Boundary
-    PhiloxRNG gen(seed + 104729);
+    // Philox counter-based: il seed seleziona l'esperimento,
+    // il counter (global_idx, iConf) seleziona il numero random
+    uint32_t rng_seed = (uint32_t)(seed + 104729);
     print_simulation_info(N_dim, N, nThreads, nConfs, Beta,
-                          sizeof(PhiloxRNG), true);
+                          sizeof(uint32_t), true);
     // Vettore che contiene la configurazione locale a ogni rank
     // (1 byte per sito). Contiene celle halo
     vector<int8_t> conf_local(N_alloc); 
 
     //Genera la prima configurazione
-    initialize_configuration(conf_local, N_local, N_dim, local_L, 
-                            local_L_halo,global_offset, arr, gen, seed);
+    initialize_configuration(conf_local, N_local, N_dim, local_L,
+                            local_L_halo,global_offset, arr, rng_seed);
 
     // Costruisce le dimensioni delle facce e la sua posizione
     vector<FaceInfo> faces = build_faces(local_L, N_dim);
@@ -296,7 +296,7 @@ int main(int argc, char** argv) {
 	             // Update Bulk rosso/nero
 	            metropolis_update(conf_local, bulk_sites[updPar],
 			                  bulk_indices[updPar], stride_halo, 
-                              expTable, DeltaE,DeltaMag, gen, 
+                              expTable, DeltaE,DeltaMag, rng_seed,
                               iConf, nThreads);
 
 	            computeTime.stop();
@@ -310,7 +310,7 @@ int main(int argc, char** argv) {
 	            // Update boundary rossa/nero
 	            metropolis_update(conf_local, boundary_sites[updPar],
 			                  boundary_indices[updPar], stride_halo,
-                              expTable, DeltaE,DeltaMag, gen, 
+                              expTable, DeltaE,DeltaMag, rng_seed,
                               iConf, nThreads);
                 computeTime.stop();
             } //Fine loop sulle paritá
@@ -339,7 +339,7 @@ int main(int argc, char** argv) {
                                         global_offset, arr,
                                         stride_halo, stride_global, expTable,
                                         pf_limit, DeltaE, DeltaMag,
-                                        gen, iConf);
+                                        rng_seed, iConf);
 	            div_time.stop();
 	            computeTime.stop();
 	            mpiTime.start();
@@ -353,7 +353,7 @@ int main(int argc, char** argv) {
 	            // Update boundary rossa/nero
 	            metropolis_update(conf_local, boundary_sites[updPar],
 			                  boundary_indices[updPar], stride_halo,
-                              expTable, DeltaE,DeltaMag, gen, 
+                              expTable, DeltaE,DeltaMag, rng_seed,
                               iConf, nThreads);
                 computeTime.stop();
             } //Fine loop sulle paritá

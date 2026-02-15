@@ -124,8 +124,7 @@ void initialize_configuration(vector<int8_t>& conf_local,
                                      const vector<size_t>& local_L_halo,
                                      const vector<size_t>& global_offset,
                                      const vector<size_t>& arr,
-                                     PhiloxRNG& gen,
-                                     uint64_t base_seed) {
+                                     uint32_t rng_seed) {
     // Inizializza
 
     #pragma omp parallel for schedule(static)
@@ -147,7 +146,7 @@ void initialize_configuration(vector<int8_t>& conf_local,
 
             size_t global_index = compute_global_index(i, local_L, global_offset, arr, N_dim,
                                                        coord_local.data(), coord_global.data());
-            uint32_t rand_val = gen.get1(global_index, 0, 0, false);
+            uint32_t rand_val = philox_rand(global_index, 0, rng_seed);
             int8_t spin = (rand_val & 1) ? 1 : -1;
 
             #ifdef DEBUG
