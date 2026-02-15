@@ -22,7 +22,7 @@ echo "Start: $(date)"
 echo ""
 
 # Parametri
-NDIM=2
+NDIM=3
 NCONFS=100
 BETA=0.45
 SEED=124634
@@ -44,39 +44,42 @@ mpicxx -O3 -std=c++17 -fopenmp -DROWING -DPREFETCH_CACHE \
     src/main.cpp -o ising_prefetch.exe
 echo ""
 
-# WEAK SCALING: volume per rank costante 2000x2000 = 4M siti/rank
-echo "========== WEAK SCALING =========="
-echo "Volume per rank costante: 2000x2000 = 4000000 siti/rank"
+# WEAK SCALING 3D: volume per rank costante 200^3 = 8M siti/rank
+echo "========== WEAK SCALING 3D =========="
+echo "Volume per rank costante: 200x200x200 = 8000000 siti/rank"
 echo ""
 
-RANKS_W=(1     2     4     8     16   )
-L0_W=(   2000  4000  4000  8000  8000 )
-L1_W=(   2000  2000  4000  4000  8000 )
+RANKS_W=(1    2    4    8   )
+L0_W=(   200  400  400  400 )
+L1_W=(   200  200  400  400 )
+L2_W=(   200  200  200  400 )
 
 for i in "${!RANKS_W[@]}"; do
     NRANKS=${RANKS_W[$i]}
     L0=${L0_W[$i]}
     L1=${L1_W[$i]}
+    L2=${L2_W[$i]}
     NTHREADS=$((32 / NRANKS))
 
-    echo "--- Weak: $NRANKS rank x $NTHREADS threads, ${L0}x${L1} ---"
+    echo "--- Weak: $NRANKS rank x $NTHREADS threads, ${L0}x${L1}x${L2} ---"
 
     for MODE in idx rowing prefetch; do
         echo "  [$MODE]"
         mpirun -n $NRANKS ./ising_${MODE}.exe \
-            $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED \
+            $NDIM $L0 $L1 $L2 $NCONFS $NTHREADS $BETA $SEED \
             2>&1 | tee logs/weak_${MODE}_${NRANKS}rank.log
     done
     echo ""
 done
 
-# STRONG SCALING: reticolo fisso 16000x16000
-echo "========== STRONG SCALING =========="
-echo "Reticolo fisso: 16000x16000"
+# STRONG SCALING 3D: reticolo fisso 5000^3
+echo "========== STRONG SCALING 3D =========="
+echo "Reticolo fisso: 5000x5000x5000"
 echo ""
 
-L0=16000
-L1=16000
+L0=5000
+L1=5000
+L2=5000
 
 for NRANKS in 1 2 4 8 16; do
     NTHREADS=$((32 / NRANKS))
@@ -86,7 +89,7 @@ for NRANKS in 1 2 4 8 16; do
     for MODE in idx rowing prefetch; do
         echo "  [$MODE]"
         mpirun -n $NRANKS ./ising_${MODE}.exe \
-            $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED \
+            $NDIM $L0 $L1 $L2 $NCONFS $NTHREADS $BETA $SEED \
             2>&1 | tee logs/strong_${MODE}_${NRANKS}rank.log
     done
     echo ""
