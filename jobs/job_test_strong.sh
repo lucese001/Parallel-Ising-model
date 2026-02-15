@@ -1,5 +1,5 @@
 #!/bin/bash
-#PBS -N ising_compare
+#PBS -N ising_test_strong
 #PBS -l nodes=1:ppn=32
 #PBS -l walltime=01:00:00
 #PBS -j oe
@@ -17,7 +17,7 @@ export OMP_PLACES=cores
 # Disabilita la ricerca di InfiniBand
 export OMPI_MCA_btl=tcp,self
 
-echo "Confronto IDX_ALLOC vs ROWING"
+echo "Test strong prefetch cache"
 echo "Start: $(date)"
 echo ""
 
@@ -27,13 +27,9 @@ NCONFS=100
 BETA=0.45
 SEED=124634
 
-# Compila entrambe le versioni
-echo "Compilazione IDX_ALLOC..."
-mpicxx -O3 -std=c++17 -fopenmp -DIDX_ALLOC \
-    -Iinclude -Irandom123/include \
-    src/main.cpp -o ising_idx.exe
-
+# Compila
 echo "Compilazione ROWING..."
+
 mpicxx -O3 -std=c++17 -fopenmp -DROWING \
     -Iinclude -Irandom123/include \
     src/main.cpp -o ising_rowing.exe
@@ -47,7 +43,7 @@ echo ""
 L0=16000
 L1=16000
 
-for NRANKS in 1 2 4 ; do
+for NRANKS in 1 2 4 8 ; do
     NTHREADS=$((32 / NRANKS))
 
     echo "--- Strong: $NRANKS rank x $NTHREADS threads ---"
@@ -61,5 +57,4 @@ for NRANKS in 1 2 4 ; do
     echo ""
 done
 
-echo "Confronto completato"
 echo "Fine: $(date)"
