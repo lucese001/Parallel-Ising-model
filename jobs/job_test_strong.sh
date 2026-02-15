@@ -35,6 +35,22 @@ mpicxx -O3 -std=c++17 -fopenmp -DROWING \
     src/main.cpp -o ising_rowing.exe
 echo ""
 
+echo "Compilazione IDX_ALLOC"
+
+mpicxx -O3 -std=c++17 -fopenmp -DIDX_ALLOC \
+    -Iinclude -Irandom123/include \
+    src/main.cpp -o ising_idx_alloc.exe
+echo ""
+
+echo "Compilazione PREFETCH"
+
+mpicxx -O3 -std=c++17 -fopenmp -DROWING -DPREFETCHCACHE \
+    -Iinclude -Irandom123/include \
+    src/main.cpp -o ising_prefetch.exe
+echo ""
+
+
+
 # STRONG SCALING: reticolo fisso 8400x8400
 echo "========== STRONG SCALING =========="
 echo "Reticolo fisso: 16000x16000"
@@ -49,6 +65,14 @@ for NRANKS in 1 2 4 8 ; do
     echo "--- Strong: $NRANKS rank x $NTHREADS threads ---"
 
     for MODE in idx rowing; do
+        echo "  [$MODE]"
+        mpirun -n $NRANKS ./ising_${MODE}.exe \
+            $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED \
+            2>&1 | tee logs/strong_${MODE}_${NRANKS}rank.log
+    done
+    echo ""
+
+        for MODE in fa; do
         echo "  [$MODE]"
         mpirun -n $NRANKS ./ising_${MODE}.exe \
             $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED \

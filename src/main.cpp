@@ -139,7 +139,11 @@ int main(int argc, char** argv) {
         stride_halo[d] = stride_halo[d-1] * local_L_halo[d-1];
     }
     // Calcola l'indice oltre il quale non fare prefetch (rischia di sforare)
-    size_t pf_limit = conf_local.size() - stride_halo[N_dim - 1];
+#ifdef PREFETCH_CACHE
+    size_t pf_limit = N_alloc - stride_halo[N_dim - 1];
+#else
+    size_t pf_limit = 0; // non usato, serve per compilare la firma
+#endif
     //Precalcola gli stride globali
     vector<long long> stride_global(N_dim);
     stride_global[0] = 1;
@@ -221,8 +225,6 @@ int main(int argc, char** argv) {
     for (int d = 0; d < N_dim; ++d){
         expTable[d] = exp(-Beta * 4.0 * (d + 1));
     }
-
-    for (int d=0;)
 
     // Apertura del file di output per le misure
     FILE* measFile = nullptr;
@@ -335,8 +337,8 @@ int main(int argc, char** argv) {
                 metropolis_update_bulk(conf_local,updPar,
                                         local_L, local_L_halo,
                                         global_offset, arr,
-                                        stride_halo, expTable,
-                                        pf_limit, DeltaE, DeltaMag, 
+                                        stride_halo, stride_global, expTable,
+                                        pf_limit, DeltaE, DeltaMag,
                                         gen, iConf);
 	            div_time.stop();
 	            computeTime.stop();

@@ -118,7 +118,7 @@ void metropolis_update(vector<int8_t>& conf_local,
         const vector<size_t>& global_offset,   
         const vector<size_t>& arr,             
         const vector<uint32_t>& stride_halo,
-        const vector <uint32_t>& stride_global,     
+        const vector<long long>& stride_global,     
         const vector<double>& expTable,
         size_t pf_limit,
         long long& DeltaE, long long& DeltaMag,
@@ -163,27 +163,31 @@ void metropolis_update(vector<int8_t>& conf_local,
             // Calcolo indici di partenza sulla riga
             size_t halo_idx   = base_halo   + (x0 + 1);
             size_t global_idx = base_global + (x0 + global_offset[0]);
+#ifdef PREFETCH_CACHE
             size_t pf_trigger= halo_idx; // Trigger per fare prefetch halo
+#endif
 
             // Loop sulla riga dove avanza di 2 per mantenere la parità
             for (size_t x = x0; x + 2 <= local_L[0]; x += 2) {
 
+#ifdef PREFETCH_CACHE
                 //Prefetch cache dei prossimi 32 siti da aggiornare
                 // dato che una cache line son 64 byte. Carico i prossimi
-                // 64 siti nella riga e pure i suoi vicinie
+                // 64 siti nella riga e pure i suoi vicini
                 if (halo_idx >= pf_trigger && halo_idx + 64 < pf_limit) {
-                    
+
                     // Carica la riga contenente i prossimi siti
                     __builtin_prefetch(&conf_local[halo_idx + 64], 0, 1);
                     pf_trigger = halo_idx + 64;
                     // Carica i vicini
                     for (int d = 1; d < N_dim; ++d) {
-                        __builtin_prefetch(&conf_local[halo_idx 
+                        __builtin_prefetch(&conf_local[halo_idx
                         + 64 + stride_halo[d]], 0, 1);
-                        __builtin_prefetch(&conf_local[halo_idx 
+                        __builtin_prefetch(&conf_local[halo_idx
                         + 64 - stride_halo[d]], 0, 1);
                     }
                 }
+#endif
 
                 const int8_t oldVal = conf_local[halo_idx];
                 const int8_t proposed_spin = -oldVal;
