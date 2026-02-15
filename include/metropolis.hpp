@@ -50,31 +50,21 @@ void metropolis_update(vector<int8_t>& conf_local,
             const uint32_t global_idx = sites_global_indices[idx];
 
             const int8_t oldVal = conf_local[iSite_halo];
-
-            // Philox e' un counter-based RNG. L'ordine in cui
-            // vengono aggiornati i siti non influenza i numeri estratti
-            // (dipendono solo dall'indice globale e dalla configurazione)
-
-            // Proposta di spin: se é uguale a quello precedente
-            // salta al prossimo sito
-            uint32_t rand0 = gen.get1(global_idx, iConf, 0, false);
-            int8_t proposed_spin = (rand0 & 1) ? 1 : -1;
-            if (proposed_spin == oldVal) continue;
+            // Proposta: flip sempre (detailed balance mantenuta)
+            const int8_t proposed_spin = -oldVal;
 
             const int enBefore = computeEnSite(conf_local, iSite_halo,
                                                stride_halo, N_dim);
-            const int eDiff = - 2*enBefore; // Se flippa l'energia cambia segno           
-            
+            const int eDiff = -2 * enBefore;
+
             // Accettazione
             bool accept;
             if (eDiff <= 0) {
-                // L'energia diminuisce quindi il flip viene accettato
                 accept = true;
             } else {
                 // eDiff > 0: valori possibili 4, 8, ..., 4*N_dim
                 // Lookup: expTable[eDiff/4 - 1] = exp(-Beta*eDiff)
-                uint32_t rand1 = gen.get1(global_idx, iConf, 1, false);
-                // Questa parte non mi è 100% chiara
+                uint32_t rand1 = gen.get1(global_idx, iConf, 0, false);
                 const double rand_uniform = (double)rand1 / 4294967296.0;
                 accept = (rand_uniform < expTable[eDiff / 4 - 1]);
             }
@@ -90,7 +80,6 @@ void metropolis_update(vector<int8_t>& conf_local,
             {
                 std::cout << "PHILOX_DEBUG: iConf=" << iConf
                 << " global_idx=" << global_idx
-                << " rand0=" << rand0
                 << " spin=" << (int)proposed_spin
                 << " E iniziale=" << enBefore
                 << " DeltaE=" << eDiff
@@ -128,22 +117,18 @@ void metropolis_update(vector<int8_t>& conf_local,
         const vector<size_t>& local_L_halo,    
         const vector<size_t>& global_offset,   
         const vector<size_t>& arr,             
-        const vector<uint32_t>& stride_halo,     
-        const vector<double>& expTable,        
+        const vector<uint32_t>& stride_halo,
+        const vector <uint32_t>& stride_global,     
+        const vector<double>& expTable,
+        size_t pf_limit,
         long long& DeltaE, long long& DeltaMag,
-        PhiloxRNG& gen, int iConf)
-    {
+        PhiloxRNG& gen, int iConf)  {
 
         // Calcolo numero di righe
         size_t n_rows = 1;
-        for (int d = 1; d < N_dim; d++)
+        for (int d = 1; d < N_dim; d++){
             n_rows *= (local_L[d] - 2);
-
-        // Precomputa stride_global
-        vector<size_t> stride_global(N_dim);
-        stride_global[0] = 1;
-        for (int d = 1; d < N_dim; d++)
-            stride_global[d] = stride_global[d-1] * arr[d-1];
+        }
 
         long long local_dE = 0, local_dM = 0;
 
@@ -167,53 +152,59 @@ void metropolis_update(vector<int8_t>& conf_local,
 
             // Determina x[0] di partenza correto con la paritá globale
             size_t x0 = 1;
-            if (((x0 + global_offset[0] + parity_sum) % 2) != (size_t)parity)
-                x0 = 2;
+            if (((x0 + global_offset[0] + parity_sum) % 2) != (size_t)parity){
+               x0 = 2; 
+            }
 
             // Se x0 è fuori dal bulk, niente siti su questa riga
             if (x0 + 2 > local_L[0]) continue;
-
-            // Prefetch cache dei vicini
-            for (int d=1; d<N_dim;d++){
-                for (size_t pf = 0; pf < local_L[0] + 2; pf += 64) {
-                    // Vicino positivo
-                    __builtin_prefetch(&conf_local[base_halo + stride_halo[d] + pf], 0, 1);
-                    // Vicino negativo
-                    __builtin_prefetch(&conf_local[base_halo - stride_halo[d] + pf], 0, 1);
-                }
-            }    
+   
 
             // Calcolo indici di partenza sulla riga
             size_t halo_idx   = base_halo   + (x0 + 1);
             size_t global_idx = base_global + (x0 + global_offset[0]);
+            size_t pf_trigger= halo_idx; // Trigger per fare prefetch halo
 
             // Loop sulla riga dove avanza di 2 per mantenere la parità
             for (size_t x = x0; x + 2 <= local_L[0]; x += 2) {
 
-                const int8_t oldVal = conf_local[halo_idx];
-
-                uint32_t rand0 = gen.get1(global_idx, iConf, 0, false);
-                int8_t proposed_spin = (rand0 & 1) ? 1 : -1;
-
-                if (proposed_spin != oldVal) {
-                    const int enBefore = computeEnSite(conf_local, halo_idx,
-                                                    stride_halo, N_dim);
-                    const int eDiff = -2 * enBefore;
-
-                    bool accept;
-                    if (eDiff <= 0) {
-                        accept = true;
-                    } else {
-                        uint32_t rand1 = gen.get1(global_idx, iConf, 1, false);
-                        double rand_uniform = (double)rand1 / 4294967296.0;
-                        accept = (rand_uniform < expTable[eDiff / 4 - 1]);
+                //Prefetch cache dei prossimi 32 siti da aggiornare
+                // dato che una cache line son 64 byte. Carico i prossimi
+                // 64 siti nella riga e pure i suoi vicinie
+                if (halo_idx >= pf_trigger && halo_idx + 64 < pf_limit) {
+                    
+                    // Carica la riga contenente i prossimi siti
+                    __builtin_prefetch(&conf_local[halo_idx + 64], 0, 1);
+                    pf_trigger = halo_idx + 64;
+                    // Carica i vicini
+                    for (int d = 1; d < N_dim; ++d) {
+                        __builtin_prefetch(&conf_local[halo_idx 
+                        + 64 + stride_halo[d]], 0, 1);
+                        __builtin_prefetch(&conf_local[halo_idx 
+                        + 64 - stride_halo[d]], 0, 1);
+                    }
                 }
 
-                    if (accept) {
-                        conf_local[halo_idx] = proposed_spin;
-                        local_dE += eDiff;
-                        local_dM += proposed_spin - oldVal;
-                    }
+                const int8_t oldVal = conf_local[halo_idx];
+                const int8_t proposed_spin = -oldVal;
+
+                const int enBefore = computeEnSite(conf_local, halo_idx,
+                                                stride_halo, N_dim);
+                const int eDiff = -2 * enBefore;
+
+                bool accept;
+                if (eDiff <= 0) {
+                    accept = true;
+                } else {
+                    uint32_t rand1 = gen.get1(global_idx, iConf, 0, false);
+                    double rand_uniform = (double)rand1 / 4294967296.0;
+                    accept = (rand_uniform < expTable[eDiff / 4 - 1]);
+                }
+
+                if (accept) {
+                    conf_local[halo_idx] = proposed_spin;
+                    local_dE += eDiff;
+                    local_dM += proposed_spin - oldVal;
                 }
 
                 halo_idx   += 2;   

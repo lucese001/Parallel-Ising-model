@@ -138,6 +138,8 @@ int main(int argc, char** argv) {
     for (int d = 1; d < N_dim; ++d){
         stride_halo[d] = stride_halo[d-1] * local_L_halo[d-1];
     }
+    // Calcola l'indice oltre il quale non fare prefetch (rischia di sforare)
+    size_t pf_limit = conf_local.size() - stride_halo[N_dim - 1];
     //Precalcola gli stride globali
     vector<long long> stride_global(N_dim);
     stride_global[0] = 1;
@@ -219,6 +221,8 @@ int main(int argc, char** argv) {
     for (int d = 0; d < N_dim; ++d){
         expTable[d] = exp(-Beta * 4.0 * (d + 1));
     }
+
+    for (int d=0;)
 
     // Apertura del file di output per le misure
     FILE* measFile = nullptr;
@@ -332,8 +336,8 @@ int main(int argc, char** argv) {
                                         local_L, local_L_halo,
                                         global_offset, arr,
                                         stride_halo, expTable,
-                                        DeltaE,  DeltaMag, gen,
-                                        iConf);
+                                        pf_limit, DeltaE, DeltaMag, 
+                                        gen, iConf);
 	            div_time.stop();
 	            computeTime.stop();
 	            mpiTime.start();
