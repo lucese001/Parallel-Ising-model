@@ -178,8 +178,7 @@ int main(int argc, char** argv) {
     // Philox counter-based: il seed seleziona l'esperimento,
     // il counter (global_idx, iConf) seleziona il numero random
     uint32_t rng_seed = (uint32_t)(seed + 104729);
-    print_simulation_info(N_dim, N, nThreads, nConfs, Beta, world_size
-                          sizeof(uint32_t), true);
+    print_simulation_info(N_dim, N, nThreads, nConfs, Beta, world_size);
     // Vettore che contiene la configurazione locale a ogni rank
     // (1 byte per sito). Contiene celle halo
     vector<uint64_t> conf_local ((N_alloc+63)/64); 
@@ -346,9 +345,8 @@ int main(int argc, char** argv) {
 	            computeTime.start();
 	            div_time.start();
 	             // Update Bulk rosso/nero (include divisioni per righe)
-                metropolis_update_bulk(conf_local,updPar,
-                                        local_L, local_L_halo,
-                                        global_offset, arr,
+                metropolis_update_bulk(conf_local, updPar,
+                                        local_L, global_offset, arr,
                                         stride_halo, stride_global, expTable,
                                         pf_limit, DeltaE, DeltaMag,
                                         rng_seed, iConf);
