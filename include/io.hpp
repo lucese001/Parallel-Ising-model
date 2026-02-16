@@ -119,14 +119,10 @@ inline void write_measurement(FILE* measFile, long long Mag,
 
 // Stampa le informazioni sulla simulazione
 inline void print_simulation_info(int N_dim, long long N, size_t nThreads, int nConfs, 
-                                   double Beta, size_t rng_memory, bool parallel_rng) {
-    master_printf("N_dim: %d, Npunti: %zu, NThreads: %d, nConfs: %d, Beta: %lg\n", 
-           N_dim, N, nThreads, nConfs, Beta);
-    if (parallel_rng) {
-        master_printf("Memory usage of the rng: %zu Bytes\n", rng_memory);
-    } else {
-        master_printf("Memory usage of the rng: %zu MB\n", rng_memory / (1 << 20));
-    }
+                                   double Beta, size_t rng_memory, bool parallel_rng,
+                                    int world_size) {
+    master_printf("N_dim: %d, Npunti: %zu, NThreads: %d, nConfs: %d, Beta: %lg\n,
+                    numero di rank: %d", N_dim, N, nThreads, nConfs, Beta,world_size);
 }
 
 // Stampa la topologia MPI per debug

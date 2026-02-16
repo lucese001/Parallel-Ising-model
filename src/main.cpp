@@ -48,8 +48,7 @@ int main(int argc, char** argv) {
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
-      master_printf("world_size  %d rank %d\n", world_size, world_rank);
-    
+        
     // Lettura parametri: da riga di comando o da file
     // Uso: ./ising_philox.exe <N_dim> <L0> [L1 ...] <nConfs> <nThreads> <Beta> <seed>
     if (world_rank == 0) {
@@ -179,7 +178,7 @@ int main(int argc, char** argv) {
     // Philox counter-based: il seed seleziona l'esperimento,
     // il counter (global_idx, iConf) seleziona il numero random
     uint32_t rng_seed = (uint32_t)(seed + 104729);
-    print_simulation_info(N_dim, N, nThreads, nConfs, Beta,
+    print_simulation_info(N_dim, N, nThreads, nConfs, Beta, world_size
                           sizeof(uint32_t), true);
     // Vettore che contiene la configurazione locale a ogni rank
     // (1 byte per sito). Contiene celle halo

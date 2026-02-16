@@ -1,7 +1,7 @@
 #!/bin/bash
 #PBS -N ising_compare
 #PBS -l nodes=1:ppn=32
-#PBS -l walltime=01:00:00
+#PBS -l walltime=03:00:00
 #PBS -j oe
 
 cd $PBS_O_WORKDIR
@@ -27,11 +27,7 @@ NCONFS=100
 BETA=0.45
 SEED=124634
 
-# Compila le tre versioni
-echo "Compilazione IDX_ALLOC..."
-mpicxx -O3 -std=c++17 -fopenmp -DIDX_ALLOC \
-    -Iinclude -Irandom123/include \
-    src/main.cpp -o ising_idx.exe
+# Compila le due versioni
 
 echo "Compilazione ROWING..."
 mpicxx -O3 -std=c++17 -fopenmp -DROWING \

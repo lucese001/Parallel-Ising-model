@@ -26,7 +26,7 @@ BETA=0.45
 SEED=124634
 
 # Compilazione
-mpicxx -O3 -std=c++17 -fopenmp -DROWING \
+mpicxx -O3 -std=c++17 -fopenmp -DROWING -DPREFETCH \
     -Iinclude -Irandom123/include \
     src/main.cpp -o ising_philox.exe
 
