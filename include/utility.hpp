@@ -272,12 +272,25 @@ inline int8_t get_spin(const uint64_t* data, size_t i) {
 }
 
 // Flippa spin al sito i (XOR: inverte il bit)
+// Atomic per evitare data race quando più thread modificano bit diversi
+// nella stessa parola uint64_t
 inline void flip_spin(uint64_t* data, size_t i) {
-    data[i >> 6] ^= (1ULL << (i & 63));
+    const uint64_t mask = 1ULL << (i & 63);
+    #pragma omp atomic
+    data[i >> 6] ^= mask;
 }
 
 // Scrivi spin al sito i (+1 → bit=1, -1 → bit=0)
+// Atomic per lo stesso motivo di flip_spin
 inline void set_spin(uint64_t* data, size_t i, int8_t val) {
-    if (val > 0) data[i >> 6] |=  (1ULL << (i & 63));
-    else         data[i >> 6] &= ~(1ULL << (i & 63));
+    const size_t word = i >> 6;
+    const uint64_t mask = 1ULL << (i & 63);
+    if (val > 0) {
+        #pragma omp atomic
+        data[word] |= mask;
+    } else {
+        const uint64_t nmask = ~mask;
+        #pragma omp atomic
+        data[word] &= nmask;
+    }
 }
