@@ -6,47 +6,29 @@
 #include <cstdint>
 #include <cstring>
 #include <random>
-#include "prng_engine.hpp"
 #include "utility.hpp"
 
 using std::vector;
-using std::binomial_distribution;
-using std::mt19937_64;
 using namespace std;
 
-// Variabili globali esterne (definite in new_ising.cpp)
+// Variabili globali esterne (definite in main.cpp)
 extern int N_dim;
 extern int world_rank;
 extern int world_size;
 
-inline int computeEnSite(const vector<int8_t>& conf,
+inline int computeEnSite(const uint64_t* conf,
                          size_t idx,
                          const vector<uint32_t>& stride_halo,
                          int N_dim) {
     int sum = 0;
     for (int d = 0; d < N_dim; ++d) {
-        sum += conf[idx + stride_halo[d]];
-        sum += conf[idx - stride_halo[d]];
+        sum += get_spin(conf, idx + stride_halo[d]);
+        sum += get_spin(conf, idx - stride_halo[d]);
     }
-    return -sum*conf[idx];
+    return -sum * get_spin(conf, idx);
 }
 
-// computeEn: somma parziale dell'energia sui siti specificati
-// Restituisce la somma GREZZA (ogni coppia contata 2 volte).
-// Il chiamante divide per 2 dopo aver sommato tutti i contributi.
-long long computeEn(const vector<int8_t>& conf,
-                           const vector<size_t>& sites,
-                           const vector<uint32_t>& stride_halo,
-                           int N_dim) {
-    long long en = 0;
-#pragma omp parallel for reduction(+:en)
-    for (size_t i = 0; i < sites.size(); ++i) {
-        en += computeEnSite(conf, sites[i], stride_halo, N_dim);
-    }
-    return en;
-}
-
-long long computeEn_rank(const vector<int8_t>& conf,
+long long computeEn_rank(const vector<uint64_t>& conf,
                          const vector<uint32_t>& stride_halo,
                          const vector<size_t>& local_L,
                          int N_dim) 
@@ -68,7 +50,7 @@ long long computeEn_rank(const vector<int8_t>& conf,
         }
         for (size_t x0 = 0; x0 < local_L[0]; x0++) {
             size_t halo_idx = base_halo + (x0 + 1);
-            E_local += computeEnSite(conf, halo_idx, stride_halo, N_dim);
+            E_local += computeEnSite(conf.data(), halo_idx, stride_halo, N_dim);
         }
     }
     return E_local / 2;
@@ -76,10 +58,10 @@ long long computeEn_rank(const vector<int8_t>& conf,
 
 
 
-long long compute_Mag_rank(const vector<int8_t>& conf,
+long long compute_Mag_rank(const vector<uint64_t>& conf,
                            const vector<uint32_t>& stride_halo,
                            const vector<size_t>& local_L,
-                           int N_dim) 
+                           int N_dim)
 {
     long long Mag_local = 0;
     
@@ -98,26 +80,14 @@ long long compute_Mag_rank(const vector<int8_t>& conf,
         }
         for (size_t x0 = 0; x0 < local_L[0]; x0++) {
             size_t halo_idx = base_halo + (x0 + 1);
-            Mag_local += conf[halo_idx];
+            Mag_local += get_spin(conf.data(), halo_idx);
         }
     }
     return Mag_local;
 }
 
 
-/*
-// computeMagnetization_local: magnetizzazione parziale sui siti specificati
-long long compute_Mag_rank(const vector<int8_t>& conf,
-                                            const vector<size_t>& sites) {
-    long long mag = 0;
-#pragma omp parallel for reduction(+:mag)
-    for (size_t i = 0; i < sites.size(); ++i) {
-        mag += conf[sites[i]];
-    }
-    return mag;
-}*/
-
-void initialize_configuration(vector<int8_t>& conf_local,
+void initialize_configuration(vector<uint64_t>& conf_local,
                                      size_t N_local,
                                      int N_dim,
                                      const vector<size_t>& local_L,
@@ -162,7 +132,7 @@ void initialize_configuration(vector<int8_t>& conf_local,
             for (int d = 0; d < N_dim; ++d)
                 coord_halo[d] = coord_local[d] + 1;
             size_t idx_halo = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
-            conf_local[idx_halo] = spin;
+            set_spin(conf_local.data(), idx_halo, spin);
         }
     }
     

@@ -254,6 +254,7 @@ inline void classify_bulk(
 }
 
 
+// Generatore di numeri casuali philox
 inline uint32_t philox_rand(uint64_t global_idx, uint32_t iConf, uint32_t seed) {
     philox4x32_ctr_t ctr = {{
         (uint32_t)(global_idx),
@@ -263,4 +264,20 @@ inline uint32_t philox_rand(uint64_t global_idx, uint32_t iConf, uint32_t seed) 
     }};
     philox4x32_key_t key = {{seed, 0}};
     return philox4x32(ctr, key).v[0];
+}
+
+// Leggi spin al sito i: restituisce +1 o -1
+inline int8_t get_spin(const uint64_t* data, size_t i) {
+    return ((data[i >> 6] >> (i & 63)) & 1) ? 1 : -1;
+}
+
+// Flippa spin al sito i (XOR: inverte il bit)
+inline void flip_spin(uint64_t* data, size_t i) {
+    data[i >> 6] ^= (1ULL << (i & 63));
+}
+
+// Scrivi spin al sito i (+1 → bit=1, -1 → bit=0)
+inline void set_spin(uint64_t* data, size_t i, int8_t val) {
+    if (val > 0) data[i >> 6] |=  (1ULL << (i & 63));
+    else         data[i >> 6] &= ~(1ULL << (i & 63));
 }

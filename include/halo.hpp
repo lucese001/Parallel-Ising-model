@@ -307,7 +307,7 @@ build_face_cache(const vector<FaceInfo>& faces,
 
 // Inizia lo scambio halo non-blocking
 inline void start_halo_exchange(
-    vector<int8_t>& conf_local,
+    vector<uint64_t>& conf_local,
     const vector<size_t>& local_L,
     const vector<size_t>& local_L_halo,
     const vector<vector<int>>& neighbors,
@@ -349,11 +349,13 @@ inline void start_halo_exchange(
         // Prepara i buffer con le configurazioni
         // (solo siti della parità richiesta)
         for (size_t i = 0; i < send_minus_size; ++i) {
-            buffers.send_minus[d][i] = conf_local[cache[d].idx_minus[parity][i]];
+            buffers.send_minus[d][i] = get_spin(conf_local.data(),
+                                cache[d].idx_minus[parity][i]);
         }
 
         for (size_t i = 0; i < send_plus_size; ++i) {
-            buffers.send_plus[d][i] = conf_local[cache[d].idx_plus[parity][i]];
+            buffers.send_plus[d][i] = get_spin(conf_local.data(),
+                    cache[d].idx_plus[parity][i]);
         }
 
         int tag_minus = 100 + d;
@@ -394,7 +396,7 @@ inline void start_halo_exchange(
 
 // Scrive i dati ricevuti nelle regioni halo
 void write_halo_data(
-    vector<int8_t>& conf_local,
+    vector<uint64_t>& conf_local,
     const HaloBuffers& buffers,
     const vector<FaceInfo>& faces,
     const vector<size_t>& local_L,
@@ -418,12 +420,12 @@ void write_halo_data(
         for (size_t i = 0; i < halo_minus_size; ++i) {
 
             // Scrive i dati ricevuti negli halo meno
-            conf_local[cache[d].idx_halo_minus[parity][i]] = buffers.recv_minus[d][i];
+            set_spin(conf_local.data(), cache[d].idx_halo_minus[parity][i], buffers.recv_minus[d][i]);
         }
         for (size_t i = 0; i < halo_plus_size; ++i) {
 
-            // Scrive i dati ricevuti negli halo meno
-            conf_local[cache[d].idx_halo_plus[parity][i]] = buffers.recv_plus[d][i];
+            // Scrive i dati ricevuti negli halo più
+            set_spin(conf_local.data(), cache[d].idx_halo_plus[parity][i], buffers.recv_plus[d][i]);
         }
     }
 }

@@ -170,7 +170,7 @@ int main(int argc, char** argv) {
                           sizeof(uint32_t), true);
     // Vettore che contiene la configurazione locale a ogni rank
     // (1 byte per sito). Contiene celle halo
-    vector<int8_t> conf_local(N_alloc); 
+    vector<uint64_t> conf_local ((N_alloc+63)/64); 
 
     //Genera la prima configurazione
     initialize_configuration(conf_local, N_local, N_dim, local_L,

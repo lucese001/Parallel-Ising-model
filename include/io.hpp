@@ -164,7 +164,7 @@ inline void print_mpi_topology(int world_rank, int world_size, int N_dim,
 
 // Stampa la configurazione locale per debug
 // Ogni rank stampa in ordine la propria configurazione
-inline void print_configuration_debug(const vector<int8_t>& conf_local,
+inline void print_configuration_debug(const vector<uint64_t>& conf_local,
                                        const vector<size_t>& local_L,
                                        const vector<size_t>& local_L_halo,
                                        int N_dim, size_t N_local,
@@ -184,7 +184,7 @@ inline void print_configuration_debug(const vector<int8_t>& conf_local,
                         size_t coord_halo[2] = {x + 1, y + 1};
                         size_t idx_halo = coord_halo[0] + coord_halo[1] * local_L_halo[0];
                         // Stampa '+' per spin +1, '-' per spin -1
-                        master_printf("%c ", conf_local[idx_halo] > 0 ? '+' : '-');
+                        master_printf("%c ", get_spin(conf_local.data(), idx_halo) > 0 ? '+' : '-');
                     }
                     master_printf("\n");
                 }
@@ -199,7 +199,7 @@ inline void print_configuration_debug(const vector<int8_t>& conf_local,
                         coord_halo[d] = coord_local[d] + 1;
                     }
                     size_t idx_halo = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
-                    master_printf("%+d ", (int)conf_local[idx_halo]);
+                    master_printf("%+d ", (int)get_spin(conf_local.data(), idx_halo));
                     if ((i + 1) % 16 == 0 && i + 1 < N_local) master_printf("\n        ");
                 }
                 master_printf("\n");
@@ -217,7 +217,7 @@ inline void print_configuration_debug(const vector<int8_t>& conf_local,
 
 // Stampa la configurazione GLOBALE per debug (ricostruita da tutti i rank)
 // Utile per confrontare configurazioni con diverso numero di rank
-inline void print_global_configuration_debug(const vector<int8_t>& conf_local,
+inline void print_global_configuration_debug(const vector<uint64_t>& conf_local,
                                               const vector<size_t>& local_L,
                                               const vector<size_t>& local_L_halo,
                                               const vector<size_t>& global_offset,
@@ -252,7 +252,7 @@ inline void print_global_configuration_debug(const vector<int8_t>& conf_local,
             coord_halo[d] = coord_local[d] + 1;
         }
         size_t idx_halo = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
-        my_spins[i] = conf_local[idx_halo];
+        my_spins[i] = get_spin(conf_local.data(), idx_halo);
     }
     
     // Raccogli i dati su rank 0
