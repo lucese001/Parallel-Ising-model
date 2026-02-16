@@ -126,9 +126,22 @@ int main(int argc, char** argv) {
         local_L[d] = arr[d] / Chunks[d];
         local_L_halo[d] = local_L[d] + 2;
         N_local *= local_L[d]; 
-        N_alloc *= local_L_halo[d]; 
         N *= arr[d];
-        global_offset[d] = rank_coords[d] * local_L[d]; 
+        global_offset[d] = rank_coords[d] * local_L[d];
+        // local_L_halo padded: usato affinché ogni riga abbia un numero
+        // intero di word (ho un numero di bit multiplo di 64).
+    }
+
+    // Padding del reticolo halo lungo la direzione 0. Questo é utile per il
+    // loop metropolis, che itera lungo le righe in direzione 0: in questo modo
+    // i siti (bit) su una riga appartengono a word diverse. Dato che ogni thread
+    // itera su righe diverse, evitiamo race condition di accesso ai bit.
+    local_L_halo[0]=((local_L_halo[0] + 63) / 64) * 64;
+
+    // Numero di bit per ogni rank (tiene conto dell'halo e del padding)
+    N_alloc = 1;
+    for (int d = 0; d < N_dim; ++d){
+      N_alloc *= local_L_halo[d];  
     }
 
     //Precalcola gli stride locali a ogni rank

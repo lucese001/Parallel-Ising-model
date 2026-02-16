@@ -270,11 +270,25 @@ inline uint32_t philox_rand(uint64_t global_idx, uint32_t iConf, uint32_t seed) 
 inline int8_t get_spin(const uint64_t* data, size_t i) {
     return ((data[i >> 6] >> (i & 63)) & 1) ? 1 : -1;
 }
+// Flippa spin al sito i (XOR: inverte il bit). Usato per il bulk
+// (la maggior parte dei siti). Dato che atomic rallenta, assegniamo
+// a ogni thread una riga, dove ogni riga ha un numero intero di parole
+// Non tutti i bit delle parole avranno siti "veri", si usa un padding
+// per avere un numero intero di word.
+
+inline void flip_spin(uint64_t* data, size_t i) {
+    const uint64_t mask = 1ULL << (i & 63);
+    data[i >> 6] ^= mask;
+}
 
 // Flippa spin al sito i (XOR: inverte il bit)
 // Atomic per evitare data race quando più thread modificano bit diversi
-// nella stessa parola uint64_t
-inline void flip_spin(uint64_t* data, size_t i) {
+// nella stessa parola uint64_t. Atomic rallenta leggermente l'esecuzione,
+// quindi viene usato solamente per i siti boundary (2 siti boundary
+// possono trovarsi nella stessa word). Irrilevante perché i siti boundary
+// sono pochi per reticoli grandi.
+
+inline void flip_spin_atomic(uint64_t* data, size_t i) {
     const uint64_t mask = 1ULL << (i & 63);
     #pragma omp atomic
     data[i >> 6] ^= mask;

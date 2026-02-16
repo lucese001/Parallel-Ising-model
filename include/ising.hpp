@@ -95,8 +95,8 @@ void initialize_configuration(vector<uint64_t>& conf_local,
                                      const vector<size_t>& global_offset,
                                      const vector<size_t>& arr,
                                      uint32_t rng_seed) {
-    // Inizializza
-
+    
+    // Inizializza tutti i siti a 0
     #pragma omp parallel for schedule(static)
         for (size_t i = 0; i < conf_local.size(); ++i) conf_local[i] = 0;
     
@@ -131,7 +131,10 @@ void initialize_configuration(vector<uint64_t>& conf_local,
 
             for (int d = 0; d < N_dim; ++d)
                 coord_halo[d] = coord_local[d] + 1;
-            size_t idx_halo = coord_to_index(N_dim, local_L_halo.data(), coord_halo.data());
+            size_t idx_halo = coord_to_index(N_dim, local_L_halo.data(), 
+                                            coord_halo.data());
+            // In parallelo ma con pragma omp atomic (per evitare race condition
+            // in scrittura).
             set_spin(conf_local.data(), idx_halo, spin);
         }
     }

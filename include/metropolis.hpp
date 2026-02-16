@@ -22,8 +22,7 @@ extern double Beta;
     void metropolis_update_bulk(
         vector<uint64_t>& conf_local,
         int parity,                           
-        const vector<size_t>& local_L,         
-        const vector<size_t>& local_L_halo,    
+        const vector<size_t>& local_L,        
         const vector<size_t>& global_offset,   
         const vector<size_t>& arr,             
         const vector<uint32_t>& stride_halo,
@@ -83,7 +82,7 @@ extern double Beta;
                 //Prefetch cache dei prossimi 32 siti da aggiornare
                 // dato che una cache line son 64 byte. Carico i prossimi
                 // 64 siti nella riga e pure i suoi vicini
-                // Con bit packing: 1 cache line = 64 byte = 8 parole = 512 bit/spin
+                // Con bit packing: 1 cache line = 64 byte = 8 word = 512 bit/spin
                 if (halo_idx >= pf_trigger && halo_idx + 512 < pf_limit) {
 
                     // Carica la cache line contenente i prossimi 512 spin
@@ -110,6 +109,9 @@ extern double Beta;
                 if (eDiff <= 0) {
                     accept = true;
                 } else {
+                    // Philox produce un integer uniformemente distribuito
+                    // nel range [0,2^32-1]. Per convertirlo nella distribuzione
+                    // uniforme tra 0 e 1 basta dividere per 2^32 (4294967296).
                     uint32_t rand1 = philox_rand(global_idx, iConf, rng_seed);
                     double rand_uniform = (double)rand1 / 4294967296.0;
                     accept = (rand_uniform < expTable[eDiff / 4 - 1]);
@@ -178,7 +180,7 @@ void metropolis_update(vector<uint64_t>& conf_local,
             }
 
             if (accept) {
-                flip_spin(conf_local.data(), iSite_halo);
+                flip_spin_atomic(conf_local.data(), iSite_halo);
                 local_dE += eDiff;
                 local_dM += proposed_spin - oldVal;
             }
