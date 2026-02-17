@@ -17,7 +17,7 @@ export OMP_PLACES=cores
 # Disabilita la ricerca di InfiniBand
 export OMPI_MCA_btl=tcp,self
 
-echo "Confronto IDX_ALLOC vs ROWING vs PREFETCH"
+echo "Confronto IDX vs ROWING vs PREFETCH"
 echo "Start: $(date)"
 echo ""
 

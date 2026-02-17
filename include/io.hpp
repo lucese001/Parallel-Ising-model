@@ -226,7 +226,7 @@ inline void print_global_configuration_debug(const vector<uint64_t>& conf_local,
         global_conf.resize(N_global);
     }
     
-    // Ogni rank prepara i suoi dati: (global_index, spin) pairs
+    // Ogni rank prepara i suoi dati: (global_index, spin)
     vector<size_t> my_global_indices(N_local);
     vector<int8_t> my_spins(N_local);
     

@@ -22,7 +22,7 @@ echo "Start: $(date)"
 echo ""
 
 # Parametri
-NDIM=2
+NDIM=3
 NCONFS=100
 BETA=0.45
 SEED=124634
@@ -33,13 +33,6 @@ echo "Compilazione ROWING..."
 mpicxx -O3 -std=c++17 -fopenmp -DROWING \
     -Iinclude -Irandom123/include \
     src/main.cpp -o ising_rowing.exe
-echo ""
-
-echo "Compilazione IDX_ALLOC"
-
-mpicxx -O3 -std=c++17 -fopenmp -DIDX_ALLOC \
-    -Iinclude -Irandom123/include \
-    src/main.cpp -o ising_idx_alloc.exe
 echo ""
 
 echo "Compilazione PREFETCH"
@@ -56,18 +49,19 @@ echo "========== STRONG SCALING =========="
 echo "Reticolo fisso: 16000x16000"
 echo ""
 
-L0=16000
-L1=16000
+L0=5000
+L1=5000
+L2=5000
 
 for NRANKS in 1 2 4 8 ; do
     NTHREADS=$((32 / NRANKS))
 
     echo "--- Strong: $NRANKS rank x $NTHREADS threads ---"
 
-    for MODE in idx rowing; do
+    for MODE in rowing; do
         echo "  [$MODE]"
         mpirun -n $NRANKS ./ising_${MODE}.exe \
-            $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED \
+            $NDIM $L0 $L1 $L2 $NCONFS $NTHREADS $BETA $SEED \
             2>&1 | tee logs/strong_${MODE}_${NRANKS}rank.log
     done
     echo ""
@@ -75,7 +69,7 @@ for NRANKS in 1 2 4 8 ; do
         for MODE in fa; do
         echo "  [$MODE]"
         mpirun -n $NRANKS ./ising_${MODE}.exe \
-            $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED \
+            $NDIM $L0 $L1 $L2 $NCONFS $NTHREADS $BETA $SEED \
             2>&1 | tee logs/strong_${MODE}_${NRANKS}rank.log
     done
     echo ""
