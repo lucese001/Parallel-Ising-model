@@ -44,7 +44,7 @@ echo ""
 
 
 
-# STRONG SCALING: reticolo fisso 8400x8400
+# STRONG SCALING: reticolo fisso
 echo "========== STRONG SCALING =========="
 echo "500x500x500"
 echo ""
@@ -60,7 +60,7 @@ for NRANKS in 1 2 4 8 ; do
 
     for MODE in rowing prefetch; do
         echo "  [$MODE]"
-        mpirun -n $NRANKS ./ising_${MODE}.exe \
+        mpirun -n $NRANKS stdbuf -oL ./ising_${MODE}.exe \
             $NDIM $L0 $L1 $L2 $NCONFS $NTHREADS $BETA $SEED \
             2>&1 | tee logs/strong_${MODE}_${NRANKS}rank.log
     done

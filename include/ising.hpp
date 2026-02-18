@@ -20,12 +20,16 @@ inline int computeEnSite(const uint64_t* conf,
                          size_t idx,
                          const vector<uint32_t>& stride_halo,
                          int N_dim) {
-    int sum = 0;
+
+    int center_bit = (conf[idx >> 6] >> (idx & 63)) & 1;
+    int n_up = 0;
     for (int d = 0; d < N_dim; ++d) {
-        sum += get_spin(conf, idx + stride_halo[d]);
-        sum += get_spin(conf, idx - stride_halo[d]);
+        size_t ip = idx + stride_halo[d];
+        size_t im = idx - stride_halo[d];
+        n_up += (conf[ip >> 6] >> (ip & 63)) & 1;
+        n_up += (conf[im >> 6] >> (im & 63)) & 1;
     }
-    return -sum * get_spin(conf, idx);
+    return -(2 * center_bit - 1) * (2 * n_up - 2 * N_dim);
 }
 
 long long computeEn_rank(const vector<uint64_t>& conf,
