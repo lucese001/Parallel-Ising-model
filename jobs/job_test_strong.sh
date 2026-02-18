@@ -37,7 +37,7 @@ echo ""
 
 echo "Compilazione PREFETCH"
 
-mpicxx -O3 -std=c++17 -fopenmp -DROWING -DPREFETCHCACHE \
+mpicxx -O3 -std=c++17 -fopenmp -DROWING -DPREFETCH_CACHE \
     -Iinclude -Irandom123/include \
     src/main.cpp -o ising_prefetch.exe
 echo ""
@@ -58,15 +58,7 @@ for NRANKS in 1 2 4 8 ; do
 
     echo "--- Strong: $NRANKS rank x $NTHREADS threads ---"
 
-    for MODE in rowing; do
-        echo "  [$MODE]"
-        mpirun -n $NRANKS ./ising_${MODE}.exe \
-            $NDIM $L0 $L1 $L2 $NCONFS $NTHREADS $BETA $SEED \
-            2>&1 | tee logs/strong_${MODE}_${NRANKS}rank.log
-    done
-    echo ""
-
-        for MODE in fa; do
+    for MODE in rowing prefetch; do
         echo "  [$MODE]"
         mpirun -n $NRANKS ./ising_${MODE}.exe \
             $NDIM $L0 $L1 $L2 $NCONFS $NTHREADS $BETA $SEED \
