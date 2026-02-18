@@ -46,12 +46,12 @@ echo ""
 
 # STRONG SCALING: reticolo fisso 8400x8400
 echo "========== STRONG SCALING =========="
-echo "Reticolo fisso: 16000x16000"
+echo "500x500x500"
 echo ""
 
-L0=5000
-L1=5000
-L2=5000
+L0=500
+L1=500
+L2=500
 
 for NRANKS in 1 2 4 8 ; do
     NTHREADS=$((32 / NRANKS))
