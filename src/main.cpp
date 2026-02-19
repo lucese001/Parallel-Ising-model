@@ -226,6 +226,9 @@ int main(int argc, char** argv) {
         expTable[d] = exp(-Beta * 4.0 * (d + 1));
     }
 
+    // Accumulatore per le osservabili (solo rank 0)
+    ObsAccumulator obs_acc;
+
     // Apertura del file di output per le misure
     FILE* measFile = nullptr;
     if (world_rank == 0) {
@@ -375,6 +378,7 @@ int main(int argc, char** argv) {
             ioTime.start();
             E += DeltaE_glob;
             Mag += DeltaMag_glob;
+            obs_acc.accumulate(E, Mag, N);
             write_measurement(measFile, Mag, E, N);
             /*print_progress(iConf, local_Nconfs, nConfs, world_size);*/
             ioTime.stop();
@@ -383,6 +387,14 @@ int main(int argc, char** argv) {
     
     if (world_rank == 0 && measFile) {
         fclose(measFile);
+
+        Observables obs = compute_observables(obs_acc, Beta, N);
+        master_printf("\n          OBSERVABLES              \n");
+        master_printf("<E>    = %lg\n",    obs.avg_E);
+        master_printf("<|M|>  = %lg\n",    obs.avg_absM);
+        master_printf("Cv     = %lg\n",    obs.Cv);
+        master_printf("chi    = %lg\n",    obs.chi);
+        master_printf("Binder = %lg\n",    obs.binder);
     }
 
     totalTime.stop();

@@ -5,6 +5,7 @@
 #include <mpi.h>
 #include <cstdint>
 #include <cstring>
+#include <cmath>
 #include <random>
 #include "prng_engine.hpp"
 #include "utility.hpp"
@@ -14,7 +15,61 @@ using std::binomial_distribution;
 using std::mt19937_64;
 using namespace std;
 
-// Variabili globali esterne (definite in new_ising.cpp)
+// Accumulatori per le osservabili termodinamiche
+struct ObsAccumulator {
+    double sum_E   = 0.0;
+    double sum_E2  = 0.0;
+    double sum_M   = 0.0;  // |M|
+    double sum_M2  = 0.0;
+    double sum_M4  = 0.0;
+    int    count   = 0;
+
+    // Accumula una misura (E e Mag sono valori estensivi, N = numero totale di siti)
+    void accumulate(long long E, long long Mag, long long N) {
+        double e = (double)E / (double)N;
+        double m = (double)Mag / (double)N;
+        double absm = std::abs(m);
+        sum_E  += e;
+        sum_E2 += e * e;
+        sum_M  += absm;
+        sum_M2 += m * m;
+        sum_M4 += (m * m) * (m * m);
+        count++;
+    }
+};
+
+// Risultato del calcolo delle osservabili
+struct Observables {
+    double avg_E;       // <E> per sito
+    double avg_E2;      // <E^2> per sito
+    double avg_absM;    // <|M|> per sito
+    double avg_M2;      // <M^2> per sito
+    double avg_M4;      // <M^4> per sito
+    double Cv;          // Calore specifico = Beta^2 * N * (<E^2> - <E>^2)
+    double chi;         // Suscettività = Beta * N * (<M^2> - <|M|>^2)
+    double binder;      // Cumulante di Binder = 1 - <M^4> / (3 * <M^2>^2)
+};
+
+// Calcola le osservabili termodinamiche dagli accumulatori
+inline Observables compute_observables(const ObsAccumulator& acc,
+                                       double Beta, long long N) {
+    Observables obs;
+    double n = (double)acc.count;
+
+    obs.avg_E    = acc.sum_E  / n;
+    obs.avg_E2   = acc.sum_E2 / n;
+    obs.avg_absM = acc.sum_M  / n;
+    obs.avg_M2   = acc.sum_M2 / n;
+    obs.avg_M4   = acc.sum_M4 / n;
+
+    obs.Cv     = Beta * Beta * (double)N * (obs.avg_E2 - obs.avg_E * obs.avg_E);
+    obs.chi    = Beta * (double)N * (obs.avg_M2 - obs.avg_absM * obs.avg_absM);
+    obs.binder = 1.0 - obs.avg_M4 / (3.0 * obs.avg_M2 * obs.avg_M2);
+
+    return obs;
+}
+
+// Variabili globali esterne
 extern int N_dim;
 extern int world_rank;
 extern int world_size;
