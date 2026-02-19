@@ -106,7 +106,7 @@ void initialize_configuration(vector<uint64_t>& conf_local,
     
     #ifdef DEBUG
     vector<size_t> debug_global_idx;
-    vector<int8_t> debug_spins;
+    vector<int8_t> debug_spins;//
     #endif
 
     #pragma omp parallel
