@@ -230,12 +230,18 @@ int main(int argc, char** argv) {
     ObsAccumulator obs_acc;
 
     // Apertura del file di output per le misure
+    // Nome file: meas_{L0}x{L1}x..._T={T}.txt
     FILE* measFile = nullptr;
     if (world_rank == 0) {
-        string fname = "output/meas_" + to_string(world_size) + "rank";
+        double T = 1.0 / Beta;
+        string fname = "output/meas";
         for (int d = 0; d < N_dim; ++d)
             fname += (d == 0 ? "_" : "x") + to_string(arr[d]);
-        fname += ".txt";
+
+        // Formatta T con precisione sufficiente, rimuovi zeri finali
+        char Tbuf[32];
+        snprintf(Tbuf, sizeof(Tbuf), "%.6g", T);
+        fname += "_T=" + string(Tbuf) + ".txt";
 
         measFile = fopen(fname.c_str(), "w");
         if (!measFile) {
@@ -373,28 +379,32 @@ int main(int argc, char** argv) {
         MPI_Reduce(&DeltaMag, &DeltaMag_glob, 1, MPI_LONG_LONG, MPI_SUM, 0, cart_comm);
         mpiTime.stop();
         
-        // Si scrivono le misure nel file
+        // Si scrivono le misure nel file e si stampano le osservabili
         if (world_rank == 0) {
             ioTime.start();
             E += DeltaE_glob;
             Mag += DeltaMag_glob;
             obs_acc.accumulate(E, Mag, N);
-            write_measurement(measFile, Mag, E, N);
-            /*print_progress(iConf, local_Nconfs, nConfs, world_size);*/
+
+            Observables obs = compute_observables(obs_acc, Beta, N);
+
+            // Scrivi nel file: E M Cv Chi binder
+            double e = (double)E / (double)N;
+            double m = (double)Mag / (double)N;
+            fprintf(measFile, "%lg %lg %lg %lg %lg\n",
+                    e, m, obs.Cv, obs.chi, obs.binder);
+            fflush(measFile);
+
+            // Stampa a schermo
+            master_printf("iConf=%d  E=%.6g  M=%.6g  Cv=%.6g  chi=%.6g  Binder=%.6g\n",
+                          iConf, e, m, obs.Cv, obs.chi, obs.binder);
+
             ioTime.stop();
         }
     } // Fine del loop sulle configurazioni
-    
+
     if (world_rank == 0 && measFile) {
         fclose(measFile);
-
-        Observables obs = compute_observables(obs_acc, Beta, N);
-        master_printf("\n          OBSERVABLES              \n");
-        master_printf("<E>    = %lg\n",    obs.avg_E);
-        master_printf("<|M|>  = %lg\n",    obs.avg_absM);
-        master_printf("Cv     = %lg\n",    obs.Cv);
-        master_printf("chi    = %lg\n",    obs.chi);
-        master_printf("Binder = %lg\n",    obs.binder);
     }
 
     totalTime.stop();
