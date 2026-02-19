@@ -3,7 +3,6 @@
 #include "metropolis.hpp"
 #include "halo.hpp"
 #include "io.hpp"
-
 #include <cstdint>
 #include <random>
 #include <vector>
@@ -203,7 +202,7 @@ int main(int argc, char** argv) {
                         faces, requests, face_cache, 1, true);
     write_halo_data(conf_local, buffers, faces, local_L,
                     local_L_halo, N_dim, face_cache, 1, requests);
-    
+                    
     long long E_rank = computeEn_rank(conf_local, stride_halo, 
                                         local_L, N_dim);
     long long Mag_rank = compute_Mag_rank(conf_local, stride_halo, 
@@ -225,9 +224,6 @@ int main(int argc, char** argv) {
     for (int d = 0; d < N_dim; ++d){
         expTable[d] = exp(-Beta * 4.0 * (d + 1));
     }
-
-    // Accumulatore per le osservabili (solo rank 0)
-    ObsAccumulator obs_acc;
 
     // Apertura del file di output per le misure
     // Nome file: meas_{L0}x{L1}x..._T={T}.txt
@@ -379,25 +375,18 @@ int main(int argc, char** argv) {
         MPI_Reduce(&DeltaMag, &DeltaMag_glob, 1, MPI_LONG_LONG, MPI_SUM, 0, cart_comm);
         mpiTime.stop();
         
-        // Si scrivono le misure nel file e si stampano le osservabili
+        // Si scrivono le misure nel file e si stampano a schermo
         if (world_rank == 0) {
             ioTime.start();
             E += DeltaE_glob;
             Mag += DeltaMag_glob;
-            obs_acc.accumulate(E, Mag, N);
 
-            Observables obs = compute_observables(obs_acc, Beta, N);
-
-            // Scrivi nel file: E M Cv Chi binder
             double e = (double)E / (double)N;
             double m = (double)Mag / (double)N;
-            fprintf(measFile, "%lg %lg %lg %lg %lg\n",
-                    e, m, obs.Cv, obs.chi, obs.binder);
+            fprintf(measFile, "%lg %lg\n", e, m);
             fflush(measFile);
 
-            // Stampa a schermo
-            master_printf("iConf=%d  E=%.6g  M=%.6g  Cv=%.6g  chi=%.6g  Binder=%.6g\n",
-                          iConf, e, m, obs.Cv, obs.chi, obs.binder);
+            master_printf("iConf=%d  E=%.6g  M=%.6g\n", iConf, e, m);
 
             ioTime.stop();
         }
