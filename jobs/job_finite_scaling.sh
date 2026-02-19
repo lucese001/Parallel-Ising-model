@@ -1,5 +1,5 @@
 #!/bin/bash
-#PBS -N ising_weak
+#PBS -N finite_scaling
 #PBS -l nodes=1:ppn=32
 #PBS -l walltime=02:00:00
 #PBS -j oe
@@ -21,14 +21,13 @@ echo ""
 
 # Parametri fissi
 NDIM=2
-NCONFS=100
+NCONFS=100000
 SEED=124634
-RANKS=4
-L0S= 15000
-L1S= 15000
-T= (0.40, 0.405, 0.41, 0.415, 0.42, 0.425, 0.43, 0.435, 0.44, 0.445,
-    0.45, 0.455, 0.46)
-STEP=T_F/T_IN
+NRANKS=4
+NTHREADS=8
+L0=64
+L1=64
+T=(0.40 0.405 0.41 0.415 0.42 0.425 0.43 0.435 0.44 0.445 0.45 0.455 0.46)
 
 # Compila
 mpicxx -O3 -std=c++17 -fopenmp -DROWING \
@@ -37,14 +36,13 @@ mpicxx -O3 -std=c++17 -fopenmp -DROWING \
 
 for i in "${!T[@]}"; do
 
-    BETA=1/T
-    echo "===  ==="
+    BETA=$(awk "BEGIN {printf \"%.10f\", 1.0/${T[$i]}}")
+    echo "=== T=${T[$i]}  BETA=$BETA ==="
     mpirun -n $NRANKS ./ising_rowing.exe \
         $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED \
-        2>&1 | tee FINITE SIZE-SCALING ${NRANKS}rank_${L0}x${L1}.log
-        $T={T}
+        2>&1 | tee "logs/finite_scaling_${NRANKS}rank_${L0}x${L1}_T${T[$i]}.log"
     echo ""
 done
 
-echo "Weak Scaling Completato"
+echo "Finite size scaling completato"
 echo "Fine: $(date)"
