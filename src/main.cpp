@@ -242,18 +242,23 @@ int main(int argc, char** argv) {
     }
 
     // Apertura del file di output per le misure
-    // Nome file: meas_{L0}x{L1}x..._T={T}.txt
+    // Directory: output/{L0}x{L1}x.../  File: meas_T{T}_{hot|cold}.txt
     FILE* measFile = nullptr;
     if (world_rank == 0) {
         double T = 1.0 / Beta;
-        string fname = "output/meas";
-        for (int d = 0; d < N_dim; ++d)
-            fname += (d == 0 ? "_" : "x") + to_string(arr[d]);
 
-        // Formatta T con precisione sufficiente, rimuovi zeri finali
+        // Crea la directory output/{L0}x{L1}x...
+        string dir = "output/";
+        for (int d = 0; d < N_dim; ++d)
+            dir += (d == 0 ? "" : "x") + to_string(arr[d]);
+        string mkdir_cmd = "mkdir -p " + dir;
+        system(mkdir_cmd.c_str());
+
+        // Nome file
         char Tbuf[32];
         snprintf(Tbuf, sizeof(Tbuf), "%.6g", T);
-        fname += "_T" + string(Tbuf) + (cold_start ? "_cold" : "_hot") + ".txt";
+        string fname = dir + "/meas_T" + string(Tbuf)
+                     + (cold_start ? "_cold" : "_hot") + ".txt";
 
         measFile = fopen(fname.c_str(), "w");
         if (!measFile) {
