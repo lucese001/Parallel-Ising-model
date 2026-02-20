@@ -49,7 +49,7 @@ void metropolis_update(vector<int8_t>& conf_local,
             const uint32_t global_idx = sites_global_indices[idx];
 
             const int8_t oldVal = conf_local[iSite_halo];
-            // Proposta: flip sempre (detailed balance mantenuta)
+            
             const int8_t proposed_spin = -oldVal;
 
             const int enBefore = computeEnSite(conf_local, iSite_halo,

@@ -148,7 +148,7 @@ void initialize_configuration(vector<int8_t>& conf_local,
             size_t global_index = compute_global_index(i, local_L, global_offset, arr, N_dim,
                                                        coord_local.data(), coord_global.data());
             uint32_t rand_val = philox_rand(global_index, 0, rng_seed);
-            int8_t spin = (rand_val >> 16) & 1 ? 1 : -1;
+            int8_t spin = (rand_val & 1) & 1 ? 1 : -1;
 
             #ifdef DEBUG
             #pragma omp critical
