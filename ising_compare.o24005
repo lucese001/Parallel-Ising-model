@@ -1,0 +1,908 @@
+Epilog:  nodes=1:ppn=32
+Epilog:  walltime=02:00:00
+Epilog:  neednodes=1:ppn=32
+Epilog:  cput=399:00:00
+Epilog:  mem=28gb
+################################################
+# Summary for job running at Roma3 cluster
+#
+#  JobID:       24005.qmgr.cluster.roma3
+#  JobName:     ising_compare
+#  Submitted:   lcerioni.theorm3
+#  Started:     2026-02-15 16:41:43
+#  Queue:       al9_mpi_short
+#  ExecutingOn: wn-01-01-02
+#  ExecHost(s): wn-01-01-02.cluster.roma3/0-31
+#  Nodes:       1
+#  PPN:         N/A
+################################################
+Confronto IDX_ALLOC vs ROWING vs PREFETCH
+Start: Sun Feb 15 04:41:44 PM CET 2026
+
+Compilazione IDX_ALLOC...
+Compilazione ROWING...
+Compilazione PREFETCH...
+
+========== WEAK SCALING 3D ==========
+Volume per rank costante: 200x200x200 = 8000000 siti/rank
+
+--- Weak: 1 rank x 32 threads, 200x200x200 ---
+  [idx]
+[wn-01-01-02.cluster.roma3:48847] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  1 rank 0
+N_dim: 3, Npunti: 8000000, NThreads: 32, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_1rank_200x200x200.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 14.139 s (100.0%)
+Computation time:              13.310 s ( 94.1%)
+MPI Communication:              0.136 s (  1.0%)
+I/O (file write):               0.005 s (  0.0%)
+Initialitation time:            0.688 s (  4.9%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.141 s
+  [rowing]
+[wn-01-01-02.cluster.roma3:48888] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  1 rank 0
+N_dim: 3, Npunti: 8000000, NThreads: 32, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_1rank_200x200x200.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 15.447 s (100.0%)
+Computation time:              14.798 s ( 95.8%)
+MPI Communication:              0.116 s (  0.7%)
+I/O (file write):               0.002 s (  0.0%)
+Initialitation time:            0.531 s (  3.4%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.154 s
+Bulk (rowing) time: 14.341023 s (0.143410 s/conf) | Boundary time: 0.456506 s (0.004565 s/conf)
+  [prefetch]
+[wn-01-01-02.cluster.roma3:48942] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  1 rank 0
+N_dim: 3, Npunti: 8000000, NThreads: 32, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_1rank_200x200x200.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 15.433 s (100.0%)
+Computation time:              14.790 s ( 95.8%)
+MPI Communication:              0.119 s (  0.8%)
+I/O (file write):               0.002 s (  0.0%)
+Initialitation time:            0.522 s (  3.4%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.154 s
+Bulk (rowing) time: 14.329044 s (0.143290 s/conf) | Boundary time: 0.460911 s (0.004609 s/conf)
+
+--- Weak: 2 rank x 16 threads, 400x200x200 ---
+  [idx]
+[wn-01-01-02.cluster.roma3:48983] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:48984] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  2 rank 0
+N_dim: 3, Npunti: 16000000, NThreads: 16, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_2rank_400x200x200.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 14.205 s (100.0%)
+Computation time:              13.337 s ( 93.9%)
+MPI Communication:              0.164 s (  1.2%)
+I/O (file write):               0.005 s (  0.0%)
+Initialitation time:            0.698 s (  4.9%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.142 s
+  [rowing]
+[wn-01-01-02.cluster.roma3:49038] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49039] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  2 rank 0
+N_dim: 3, Npunti: 16000000, NThreads: 16, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_2rank_400x200x200.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 15.451 s (100.0%)
+Computation time:              14.780 s ( 95.7%)
+MPI Communication:              0.126 s (  0.8%)
+I/O (file write):               0.002 s (  0.0%)
+Initialitation time:            0.543 s (  3.5%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.155 s
+Bulk (rowing) time: 14.328515 s (0.143285 s/conf) | Boundary time: 0.451062 s (0.004511 s/conf)
+  [prefetch]
+[wn-01-01-02.cluster.roma3:49081] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49082] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  2 rank 0
+N_dim: 3, Npunti: 16000000, NThreads: 16, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_2rank_400x200x200.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 15.383 s (100.0%)
+Computation time:              14.722 s ( 95.7%)
+MPI Communication:              0.127 s (  0.8%)
+I/O (file write):               0.002 s (  0.0%)
+Initialitation time:            0.532 s (  3.5%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.154 s
+Bulk (rowing) time: 14.284348 s (0.142843 s/conf) | Boundary time: 0.437777 s (0.004378 s/conf)
+
+--- Weak: 4 rank x 8 threads, 400x400x200 ---
+  [idx]
+[wn-01-01-02.cluster.roma3:49139] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49141] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49142] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49140] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32000000, NThreads: 8, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_4rank_400x400x200.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                  5.638 s (100.0%)
+Computation time:               4.379 s ( 77.7%)
+MPI Communication:              0.636 s ( 11.3%)
+I/O (file write):               0.005 s (  0.1%)
+Initialitation time:            0.618 s ( 11.0%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.056 s
+  [rowing]
+[wn-01-01-02.cluster.roma3:49186] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49188] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49189] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49187] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32000000, NThreads: 8, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_4rank_400x400x200.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                  4.175 s (100.0%)
+Computation time:               3.700 s ( 88.6%)
+MPI Communication:              0.257 s (  6.2%)
+I/O (file write):               0.002 s (  0.0%)
+Initialitation time:            0.217 s (  5.2%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.042 s
+Bulk (rowing) time: 3.566984 s (0.035670 s/conf) | Boundary time: 0.132615 s (0.001326 s/conf)
+  [prefetch]
+[wn-01-01-02.cluster.roma3:49231] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49233] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49234] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49232] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32000000, NThreads: 8, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_4rank_400x400x200.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                  4.167 s (100.0%)
+Computation time:               3.696 s ( 88.7%)
+MPI Communication:              0.255 s (  6.1%)
+I/O (file write):               0.002 s (  0.0%)
+Initialitation time:            0.213 s (  5.1%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.042 s
+Bulk (rowing) time: 3.563734 s (0.035637 s/conf) | Boundary time: 0.132509 s (0.001325 s/conf)
+
+--- Weak: 8 rank x 4 threads, 400x400x400 ---
+  [idx]
+[wn-01-01-02.cluster.roma3:49282] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49276] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49277] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49279] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49278] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49280] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49283] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49281] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  8 rank 0
+N_dim: 3, Npunti: 64000000, NThreads: 4, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_8rank_400x400x400.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 16.346 s (100.0%)
+Computation time:              14.218 s ( 87.0%)
+MPI Communication:              0.724 s (  4.4%)
+I/O (file write):               0.006 s (  0.0%)
+Initialitation time:            1.398 s (  8.5%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.163 s
+  [rowing]
+[wn-01-01-02.cluster.roma3:49339] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49340] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49342] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49341] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49344] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49345] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49343] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49346] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  8 rank 0
+N_dim: 3, Npunti: 64000000, NThreads: 4, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_8rank_400x400x400.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 16.933 s (100.0%)
+Computation time:              15.549 s ( 91.8%)
+MPI Communication:              0.430 s (  2.5%)
+I/O (file write):               0.017 s (  0.1%)
+Initialitation time:            0.936 s (  5.5%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.169 s
+Bulk (rowing) time: 14.081155 s (0.140812 s/conf) | Boundary time: 1.467691 s (0.014677 s/conf)
+  [prefetch]
+[wn-01-01-02.cluster.roma3:49394] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49395] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49396] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49400] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49398] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49397] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49399] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49401] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  8 rank 0
+N_dim: 3, Npunti: 64000000, NThreads: 4, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_8rank_400x400x400.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 16.954 s (100.0%)
+Computation time:              15.241 s ( 89.9%)
+MPI Communication:              0.784 s (  4.6%)
+I/O (file write):               0.014 s (  0.1%)
+Initialitation time:            0.914 s (  5.4%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.170 s
+Bulk (rowing) time: 13.819805 s (0.138198 s/conf) | Boundary time: 1.421093 s (0.014211 s/conf)
+
+========== STRONG SCALING 3D ==========
+Reticolo fisso: 5000x5000x5000
+
+--- Strong: 1 rank x 32 threads ---
+  [idx]
+[wn-01-01-02.cluster.roma3:49468] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  1 rank 0
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+[wn-01-01-02:49468] *** Process received signal ***
+[wn-01-01-02:49468] Signal: Aborted (6)
+[wn-01-01-02:49468] Signal code:  (-6)
+[wn-01-01-02:49468] [ 0] /usr/lib64/libc.so.6(+0x3fc30)[0x7f6b5d83fc30]
+[wn-01-01-02:49468] [ 1] /usr/lib64/libc.so.6(+0x8d02c)[0x7f6b5d88d02c]
+[wn-01-01-02:49468] [ 2] /usr/lib64/libc.so.6(raise+0x16)[0x7f6b5d83fb86]
+[wn-01-01-02:49468] [ 3] /usr/lib64/libc.so.6(abort+0xd3)[0x7f6b5d829873]
+[wn-01-01-02:49468] [ 4] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7f6b5dca1b21]
+[wn-01-01-02:49468] [ 5] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7f6b5dcad53c]
+[wn-01-01-02:49468] [ 6] /usr/lib64/libstdc++.so.6(+0xac509)[0x7f6b5dcac509]
+[wn-01-01-02:49468] [ 7] /usr/lib64/libstdc++.so.6(__gxx_personality_v0+0x9a)[0x7f6b5dcacc8a]
+[wn-01-01-02:49468] [ 8] /usr/lib64/libgcc_s.so.1(+0x11e24)[0x7f6b5de41e24]
+[wn-01-01-02:49468] [ 9] /usr/lib64/libgcc_s.so.1(_Unwind_RaiseException+0x311)[0x7f6b5de424a1]
+[wn-01-01-02:49468] [10] /usr/lib64/libstdc++.so.6(__cxa_throw+0x3c)[0x7f6b5dcad7fc]
+[wn-01-01-02:49468] [11] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7f6b5dca1731]
+[wn-01-01-02:49468] [12] ./ising_idx.exe[0x40538e]
+[wn-01-01-02:49468] [13] ./ising_idx.exe[0x406e45]
+[wn-01-01-02:49468] [14] /usr/lib64/libgomp.so.1(+0x1d2c6)[0x7f6b5de6c2c6]
+[wn-01-01-02:49468] [15] /usr/lib64/libc.so.6(+0x8b2ea)[0x7f6b5d88b2ea]
+[wn-01-01-02:49468] [16] /usr/lib64/libc.so.6(+0x1103c0)[0x7f6b5d9103c0]
+[wn-01-01-02:49468] *** End of error message ***
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun noticed that process rank 0 with PID 0 on node wn-01-01-02 exited on signal 6 (Aborted).
+--------------------------------------------------------------------------
+  [rowing]
+[wn-01-01-02.cluster.roma3:49527] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  1 rank 0
+N_dim: 3, Npunti: 125000000000, NThreads: 32, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+[wn-01-01-02:49527] *** Process received signal ***
+[wn-01-01-02:49527] Signal: Aborted (6)
+[wn-01-01-02:49527] Signal code:  (-6)
+[wn-01-01-02:49527] [ 0] /usr/lib64/libc.so.6(+0x3fc30)[0x7fec1ec3fc30]
+[wn-01-01-02:49527] [ 1] /usr/lib64/libc.so.6(+0x8d02c)[0x7fec1ec8d02c]
+[wn-01-01-02:49527] [ 2] /usr/lib64/libc.so.6(raise+0x16)[0x7fec1ec3fb86]
+[wn-01-01-02:49527] [ 3] /usr/lib64/libc.so.6(abort+0xd3)[0x7fec1ec29873]
+[wn-01-01-02:49527] [ 4] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7fec1f0a1b21]
+[wn-01-01-02:49527] [ 5] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7fec1f0ad53c]
+[wn-01-01-02:49527] [ 6] /usr/lib64/libstdc++.so.6(+0xad5a7)[0x7fec1f0ad5a7]
+[wn-01-01-02:49527] [ 7] /usr/lib64/libstdc++.so.6(+0xad809)[0x7fec1f0ad809]
+[wn-01-01-02:49527] [ 8] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7fec1f0a1731]
+[wn-01-01-02:49527] [ 9] ./ising_rowing.exe[0x402da4]
+[wn-01-01-02:49527] [10] /usr/lib64/libc.so.6(+0x2a610)[0x7fec1ec2a610]
+[wn-01-01-02:49527] [11] /usr/lib64/libc.so.6(__libc_start_main+0x80)[0x7fec1ec2a6c0]
+[wn-01-01-02:49527] [12] ./ising_rowing.exe[0x404af5]
+[wn-01-01-02:49527] *** End of error message ***
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun noticed that process rank 0 with PID 0 on node wn-01-01-02 exited on signal 6 (Aborted).
+--------------------------------------------------------------------------
+  [prefetch]
+[wn-01-01-02.cluster.roma3:49543] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  1 rank 0
+N_dim: 3, Npunti: 125000000000, NThreads: 32, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+[wn-01-01-02:49543] *** Process received signal ***
+[wn-01-01-02:49543] Signal: Aborted (6)
+[wn-01-01-02:49543] Signal code:  (-6)
+[wn-01-01-02:49543] [ 0] /usr/lib64/libc.so.6(+0x3fc30)[0x7f3157a3fc30]
+[wn-01-01-02:49543] [ 1] /usr/lib64/libc.so.6(+0x8d02c)[0x7f3157a8d02c]
+[wn-01-01-02:49543] [ 2] /usr/lib64/libc.so.6(raise+0x16)[0x7f3157a3fb86]
+[wn-01-01-02:49543] [ 3] /usr/lib64/libc.so.6(abort+0xd3)[0x7f3157a29873]
+[wn-01-01-02:49543] [ 4] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7f3157ea1b21]
+[wn-01-01-02:49543] [ 5] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7f3157ead53c]
+[wn-01-01-02:49543] [ 6] /usr/lib64/libstdc++.so.6(+0xad5a7)[0x7f3157ead5a7]
+[wn-01-01-02:49543] [ 7] /usr/lib64/libstdc++.so.6(+0xad809)[0x7f3157ead809]
+[wn-01-01-02:49543] [ 8] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7f3157ea1731]
+[wn-01-01-02:49543] [ 9] ./ising_prefetch.exe[0x402db0]
+[wn-01-01-02:49543] [10] /usr/lib64/libc.so.6(+0x2a610)[0x7f3157a2a610]
+[wn-01-01-02:49543] [11] /usr/lib64/libc.so.6(__libc_start_main+0x80)[0x7f3157a2a6c0]
+[wn-01-01-02:49543] [12] ./ising_prefetch.exe[0x404b65]
+[wn-01-01-02:49543] *** End of error message ***
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun noticed that process rank 0 with PID 0 on node wn-01-01-02 exited on signal 6 (Aborted).
+--------------------------------------------------------------------------
+
+--- Strong: 2 rank x 16 threads ---
+  [idx]
+[wn-01-01-02.cluster.roma3:49559] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49558] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  2 rank 0
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+[wn-01-01-02:49559] *** Process received signal ***
+[wn-01-01-02:49559] Signal: Aborted (6)
+[wn-01-01-02:49559] Signal code:  (-6)
+[wn-01-01-02:49559] [ 0] /usr/lib64/libc.so.6(+0x3fc30)[0x7f077a63fc30]
+[wn-01-01-02:49559] [ 1] /usr/lib64/libc.so.6(+0x8d02c)[0x7f077a68d02c]
+[wn-01-01-02:49559] [ 2] /usr/lib64/libc.so.6(raise+0x16)[0x7f077a63fb86]
+[wn-01-01-02:49559] [ 3] /usr/lib64/libc.so.6(abort+0xd3)[0x7f077a629873]
+[wn-01-01-02:49559] [ 4] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7f077aaa1b21]
+[wn-01-01-02:49559] [ 5] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7f077aaad53c]
+[wn-01-01-02:49559] [ 6] /usr/lib64/libstdc++.so.6(+0xac509)[0x7f077aaac509]
+[wn-01-01-02:49559] [ 7] /usr/lib64/libstdc++.so.6(__gxx_personality_v0+0x9a)[0x7f077aaacc8a]
+[wn-01-01-02:49559] [ 8] /usr/lib64/libgcc_s.so.1(+0x11e24)[0x7f077acd3e24]
+[wn-01-01-02:49559] [ 9] /usr/lib64/libgcc_s.so.1(_Unwind_RaiseException+0x311)[0x7f077acd44a1]
+[wn-01-01-02:49559] [10] /usr/lib64/libstdc++.so.6(__cxa_throw+0x3c)[0x7f077aaad7fc]
+[wn-01-01-02:49559] [11] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7f077aaa1731]
+[wn-01-01-02:49559] [12] ./ising_idx.exe[0x40538e]
+[wn-01-01-02:49559] [13] ./ising_idx.exe[0x406e45]
+[wn-01-01-02:49559] [14] /usr/lib64/libgomp.so.1(+0x1d2c6)[0x7f077acfe2c6]
+[wn-01-01-02:49559] [15] /usr/lib64/libc.so.6(+0x8b2ea)[0x7f077a68b2ea]
+[wn-01-01-02:49559] [16] /usr/lib64/libc.so.6(+0x1103c0)[0x7f077a7103c0]
+[wn-01-01-02:49559] *** End of error message ***
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+[wn-01-01-02:49558] *** Process received signal ***
+[wn-01-01-02:49558] Signal: Aborted (6)
+[wn-01-01-02:49558] Signal code:  (-6)
+[wn-01-01-02:49558] [ 0] /usr/lib64/libc.so.6(+0x3fc30)[0x7f0f22c3fc30]
+[wn-01-01-02:49558] [ 1] /usr/lib64/libc.so.6(+0x8d02c)[0x7f0f22c8d02c]
+[wn-01-01-02:49558] [ 2] /usr/lib64/libc.so.6(raise+0x16)[0x7f0f22c3fb86]
+[wn-01-01-02:49558] [ 3] /usr/lib64/libc.so.6(abort+0xd3)[0x7f0f22c29873]
+[wn-01-01-02:49558] [ 4] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7f0f230a1b21]
+[wn-01-01-02:49558] [ 5] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7f0f230ad53c]
+[wn-01-01-02:49558] [ 6] /usr/lib64/libstdc++.so.6(+0xac509)[0x7f0f230ac509]
+[wn-01-01-02:49558] [ 7] /usr/lib64/libstdc++.so.6(__gxx_personality_v0+0x9a)[0x7f0f230acc8a]
+[wn-01-01-02:49558] [ 8] /usr/lib64/libgcc_s.so.1(+0x11e24)[0x7f0f23296e24]
+[wn-01-01-02:49558] [ 9] /usr/lib64/libgcc_s.so.1(_Unwind_RaiseException+0x311)[0x7f0f232974a1]
+[wn-01-01-02:49558] [10] /usr/lib64/libstdc++.so.6(__cxa_throw+0x3c)[0x7f0f230ad7fc]
+[wn-01-01-02:49558] [11] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7f0f230a1731]
+[wn-01-01-02:49558] [12] ./ising_idx.exe[0x40538e]
+[wn-01-01-02:49558] [13] ./ising_idx.exe[0x406e5e]
+[wn-01-01-02:49558] [14] /usr/lib64/libgomp.so.1(+0x1d2c6)[0x7f0f232c12c6]
+[wn-01-01-02:49558] [15] /usr/lib64/libc.so.6(+0x8b2ea)[0x7f0f22c8b2ea]
+[wn-01-01-02:49558] [16] /usr/lib64/libc.so.6(+0x1103c0)[0x7f0f22d103c0]
+[wn-01-01-02:49558] *** End of error message ***
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun noticed that process rank 1 with PID 0 on node wn-01-01-02 exited on signal 6 (Aborted).
+--------------------------------------------------------------------------
+  [rowing]
+[wn-01-01-02.cluster.roma3:49633] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49634] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  2 rank 0
+N_dim: 3, Npunti: 125000000000, NThreads: 16, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+terminate called after throwing an instance of 'std::bad_alloc'
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+  what():  std::bad_alloc
+[wn-01-01-02:49634] *** Process received signal ***
+[wn-01-01-02:49634] Signal: Aborted (6)
+[wn-01-01-02:49634] Signal code:  (-6)
+[wn-01-01-02:49633] *** Process received signal ***
+[wn-01-01-02:49633] Signal: Aborted (6)
+[wn-01-01-02:49633] Signal code:  (-6)
+[wn-01-01-02:49634] [ 0] [wn-01-01-02:49633] [ 0] /usr/lib64/libc.so.6(+0x3fc30)[0x7fd55e43fc30]
+[wn-01-01-02:49634] [ 1] /usr/lib64/libc.so.6(+0x3fc30)[0x7f4214e3fc30]
+[wn-01-01-02:49633] [ 1] /usr/lib64/libc.so.6(+0x8d02c)[0x7fd55e48d02c]
+[wn-01-01-02:49634] [ 2] /usr/lib64/libc.so.6(+0x8d02c)[0x7f4214e8d02c]
+[wn-01-01-02:49633] [ 2] /usr/lib64/libc.so.6(raise+0x16)[0x7fd55e43fb86]
+[wn-01-01-02:49634] [ 3] /usr/lib64/libc.so.6(raise+0x16)[0x7f4214e3fb86]
+[wn-01-01-02:49633] [ 3] /usr/lib64/libc.so.6(abort+0xd3)[0x7fd55e429873]
+[wn-01-01-02:49634] [ 4] /usr/lib64/libc.so.6(abort+0xd3)[0x7f4214e29873]
+[wn-01-01-02:49633] [ 4] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7fd55e8a1b21]
+[wn-01-01-02:49634] [ 5] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7f42152a1b21]
+[wn-01-01-02:49633] [ 5] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7fd55e8ad53c]
+[wn-01-01-02:49634] [ 6] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7f42152ad53c]
+[wn-01-01-02:49633] [ 6] /usr/lib64/libstdc++.so.6(+0xad5a7)[0x7fd55e8ad5a7]
+[wn-01-01-02:49634] [ 7] /usr/lib64/libstdc++.so.6(+0xad5a7)[0x7f42152ad5a7]
+[wn-01-01-02:49633] [ 7] /usr/lib64/libstdc++.so.6(+0xad809)[0x7fd55e8ad809]
+[wn-01-01-02:49634] [ 8] /usr/lib64/libstdc++.so.6(+0xad809)[0x7f42152ad809]
+[wn-01-01-02:49633] [ 8] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7fd55e8a1731]
+[wn-01-01-02:49634] [ 9] ./ising_rowing.exe[0x402da4]
+[wn-01-01-02:49634] [10] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7f42152a1731]
+[wn-01-01-02:49633] [ 9] ./ising_rowing.exe[0x402da4]
+[wn-01-01-02:49633] [10] /usr/lib64/libc.so.6(+0x2a610)[0x7fd55e42a610]
+[wn-01-01-02:49634] [11] /usr/lib64/libc.so.6(+0x2a610)[0x7f4214e2a610]
+[wn-01-01-02:49633] [11] /usr/lib64/libc.so.6(__libc_start_main+0x80)[0x7fd55e42a6c0]
+[wn-01-01-02:49634] [12] ./ising_rowing.exe[0x404af5]
+[wn-01-01-02:49634] *** End of error message ***
+/usr/lib64/libc.so.6(__libc_start_main+0x80)[0x7f4214e2a6c0]
+[wn-01-01-02:49633] [12] ./ising_rowing.exe[0x404af5]
+[wn-01-01-02:49633] *** End of error message ***
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun noticed that process rank 1 with PID 0 on node wn-01-01-02 exited on signal 6 (Aborted).
+--------------------------------------------------------------------------
+  [prefetch]
+[wn-01-01-02.cluster.roma3:49658] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49659] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  2 rank 0
+N_dim: 3, Npunti: 125000000000, NThreads: 16, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+terminate called after throwing an instance of 'std::bad_alloc'
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+  what():  std::bad_alloc
+[wn-01-01-02:49658] *** Process received signal ***
+[wn-01-01-02:49659] *** Process received signal ***
+[wn-01-01-02:49658] Signal: Aborted (6)
+[wn-01-01-02:49658] Signal code:  (-6)
+[wn-01-01-02:49659] Signal: Aborted (6)
+[wn-01-01-02:49659] Signal code:  (-6)
+[wn-01-01-02:49658] [ 0] [wn-01-01-02:49659] [ 0] /usr/lib64/libc.so.6(+0x3fc30)[0x7f9420e3fc30]
+[wn-01-01-02:49658] [ 1] /usr/lib64/libc.so.6(+0x3fc30)[0x7fde9dc3fc30]
+[wn-01-01-02:49659] [ 1] /usr/lib64/libc.so.6(+0x8d02c)[0x7f9420e8d02c]
+[wn-01-01-02:49658] [ 2] /usr/lib64/libc.so.6(raise+0x16)[0x7f9420e3fb86]
+[wn-01-01-02:49658] [ 3] /usr/lib64/libc.so.6(+0x8d02c)[0x7fde9dc8d02c]
+[wn-01-01-02:49659] [ 2] /usr/lib64/libc.so.6(abort+0xd3)[0x7f9420e29873]
+[wn-01-01-02:49658] [ 4] /usr/lib64/libc.so.6(raise+0x16)[0x7fde9dc3fb86]
+[wn-01-01-02:49659] [ 3] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7f94212a1b21]
+[wn-01-01-02:49658] [ 5] /usr/lib64/libc.so.6(abort+0xd3)[0x7fde9dc29873]
+[wn-01-01-02:49659] [ 4] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7f94212ad53c]
+[wn-01-01-02:49658] [ 6] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7fde9e0a1b21]
+[wn-01-01-02:49659] [ 5] /usr/lib64/libstdc++.so.6(+0xad5a7)[0x7f94212ad5a7]
+[wn-01-01-02:49658] [ 7] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7fde9e0ad53c]
+[wn-01-01-02:49659] [ 6] /usr/lib64/libstdc++.so.6(+0xad809)[0x7f94212ad809]
+[wn-01-01-02:49658] [ 8] /usr/lib64/libstdc++.so.6(+0xad5a7)[0x7fde9e0ad5a7]
+[wn-01-01-02:49659] [ 7] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7f94212a1731]
+[wn-01-01-02:49658] [ 9] ./ising_prefetch.exe[0x402db0]
+[wn-01-01-02:49658] [10] /usr/lib64/libc.so.6(+0x2a610)[0x7f9420e2a610]
+[wn-01-01-02:49658] [11] /usr/lib64/libc.so.6(__libc_start_main+0x80)[0x7f9420e2a6c0]
+[wn-01-01-02:49658] [12] ./ising_prefetch.exe[0x404b65]
+[wn-01-01-02:49658] *** End of error message ***
+/usr/lib64/libstdc++.so.6(+0xad809)[0x7fde9e0ad809]
+[wn-01-01-02:49659] [ 8] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7fde9e0a1731]
+[wn-01-01-02:49659] [ 9] ./ising_prefetch.exe[0x402db0]
+[wn-01-01-02:49659] [10] /usr/lib64/libc.so.6(+0x2a610)[0x7fde9dc2a610]
+[wn-01-01-02:49659] [11] /usr/lib64/libc.so.6(__libc_start_main+0x80)[0x7fde9dc2a6c0]
+[wn-01-01-02:49659] [12] ./ising_prefetch.exe[0x404b65]
+[wn-01-01-02:49659] *** End of error message ***
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun noticed that process rank 1 with PID 0 on node wn-01-01-02 exited on signal 6 (Aborted).
+--------------------------------------------------------------------------
+
+--- Strong: 4 rank x 8 threads ---
+  [idx]
+[wn-01-01-02.cluster.roma3:49682] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49684] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49685] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49683] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+[wn-01-01-02:49682] *** Process received signal ***
+[wn-01-01-02:49682] Signal: Aborted (6)
+[wn-01-01-02:49682] Signal code:  (-6)
+[wn-01-01-02:49682] [ 0] /usr/lib64/libc.so.6(+0x3fc30)[0x7f469963fc30]
+[wn-01-01-02:49682] [ 1] /usr/lib64/libc.so.6(+0x8d02c)[0x7f469968d02c]
+[wn-01-01-02:49682] [ 2] /usr/lib64/libc.so.6(raise+0x16)[0x7f469963fb86]
+[wn-01-01-02:49682] [ 3] /usr/lib64/libc.so.6(abort+0xd3)[0x7f4699629873]
+[wn-01-01-02:49682] [ 4] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7f4699aa1b21]
+[wn-01-01-02:49682] [ 5] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7f4699aad53c]
+[wn-01-01-02:49682] [ 6] /usr/lib64/libstdc++.so.6(+0xac509)[0x7f4699aac509]
+[wn-01-01-02:49682] [ 7] /usr/lib64/libstdc++.so.6(__gxx_personality_v0+0x9a)[0x7f4699aacc8a]
+[wn-01-01-02:49682] [ 8] /usr/lib64/libgcc_s.so.1(+0x11e24)[0x7f4699ca8e24]
+[wn-01-01-02:49682] [ 9] /usr/lib64/libgcc_s.so.1(_Unwind_RaiseException+0x311)[0x7f4699ca94a1]
+[wn-01-01-02:49682] [10] /usr/lib64/libstdc++.so.6(__cxa_throw+0x3c)[0x7f4699aad7fc]
+[wn-01-01-02:49682] [11] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7f4699aa1731]
+[wn-01-01-02:49682] [12] ./ising_idx.exe[0x40538e]
+[wn-01-01-02:49682] [13] ./ising_idx.exe[0x406e5e]
+[wn-01-01-02:49682] [14] /usr/lib64/libgomp.so.1(+0x1d2c6)[0x7f4699cd32c6]
+[wn-01-01-02:49682] [15] /usr/lib64/libc.so.6(+0x8b2ea)[0x7f469968b2ea]
+[wn-01-01-02:49682] [16] /usr/lib64/libc.so.6(+0x1103c0)[0x7f46997103c0]
+[wn-01-01-02:49682] *** End of error message ***
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun noticed that process rank 0 with PID 0 on node wn-01-01-02 exited on signal 6 (Aborted).
+--------------------------------------------------------------------------
+  [rowing]
+[wn-01-01-02.cluster.roma3:49770] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49772] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49769] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49771] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 125000000000, NThreads: 8, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+terminate called after throwing an instance of 'std::bad_alloc'
+terminate called after throwing an instance of 'std::bad_alloc'
+terminate called after throwing an instance of 'std::bad_allocterminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+'
+  what():  std::bad_alloc  what():  std::bad_alloc
+  what():  std::bad_alloc
+
+[wn-01-01-02:49771] *** Process received signal ***
+[wn-01-01-02:49769] *** Process received signal ***
+[wn-01-01-02:49769] Signal: Aborted (6)
+[wn-01-01-02:49769] Signal code:  (-6)
+[wn-01-01-02:49771] Signal: Aborted (6)
+[wn-01-01-02:49771] Signal code:  (-6)
+[wn-01-01-02:49772] *** Process received signal ***
+[wn-01-01-02:49770] *** Process received signal ***
+[wn-01-01-02:49772] Signal: Aborted (6)
+[wn-01-01-02:49772] Signal code:  (-6)
+[wn-01-01-02:49770] Signal: Aborted (6)
+[wn-01-01-02:49770] Signal code:  (-6)
+[wn-01-01-02:49771] [ 0] [wn-01-01-02:49769] [ 0] [wn-01-01-02:49772] [ 0] [wn-01-01-02:49770] [ 0] /usr/lib64/libc.so.6(+0x3fc30)[0x7f0bc803fc30]
+[wn-01-01-02:49771] [ 1] /usr/lib64/libc.so.6(+0x3fc30)[0x7fdf89c3fc30]
+[wn-01-01-02:49769] [ 1] /usr/lib64/libc.so.6(+0x3fc30)[0x7f41e623fc30]
+[wn-01-01-02:49772] [ 1] /usr/lib64/libc.so.6(+0x3fc30)[0x7f084ca3fc30]
+[wn-01-01-02:49770] [ 1] /usr/lib64/libc.so.6(+0x8d02c)[0x7fdf89c8d02c]
+[wn-01-01-02:49769] [ 2] /usr/lib64/libc.so.6(+0x8d02c)[0x7f0bc808d02c]
+[wn-01-01-02:49771] [ 2] /usr/lib64/libc.so.6(+0x8d02c)[0x7f084ca8d02c]
+[wn-01-01-02:49770] [ 2] /usr/lib64/libc.so.6(+0x8d02c)[0x7f41e628d02c]
+[wn-01-01-02:49772] [ 2] /usr/lib64/libc.so.6(raise+0x16)[0x7f0bc803fb86]
+[wn-01-01-02:49771] [ 3] /usr/lib64/libc.so.6(raise+0x16)[0x7fdf89c3fb86]
+[wn-01-01-02:49769] [ 3] /usr/lib64/libc.so.6(raise+0x16)[0x7f41e623fb86]
+[wn-01-01-02:49772] [ 3] /usr/lib64/libc.so.6(raise+0x16)[0x7f084ca3fb86]
+[wn-01-01-02:49770] [ 3] /usr/lib64/libc.so.6(abort+0xd3)[0x7fdf89c29873]
+[wn-01-01-02:49769] [ 4] /usr/lib64/libc.so.6(abort+0xd3)[0x7f0bc8029873]
+[wn-01-01-02:49771] [ 4] /usr/lib64/libc.so.6(abort+0xd3)[0x7f084ca29873]
+[wn-01-01-02:49770] [ 4] /usr/lib64/libc.so.6(abort+0xd3)[0x7f41e6229873]
+[wn-01-01-02:49772] [ 4] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7f0bc84a1b21]
+[wn-01-01-02:49771] [ 5] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7fdf8a0a1b21]
+[wn-01-01-02:49769] [ 5] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7f41e66a1b21]
+[wn-01-01-02:49772] [ 5] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7f084cea1b21]
+[wn-01-01-02:49770] [ 5] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7fdf8a0ad53c]
+[wn-01-01-02:49769] [ 6] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7f0bc84ad53c]
+[wn-01-01-02:49771] [ 6] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7f084cead53c]
+[wn-01-01-02:49770] [ 6] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7f41e66ad53c]
+[wn-01-01-02:49772] [ 6] /usr/lib64/libstdc++.so.6(+0xad5a7)[0x7f0bc84ad5a7]
+[wn-01-01-02:49771] [ 7] /usr/lib64/libstdc++.so.6(+0xad5a7)[0x7fdf8a0ad5a7]
+[wn-01-01-02:49769] [ 7] /usr/lib64/libstdc++.so.6(+0xad5a7)[0x7f41e66ad5a7]
+[wn-01-01-02:49772] [ 7] /usr/lib64/libstdc++.so.6(+0xad5a7)[0x7f084cead5a7]
+[wn-01-01-02:49770] [ 7] /usr/lib64/libstdc++.so.6(+0xad809)[0x7fdf8a0ad809]
+[wn-01-01-02:49769] [ 8] /usr/lib64/libstdc++.so.6(+0xad809)[0x7f0bc84ad809]
+[wn-01-01-02:49771] [ 8] /usr/lib64/libstdc++.so.6(+0xad809)[0x7f084cead809]
+[wn-01-01-02:49770] [ 8] /usr/lib64/libstdc++.so.6(+0xad809)[0x7f41e66ad809]
+[wn-01-01-02:49772] [ 8] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7f0bc84a1731]
+[wn-01-01-02:49771] [ 9] ./ising_rowing.exe[0x402da4]
+[wn-01-01-02:49771] [10] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7fdf8a0a1731]
+[wn-01-01-02:49769] [ 9] ./ising_rowing.exe[0x402da4]
+[wn-01-01-02:49769] [10] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7f41e66a1731]
+[wn-01-01-02:49772] [ 9] ./ising_rowing.exe[0x402da4]
+[wn-01-01-02:49772] [10] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7f084cea1731]
+[wn-01-01-02:49770] [ 9] ./ising_rowing.exe[0x402da4]
+[wn-01-01-02:49770] [10] /usr/lib64/libc.so.6(+0x2a610)[0x7fdf89c2a610]
+[wn-01-01-02:49769] [11] /usr/lib64/libc.so.6(+0x2a610)[0x7f0bc802a610]
+[wn-01-01-02:49771] [11] /usr/lib64/libc.so.6(+0x2a610)[0x7f084ca2a610]
+[wn-01-01-02:49770] [11] /usr/lib64/libc.so.6(+0x2a610)[0x7f41e622a610]
+[wn-01-01-02:49772] [11] /usr/lib64/libc.so.6(__libc_start_main+0x80)[0x7f0bc802a6c0]
+[wn-01-01-02:49771] [12] ./ising_rowing.exe[0x404af5]
+[wn-01-01-02:49771] *** End of error message ***
+/usr/lib64/libc.so.6(__libc_start_main+0x80)[0x7fdf89c2a6c0]
+[wn-01-01-02:49769] [12] ./ising_rowing.exe[0x404af5]
+[wn-01-01-02:49769] *** End of error message ***
+/usr/lib64/libc.so.6(__libc_start_main+0x80)[0x7f41e622a6c0]
+[wn-01-01-02:49772] [12] ./ising_rowing.exe[0x404af5]
+[wn-01-01-02:49772] *** End of error message ***
+/usr/lib64/libc.so.6(__libc_start_main+0x80)[0x7f084ca2a6c0]
+[wn-01-01-02:49770] [12] ./ising_rowing.exe[0x404af5]
+[wn-01-01-02:49770] *** End of error message ***
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun noticed that process rank 2 with PID 0 on node wn-01-01-02 exited on signal 6 (Aborted).
+--------------------------------------------------------------------------
+  [prefetch]
+[wn-01-01-02.cluster.roma3:49811] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49814] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49813] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49812] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 125000000000, NThreads: 8, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+terminate called after throwing an instance of 'std::bad_alloc'
+terminate called after throwing an instance of 'std::bad_alloc'
+terminate called after throwing an instance of 'std::bad_alloc'
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+  what():  std::bad_alloc
+  what():  std::bad_alloc
+  what():  std::bad_alloc
+[wn-01-01-02:49811] *** Process received signal ***
+[wn-01-01-02:49814] *** Process received signal ***
+[wn-01-01-02:49814] Signal: Aborted (6)
+[wn-01-01-02:49814] Signal code:  (-6)
+[wn-01-01-02:49812] *** Process received signal ***
+[wn-01-01-02:49812] Signal: Aborted (6)
+[wn-01-01-02:49812] Signal code:  (-6)
+[wn-01-01-02:49813] *** Process received signal ***
+[wn-01-01-02:49813] Signal: Aborted (6)
+[wn-01-01-02:49813] Signal code:  (-6)
+[wn-01-01-02:49811] Signal: Aborted (6)
+[wn-01-01-02:49811] Signal code:  (-6)
+[wn-01-01-02:49812] [ 0] [wn-01-01-02:49813] [ 0] [wn-01-01-02:49814] [ 0] [wn-01-01-02:49811] [ 0] /usr/lib64/libc.so.6(+0x3fc30)[0x7f08c0a3fc30]
+[wn-01-01-02:49814] [ 1] /usr/lib64/libc.so.6(+0x3fc30)[0x7ff714a3fc30]
+[wn-01-01-02:49812] [ 1] /usr/lib64/libc.so.6(+0x3fc30)[0x7fd52f43fc30]
+[wn-01-01-02:49813] [ 1] /usr/lib64/libc.so.6(+0x3fc30)[0x7f5c4c83fc30]
+[wn-01-01-02:49811] [ 1] /usr/lib64/libc.so.6(+0x8d02c)[0x7fd52f48d02c]
+[wn-01-01-02:49813] [ 2] /usr/lib64/libc.so.6(+0x8d02c)[0x7f08c0a8d02c]
+[wn-01-01-02:49814] [ 2] /usr/lib64/libc.so.6(+0x8d02c)[0x7ff714a8d02c]
+[wn-01-01-02:49812] [ 2] /usr/lib64/libc.so.6(+0x8d02c)[0x7f5c4c88d02c]
+[wn-01-01-02:49811] [ 2] /usr/lib64/libc.so.6(raise+0x16)[0x7ff714a3fb86]
+[wn-01-01-02:49812] [ 3] /usr/lib64/libc.so.6(raise+0x16)[0x7fd52f43fb86]
+[wn-01-01-02:49813] [ 3] /usr/lib64/libc.so.6(raise+0x16)[0x7f08c0a3fb86]
+[wn-01-01-02:49814] [ 3] /usr/lib64/libc.so.6(raise+0x16)[0x7f5c4c83fb86]
+[wn-01-01-02:49811] [ 3] /usr/lib64/libc.so.6(abort+0xd3)[0x7f08c0a29873]
+[wn-01-01-02:49814] [ 4] /usr/lib64/libc.so.6(abort+0xd3)[0x7ff714a29873]
+[wn-01-01-02:49812] [ 4] /usr/lib64/libc.so.6(abort+0xd3)[0x7fd52f429873]
+[wn-01-01-02:49813] [ 4] /usr/lib64/libc.so.6(abort+0xd3)[0x7f5c4c829873]
+[wn-01-01-02:49811] [ 4] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7fd52f8a1b21]
+[wn-01-01-02:49813] [ 5] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7f08c0ea1b21]
+[wn-01-01-02:49814] [ 5] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7ff714ea1b21]
+[wn-01-01-02:49812] [ 5] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7f5c4cca1b21]
+[wn-01-01-02:49811] [ 5] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7ff714ead53c]
+[wn-01-01-02:49812] [ 6] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7fd52f8ad53c]
+[wn-01-01-02:49813] [ 6] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7f08c0ead53c]
+[wn-01-01-02:49814] [ 6] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7f5c4ccad53c]
+[wn-01-01-02:49811] [ 6] /usr/lib64/libstdc++.so.6(+0xad5a7)[0x7f08c0ead5a7]
+[wn-01-01-02:49814] [ 7] /usr/lib64/libstdc++.so.6(+0xad5a7)[0x7ff714ead5a7]
+[wn-01-01-02:49812] [ 7] /usr/lib64/libstdc++.so.6(+0xad5a7)[0x7fd52f8ad5a7]
+[wn-01-01-02:49813] [ 7] /usr/lib64/libstdc++.so.6(+0xad5a7)[0x7f5c4ccad5a7]
+[wn-01-01-02:49811] [ 7] /usr/lib64/libstdc++.so.6(+0xad809)[0x7fd52f8ad809]
+[wn-01-01-02:49813] [ 8] /usr/lib64/libstdc++.so.6(+0xad809)[0x7f08c0ead809]
+[wn-01-01-02:49814] [ 8] /usr/lib64/libstdc++.so.6(+0xad809)[0x7ff714ead809]
+[wn-01-01-02:49812] [ 8] /usr/lib64/libstdc++.so.6(+0xad809)[0x7f5c4ccad809]
+[wn-01-01-02:49811] [ 8] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7ff714ea1731]
+[wn-01-01-02:49812] [ 9] ./ising_prefetch.exe[0x402db0]
+/usr/lib64/libstdc++.so.6(+0xa1731)[0x7fd52f8a1731]
+[wn-01-01-02:49813] [ 9] ./ising_prefetch.exe[0x402db0]
+[wn-01-01-02:49813] [10] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7f08c0ea1731]
+[wn-01-01-02:49814] [ 9] ./ising_prefetch.exe[0x402db0]
+[wn-01-01-02:49814] [10] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7f5c4cca1731]
+[wn-01-01-02:49811] [ 9] ./ising_prefetch.exe[0x402db0]
+[wn-01-01-02:49811] [10] [wn-01-01-02:49812] [10] /usr/lib64/libc.so.6(+0x2a610)[0x7f5c4c82a610]
+[wn-01-01-02:49811] [11] /usr/lib64/libc.so.6(+0x2a610)[0x7fd52f42a610]
+[wn-01-01-02:49813] [11] /usr/lib64/libc.so.6(+0x2a610)[0x7ff714a2a610]
+[wn-01-01-02:49812] [11] /usr/lib64/libc.so.6(+0x2a610)[0x7f08c0a2a610]
+[wn-01-01-02:49814] [11] /usr/lib64/libc.so.6(__libc_start_main+0x80)[0x7ff714a2a6c0]
+[wn-01-01-02:49812] [12] ./ising_prefetch.exe[0x404b65]
+/usr/lib64/libc.so.6(__libc_start_main+0x80)[0x7fd52f42a6c0]
+[wn-01-01-02:49813] [12] ./ising_prefetch.exe[0x404b65]
+[wn-01-01-02:49813] *** End of error message ***
+/usr/lib64/libc.so.6(__libc_start_main+0x80)[0x7f5c4c82a6c0]
+[wn-01-01-02:49811] [12] ./ising_prefetch.exe[0x404b65]
+[wn-01-01-02:49811] *** End of error message ***
+/usr/lib64/libc.so.6(__libc_start_main+0x80)[0x7f08c0a2a6c0]
+[wn-01-01-02:49814] [12] ./ising_prefetch.exe[0x404b65]
+[wn-01-01-02:49814] *** End of error message ***
+[wn-01-01-02:49812] *** End of error message ***
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun noticed that process rank 2 with PID 0 on node wn-01-01-02 exited on signal 6 (Aborted).
+--------------------------------------------------------------------------
+
+--- Strong: 8 rank x 4 threads ---
+  [idx]
+[wn-01-01-02.cluster.roma3:49859] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49855] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49856] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49861] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49857] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49860] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49862] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49858] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  8 rank 0
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+[wn-01-01-02:49857] *** Process received signal ***
+[wn-01-01-02:49857] Signal: Aborted (6)
+[wn-01-01-02:49857] Signal code:  (-6)
+[wn-01-01-02:49857] [ 0] /usr/lib64/libc.so.6(+0x3fc30)[0x7f5cefe3fc30]
+[wn-01-01-02:49857] [ 1] /usr/lib64/libc.so.6(+0x8d02c)[0x7f5cefe8d02c]
+[wn-01-01-02:49857] [ 2] /usr/lib64/libc.so.6(raise+0x16)[0x7f5cefe3fb86]
+[wn-01-01-02:49857] [ 3] /usr/lib64/libc.so.6(abort+0xd3)[0x7f5cefe29873]
+[wn-01-01-02:49857] [ 4] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7f5cf02a1b21]
+[wn-01-01-02:49857] [ 5] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7f5cf02ad53c]
+[wn-01-01-02:49857] [ 6] /usr/lib64/libstdc++.so.6(+0xac509)[0x7f5cf02ac509]
+[wn-01-01-02:49857] [ 7] /usr/lib64/libstdc++.so.6(__gxx_personality_v0+0x9a)[0x7f5cf02acc8a]
+[wn-01-01-02:49857] [ 8] /usr/lib64/libgcc_s.so.1(+0x11e24)[0x7f5cf0440e24]
+[wn-01-01-02:49857] [ 9] /usr/lib64/libgcc_s.so.1(_Unwind_RaiseException+0x311)[0x7f5cf04414a1]
+[wn-01-01-02:49857] [10] /usr/lib64/libstdc++.so.6(__cxa_throw+0x3c)[0x7f5cf02ad7fc]
+[wn-01-01-02:49857] [11] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7f5cf02a1731]
+[wn-01-01-02:49857] [12] ./ising_idx.exe[0x40538e]
+[wn-01-01-02:49857] [13] ./ising_idx.exe[0x406e5e]
+[wn-01-01-02:49857] [14] /usr/lib64/libgomp.so.1(+0x1d2c6)[0x7f5cf01d72c6]
+[wn-01-01-02:49857] [15] /usr/lib64/libc.so.6(+0x8b2ea)[0x7f5cefe8b2ea]
+[wn-01-01-02:49857] [16] /usr/lib64/libc.so.6(+0x1103c0)[0x7f5ceff103c0]
+[wn-01-01-02:49857] *** End of error message ***
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+[wn-01-01-02:49855] *** Process received signal ***
+[wn-01-01-02:49855] Signal: Aborted (6)
+[wn-01-01-02:49855] Signal code:  (-6)
+[wn-01-01-02:49855] [ 0] /usr/lib64/libc.so.6(+0x3fc30)[0x7f0b8ba3fc30]
+[wn-01-01-02:49855] [ 1] /usr/lib64/libc.so.6(+0x8d02c)[0x7f0b8ba8d02c]
+[wn-01-01-02:49855] [ 2] /usr/lib64/libc.so.6(raise+0x16)[0x7f0b8ba3fb86]
+[wn-01-01-02:49855] [ 3] /usr/lib64/libc.so.6(abort+0xd3)[0x7f0b8ba29873]
+[wn-01-01-02:49855] [ 4] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7f0b8bea1b21]
+[wn-01-01-02:49855] [ 5] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7f0b8bead53c]
+[wn-01-01-02:49855] [ 6] /usr/lib64/libstdc++.so.6(+0xac509)[0x7f0b8beac509]
+[wn-01-01-02:49855] [ 7] /usr/lib64/libstdc++.so.6(__gxx_personality_v0+0x9a)[0x7f0b8beacc8a]
+[wn-01-01-02:49855] [ 8] /usr/lib64/libgcc_s.so.1(+0x11e24)[0x7f0b8c0e4e24]
+[wn-01-01-02:49855] [ 9] /usr/lib64/libgcc_s.so.1(_Unwind_RaiseException+0x311)[0x7f0b8c0e54a1]
+[wn-01-01-02:49855] [10] /usr/lib64/libstdc++.so.6(__cxa_throw+0x3c)[0x7f0b8bead7fc]
+[wn-01-01-02:49855] [11] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7f0b8bea1731]
+[wn-01-01-02:49855] [12] ./ising_idx.exe[0x40538e]
+[wn-01-01-02:49855] [13] ./ising_idx.exe[0x406e5e]
+[wn-01-01-02:49855] [14] /usr/lib64/libgomp.so.1(+0x1d2c6)[0x7f0b8c10f2c6]
+[wn-01-01-02:49855] [15] /usr/lib64/libc.so.6(+0x8b2ea)[0x7f0b8ba8b2ea]
+[wn-01-01-02:49855] [16] /usr/lib64/libc.so.6(+0x1103c0)[0x7f0b8bb103c0]
+[wn-01-01-02:49855] *** End of error message ***
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+[wn-01-01-02:49858] *** Process received signal ***
+[wn-01-01-02:49858] Signal: Aborted (6)
+[wn-01-01-02:49858] Signal code:  (-6)
+[wn-01-01-02:49858] [ 0] /usr/lib64/libc.so.6(+0x3fc30)[0x7f08d6e3fc30]
+[wn-01-01-02:49858] [ 1] /usr/lib64/libc.so.6(+0x8d02c)[0x7f08d6e8d02c]
+[wn-01-01-02:49858] [ 2] /usr/lib64/libc.so.6(raise+0x16)[0x7f08d6e3fb86]
+[wn-01-01-02:49858] [ 3] /usr/lib64/libc.so.6(abort+0xd3)[0x7f08d6e29873]
+[wn-01-01-02:49858] [ 4] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7f08d72a1b21]
+[wn-01-01-02:49858] [ 5] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7f08d72ad53c]
+[wn-01-01-02:49858] [ 6] /usr/lib64/libstdc++.so.6(+0xac509)[0x7f08d72ac509]
+[wn-01-01-02:49858] [ 7] /usr/lib64/libstdc++.so.6(__gxx_personality_v0+0x9a)[0x7f08d72acc8a]
+[wn-01-01-02:49858] [ 8] /usr/lib64/libgcc_s.so.1(+0x11e24)[0x7f08d74a0e24]
+[wn-01-01-02:49858] [ 9] /usr/lib64/libgcc_s.so.1(_Unwind_RaiseException+0x311)[0x7f08d74a14a1]
+[wn-01-01-02:49858] [10] /usr/lib64/libstdc++.so.6(__cxa_throw+0x3c)[0x7f08d72ad7fc]
+[wn-01-01-02:49858] [11] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7f08d72a1731]
+[wn-01-01-02:49858] [12] ./ising_idx.exe[0x40538e]
+[wn-01-01-02:49858] [13] ./ising_idx.exe[0x406e45]
+[wn-01-01-02:49858] [14] /usr/lib64/libgomp.so.1(+0x1d2c6)[0x7f08d74cb2c6]
+[wn-01-01-02:49858] [15] /usr/lib64/libc.so.6(+0x8b2ea)[0x7f08d6e8b2ea]
+[wn-01-01-02:49858] [16] /usr/lib64/libc.so.6(+0x1103c0)[0x7f08d6f103c0]
+[wn-01-01-02:49858] *** End of error message ***
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+[wn-01-01-02:49859] *** Process received signal ***
+[wn-01-01-02:49859] Signal: Aborted (6)
+[wn-01-01-02:49859] Signal code:  (-6)
+[wn-01-01-02:49859] [ 0] /usr/lib64/libc.so.6(+0x3fc30)[0x7f392a63fc30]
+[wn-01-01-02:49859] [ 1] /usr/lib64/libc.so.6(+0x8d02c)[0x7f392a68d02c]
+[wn-01-01-02:49859] [ 2] /usr/lib64/libc.so.6(raise+0x16)[0x7f392a63fb86]
+[wn-01-01-02:49859] [ 3] /usr/lib64/libc.so.6(abort+0xd3)[0x7f392a629873]
+[wn-01-01-02:49859] [ 4] /usr/lib64/libstdc++.so.6(+0xa1b21)[0x7f392aaa1b21]
+[wn-01-01-02:49859] [ 5] /usr/lib64/libstdc++.so.6(+0xad53c)[0x7f392aaad53c]
+[wn-01-01-02:49859] [ 6] /usr/lib64/libstdc++.so.6(+0xac509)[0x7f392aaac509]
+[wn-01-01-02:49859] [ 7] /usr/lib64/libstdc++.so.6(__gxx_personality_v0+0x9a)[0x7f392aaacc8a]
+[wn-01-01-02:49859] [ 8] /usr/lib64/libgcc_s.so.1(+0x11e24)[0x7f392ac7be24]
+[wn-01-01-02:49859] [ 9] /usr/lib64/libgcc_s.so.1(_Unwind_RaiseException+0x311)[0x7f392ac7c4a1]
+[wn-01-01-02:49859] [10] /usr/lib64/libstdc++.so.6(__cxa_throw+0x3c)[0x7f392aaad7fc]
+[wn-01-01-02:49859] [11] /usr/lib64/libstdc++.so.6(+0xa1731)[0x7f392aaa1731]
+[wn-01-01-02:49859] [12] ./ising_idx.exe[0x40538e]
+[wn-01-01-02:49859] [13] ./ising_idx.exe[0x406e45]
+[wn-01-01-02:49859] [14] /usr/lib64/libgomp.so.1(GOMP_parallel+0x46)[0x7f392ac9d576]
+[wn-01-01-02:49859] [15] ./ising_idx.exe[0x407bfa]
+[wn-01-01-02:49859] [16] ./ising_idx.exe[0x402deb]
+[wn-01-01-02:49859] [17] /usr/lib64/libc.so.6(+0x2a610)[0x7f392a62a610]
+[wn-01-01-02:49859] [18] /usr/lib64/libc.so.6(__libc_start_main+0x80)[0x7f392a62a6c0]
+[wn-01-01-02:49859] [19] ./ising_idx.exe[0x404935]
+[wn-01-01-02:49859] *** End of error message ***
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun noticed that process rank 0 with PID 0 on node wn-01-01-02 exited on signal 6 (Aborted).
+--------------------------------------------------------------------------
+  [rowing]
+[wn-01-01-02.cluster.roma3:49975] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49977] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49976] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49980] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49979] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49981] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49978] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:49982] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  8 rank 0
+N_dim: 3, Npunti: 125000000000, NThreads: 4, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_8rank_5000x5000x5000.txt
+=>> PBS: job killed: walltime 7316 exceeded limit 7200
+Epilog:  nodes=1:ppn=32
+Epilog:  walltime=02:00:00
+Epilog:  neednodes=1:ppn=32
+Epilog:  cput=399:00:00
+Epilog:  mem=28gb
+Epilog:  cput=18:48:52
+Epilog:  vmem=176628688kb
+Epilog:  walltime=02:01:56
+Epilog:  mem=129811312kb
+Epilog:  energy_used=0
+ARG: 24005.qmgr.cluster.roma3 lcerioni theorm3 ising_compare 48744 nodes=1:ppn=32,walltime=02:00:00,neednodes=1:ppn=32,cput=399:00:00,mem=28gb cput=18:48:52,vmem=176628688kb,walltime=02:01:56,mem=129811312kb,energy_used=0 al9_mpi_short  -11 /var/spool/torque/mom_priv/jobs/24005.qmgr.cluster.roma3.SC
+################################################
+# Summary of resources used by job 24005.qmgr.cluster.roma3
+#
+#  Queue:        al9_mpi_short
+#  User:         lcerioni
+#  Group:        theorm3
+#  JobName:      ising_compare
+#  ArrayID:      24005
+#  SubID:        N/A
+#  Queued:       2026-02-15 16:41:25
+#  Eligible:     2026-02-15 16:41:25
+#  Started:      2026-02-15 16:41:27
+#  Ended:        2026-02-15 18:43:39
+#  Host:         wn-01-01-02
+#  nnodes:       1
+#  ppn:          32
+#  exec_host:    wn-01-01-02.cluster.roma3/0-31
+#  ResReq:       nodes=1:ppn=32,walltime=02:00:00,neednodes=1:ppn=32,cput=399:00:00,mem=28gb
+#  ResUsed:      cputmult=1.0,wallmult=1.0,cput=18:48:52,vmem=176628688kb,walltime=02:01:56,mem=129811312kb,energy_used=0
+################################################

@@ -1,0 +1,22 @@
+[wn-01-01-02.cluster.roma3:788911] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:788912] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:788917] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:788914] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:788913] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:788915] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:788918] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:788916] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  8 rank 0
+N_dim: 3, Npunti: 64000000, NThreads: 4, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 4 Bytes
+Output file: output/meas_8rank_400x400x400.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 21.503 s (100.0%)
+Computation time:              18.903 s ( 87.9%)
+MPI Communication:              1.048 s (  4.9%)
+I/O (file write):               0.009 s (  0.0%)
+Initialitation time:            1.542 s (  7.2%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.215 s

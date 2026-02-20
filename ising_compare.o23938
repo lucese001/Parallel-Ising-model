@@ -1,0 +1,517 @@
+Epilog:  nodes=1:ppn=32
+Epilog:  walltime=01:00:00
+Epilog:  neednodes=1:ppn=32
+Epilog:  cput=399:00:00
+Epilog:  mem=28gb
+################################################
+# Summary for job running at Roma3 cluster
+#
+#  JobID:       23938.qmgr.cluster.roma3
+#  JobName:     ising_compare
+#  Submitted:   lcerioni.theorm3
+#  Started:     2026-02-13 18:29:14
+#  Queue:       al9_mpi_short
+#  ExecutingOn: wn-01-01-08
+#  ExecHost(s): wn-01-01-08.cluster.roma3/0-31
+#  Nodes:       1
+#  PPN:         N/A
+################################################
+Confronto IDX_ALLOC vs ROWING
+Start: Fri Feb 13 06:29:15 PM CET 2026
+
+Compilazione IDX_ALLOC...
+Compilazione ROWING...
+
+WEAK SCALING 
+Volume per rank costante: 1500x1500 = 2250000 siti/rank
+
+--- Weak: 1 rank x 32 threads, 1500x1500 ---
+  [idx]
+[wn-01-01-08.cluster.roma3:2972644] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  1 rank 0
+N_dim: 2, Npunti: 2250000, NThreads: 32, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_1rank_1500x1500.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                  6.952 s (100.0%)
+Computation time:               6.415 s ( 92.3%)
+MPI Communication:              0.007 s (  0.1%)
+I/O (file write):               0.007 s (  0.1%)
+Initialitation time:            0.523 s (  7.5%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.070 s
+  [rowing]
+[wn-01-01-08.cluster.roma3:2972683] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  1 rank 0
+N_dim: 2, Npunti: 2250000, NThreads: 32, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_1rank_1500x1500.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                  6.793 s (100.0%)
+Computation time:               6.383 s ( 94.0%)
+MPI Communication:              0.008 s (  0.1%)
+I/O (file write):               0.003 s (  0.0%)
+Initialitation time:            0.398 s (  5.9%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.068 s
+Bulk (rowing) time: 6.327722 s (0.063277 s/conf) | Boundary time: 0.055444 s (0.000554 s/conf)
+
+--- Weak: 2 rank x 16 threads, 3000x1500 ---
+  [idx]
+[wn-01-01-08.cluster.roma3:2972741] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972742] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  2 rank 0
+N_dim: 2, Npunti: 4500000, NThreads: 16, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_2rank_3000x1500.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                  7.341 s (100.0%)
+Computation time:               6.776 s ( 92.3%)
+MPI Communication:              0.022 s (  0.3%)
+I/O (file write):               0.009 s (  0.1%)
+Initialitation time:            0.533 s (  7.3%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.073 s
+  [rowing]
+[wn-01-01-08.cluster.roma3:2972784] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972785] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  2 rank 0
+N_dim: 2, Npunti: 4500000, NThreads: 16, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_2rank_3000x1500.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                  6.734 s (100.0%)
+Computation time:               6.299 s ( 93.5%)
+MPI Communication:              0.024 s (  0.4%)
+I/O (file write):               0.003 s (  0.0%)
+Initialitation time:            0.408 s (  6.1%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.067 s
+Bulk (rowing) time: 6.262478 s (0.062625 s/conf) | Boundary time: 0.036571 s (0.000366 s/conf)
+
+--- Weak: 4 rank x 8 threads, 3000x3000 ---
+  [idx]
+[wn-01-01-08.cluster.roma3:2972825] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972827] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972828] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972826] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 2, Npunti: 9000000, NThreads: 8, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_4rank_3000x3000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                  2.492 s (100.0%)
+Computation time:               2.013 s ( 80.8%)
+MPI Communication:              0.036 s (  1.4%)
+I/O (file write):               0.009 s (  0.3%)
+Initialitation time:            0.434 s ( 17.4%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.025 s
+  [rowing]
+[wn-01-01-08.cluster.roma3:2972872] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972873] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972874] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972875] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 2, Npunti: 9000000, NThreads: 8, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_4rank_3000x3000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                  1.904 s (100.0%)
+Computation time:               1.705 s ( 89.6%)
+MPI Communication:              0.075 s (  4.0%)
+I/O (file write):               0.003 s (  0.1%)
+Initialitation time:            0.120 s (  6.3%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.019 s
+Bulk (rowing) time: 1.698422 s (0.016984 s/conf) | Boundary time: 0.007051 s (0.000071 s/conf)
+
+--- Weak: 8 rank x 4 threads, 6000x3000 ---
+  [idx]
+[wn-01-01-08.cluster.roma3:2972919] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972921] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972918] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972917] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972920] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972923] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972922] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972924] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  8 rank 0
+N_dim: 2, Npunti: 18000000, NThreads: 4, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_8rank_6000x3000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                  8.271 s (100.0%)
+Computation time:               6.753 s ( 81.6%)
+MPI Communication:              0.620 s (  7.5%)
+I/O (file write):               0.019 s (  0.2%)
+Initialitation time:            0.879 s ( 10.6%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.083 s
+  [rowing]
+[wn-01-01-08.cluster.roma3:2972972] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972971] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972973] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972974] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972975] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972977] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972978] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2972976] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  8 rank 0
+N_dim: 2, Npunti: 18000000, NThreads: 4, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_8rank_6000x3000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                  7.695 s (100.0%)
+Computation time:               6.358 s ( 82.6%)
+MPI Communication:              0.466 s (  6.1%)
+I/O (file write):               0.015 s (  0.2%)
+Initialitation time:            0.856 s ( 11.1%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.077 s
+Bulk (rowing) time: 6.044798 s (0.060448 s/conf) | Boundary time: 0.313596 s (0.003136 s/conf)
+
+--- Weak: 16 rank x 2 threads, 6000x6000 ---
+  [idx]
+[wn-01-01-08.cluster.roma3:2973039] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973035] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973037] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973045] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973041] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973043] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973050] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973048] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973034] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973036] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973040] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973038] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973049] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973042] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973047] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973044] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  16 rank 0
+N_dim: 2, Npunti: 36000000, NThreads: 2, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_16rank_6000x6000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 29.539 s (100.0%)
+Computation time:              27.105 s ( 91.8%)
+MPI Communication:              0.333 s (  1.1%)
+I/O (file write):               0.011 s (  0.0%)
+Initialitation time:            2.091 s (  7.1%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.295 s
+  [rowing]
+[wn-01-01-08.cluster.roma3:2973145] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973148] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973146] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973147] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973149] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973152] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973150] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973154] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973151] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973153] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973161] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973157] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973158] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973160] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973162] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2973155] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  16 rank 0
+N_dim: 2, Npunti: 36000000, NThreads: 2, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_16rank_6000x6000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 27.217 s (100.0%)
+Computation time:              25.287 s ( 92.9%)
+MPI Communication:              0.530 s (  1.9%)
+I/O (file write):               0.009 s (  0.0%)
+Initialitation time:            1.391 s (  5.1%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.272 s
+Bulk (rowing) time: 23.626609 s (0.236266 s/conf) | Boundary time: 1.660138 s (0.016601 s/conf)
+
+========== STRONG SCALING ==========
+Reticolo fisso: 16000x16000
+
+--- Strong: 1 rank x 32 threads ---
+  [idx]
+[wn-01-01-08.cluster.roma3:2973232] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  1 rank 0
+N_dim: 2, Npunti: 256000000, NThreads: 32, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_1rank_16000x16000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                727.962 s (100.0%)
+Computation time:             708.729 s ( 97.4%)
+MPI Communication:              0.081 s (  0.0%)
+I/O (file write):               0.085 s (  0.0%)
+Initialitation time:           19.067 s (  2.6%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                7.280 s
+  [rowing]
+[wn-01-01-08.cluster.roma3:2976187] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  1 rank 0
+N_dim: 2, Npunti: 256000000, NThreads: 32, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_1rank_16000x16000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                690.608 s (100.0%)
+Computation time:             676.290 s ( 97.9%)
+MPI Communication:              0.082 s (  0.0%)
+I/O (file write):               0.496 s (  0.1%)
+Initialitation time:           13.740 s (  2.0%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                6.906 s
+Bulk (rowing) time: 676.006039 s (6.760060 s/conf) | Boundary time: 0.283463 s (0.002835 s/conf)
+
+--- Strong: 2 rank x 16 threads ---
+  [idx]
+[wn-01-01-08.cluster.roma3:2977901] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2977902] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  2 rank 0
+N_dim: 2, Npunti: 256000000, NThreads: 16, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_2rank_16000x16000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                365.467 s (100.0%)
+Computation time:             355.527 s ( 97.3%)
+MPI Communication:              0.087 s (  0.0%)
+I/O (file write):               0.013 s (  0.0%)
+Initialitation time:            9.840 s (  2.7%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                3.655 s
+  [rowing]
+[wn-01-01-08.cluster.roma3:2981230] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2981233] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  2 rank 0
+N_dim: 2, Npunti: 256000000, NThreads: 16, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_2rank_16000x16000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                346.961 s (100.0%)
+Computation time:             339.569 s ( 97.9%)
+MPI Communication:              0.085 s (  0.0%)
+I/O (file write):               0.013 s (  0.0%)
+Initialitation time:            7.294 s (  2.1%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                3.470 s
+Bulk (rowing) time: 339.353091 s (3.393531 s/conf) | Boundary time: 0.216233 s (0.002162 s/conf)
+
+--- Strong: 4 rank x 8 threads ---
+  [idx]
+[wn-01-01-08.cluster.roma3:2982740] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2982742] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2982743] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2982741] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 2, Npunti: 256000000, NThreads: 8, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_4rank_16000x16000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 53.572 s (100.0%)
+Computation time:              49.809 s ( 93.0%)
+MPI Communication:              0.159 s (  0.3%)
+I/O (file write):               0.009 s (  0.0%)
+Initialitation time:            3.595 s (  6.7%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.536 s
+  [rowing]
+[wn-01-01-08.cluster.roma3:2982803] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2982805] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2982806] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2982804] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 2, Npunti: 256000000, NThreads: 8, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_4rank_16000x16000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 49.150 s (100.0%)
+Computation time:              47.558 s ( 96.8%)
+MPI Communication:              0.261 s (  0.5%)
+I/O (file write):               0.009 s (  0.0%)
+Initialitation time:            1.322 s (  2.7%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.492 s
+Bulk (rowing) time: 47.517695 s (0.475177 s/conf) | Boundary time: 0.039809 s (0.000398 s/conf)
+
+--- Strong: 8 rank x 4 threads ---
+  [idx]
+[wn-01-01-08.cluster.roma3:2982905] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2982901] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2982902] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2982904] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2982907] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2982908] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2982903] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2982906] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  8 rank 0
+N_dim: 2, Npunti: 256000000, NThreads: 4, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_8rank_16000x16000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 98.798 s (100.0%)
+Computation time:              94.301 s ( 95.4%)
+MPI Communication:              0.285 s (  0.3%)
+I/O (file write):               0.009 s (  0.0%)
+Initialitation time:            4.203 s (  4.3%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.988 s
+  [rowing]
+[wn-01-01-08.cluster.roma3:2983045] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983047] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983049] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983051] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983046] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983050] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983052] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983048] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  8 rank 0
+N_dim: 2, Npunti: 256000000, NThreads: 4, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_8rank_16000x16000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 93.320 s (100.0%)
+Computation time:              89.727 s ( 96.1%)
+MPI Communication:              1.183 s (  1.3%)
+I/O (file write):               0.009 s (  0.0%)
+Initialitation time:            2.401 s (  2.6%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.933 s
+Bulk (rowing) time: 88.834051 s (0.888341 s/conf) | Boundary time: 0.892933 s (0.008929 s/conf)
+
+--- Strong: 16 rank x 2 threads ---
+  [idx]
+[wn-01-01-08.cluster.roma3:2983144] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983145] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983160] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983148] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983154] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983146] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983156] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983150] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983149] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983152] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983147] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983151] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983161] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983155] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983158] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2983153] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  16 rank 0
+N_dim: 2, Npunti: 256000000, NThreads: 2, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_16rank_16000x16000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                189.837 s (100.0%)
+Computation time:             181.207 s ( 95.5%)
+MPI Communication:              2.440 s (  1.3%)
+I/O (file write):               0.015 s (  0.0%)
+Initialitation time:            6.174 s (  3.3%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                1.898 s
+  [rowing]
+[wn-01-01-08.cluster.roma3:2984606] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2984603] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2984604] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2984609] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2984605] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2984611] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2984613] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2984607] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2984608] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2984615] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2984614] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2984618] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2984612] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2984616] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2984610] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2984620] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  16 rank 0
+N_dim: 2, Npunti: 256000000, NThreads: 2, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_16rank_16000x16000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                178.750 s (100.0%)
+Computation time:             173.396 s ( 97.0%)
+MPI Communication:              0.577 s (  0.3%)
+I/O (file write):               0.009 s (  0.0%)
+Initialitation time:            4.768 s (  2.7%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                1.787 s
+Bulk (rowing) time: 171.961678 s (1.719617 s/conf) | Boundary time: 1.434025 s (0.014340 s/conf)
+
+Confronto completato
+Fine: Fri Feb 13 07:17:46 PM CET 2026
+Epilog:  nodes=1:ppn=32
+Epilog:  walltime=01:00:00
+Epilog:  neednodes=1:ppn=32
+Epilog:  cput=399:00:00
+Epilog:  mem=28gb
+Epilog:  cput=04:21:49
+Epilog:  vmem=11093976kb
+Epilog:  walltime=00:48:32
+Epilog:  mem=2514936kb
+Epilog:  energy_used=0
+ARG: 23938.qmgr.cluster.roma3 lcerioni theorm3 ising_compare 2972554 nodes=1:ppn=32,walltime=01:00:00,neednodes=1:ppn=32,cput=399:00:00,mem=28gb cput=04:21:49,vmem=11093976kb,walltime=00:48:32,mem=2514936kb,energy_used=0 al9_mpi_short  0 /var/spool/torque/mom_priv/jobs/23938.qmgr.cluster.roma3.SC
+################################################
+# Summary of resources used by job 23938.qmgr.cluster.roma3
+#
+#  Queue:        al9_mpi_short
+#  User:         lcerioni
+#  Group:        theorm3
+#  JobName:      ising_compare
+#  ArrayID:      23938
+#  SubID:        N/A
+#  Queued:       2026-02-13 18:28:58
+#  Eligible:     2026-02-13 18:28:58
+#  Started:      2026-02-13 18:28:59
+#  Ended:        2026-02-13 19:17:46
+#  Host:         wn-01-01-08
+#  nnodes:       1
+#  ppn:          32
+#  exec_host:    wn-01-01-08.cluster.roma3/0-31
+#  ResReq:       nodes=1:ppn=32,walltime=01:00:00,neednodes=1:ppn=32,cput=399:00:00,mem=28gb
+#  ResUsed:      cputmult=1.0,wallmult=1.0,cput=04:21:49,vmem=11093976kb,walltime=00:48:32,mem=2514936kb,energy_used=0
+################################################

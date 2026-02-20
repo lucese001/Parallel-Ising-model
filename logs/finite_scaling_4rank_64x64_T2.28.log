@@ -1,0 +1,23 @@
+[wn-01-01-02.cluster.roma3:2264116] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:2264116] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:2264114] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:2264114] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:2264115] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:2264115] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:2264117] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:2264117] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 2, Npunti: 4096, NThreads: 8, nConfs: 100000, Beta: 0.438596
+Memory usage of the rng: 4 Bytes
+Output file: output/meas_64x64_T2.28.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                  7.012 s (100.0%)
+Computation time:               3.169 s ( 45.2%)
+MPI Communication:              2.875 s ( 41.0%)
+I/O (file write):               0.663 s (  9.5%)
+Initialitation time:            0.207 s (  3.0%)
+Overhead:                       0.097 s (  1.4%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 1.916161 s (0.000019 s/conf) | Boundary time: 1.253089 s (0.000013 s/conf)

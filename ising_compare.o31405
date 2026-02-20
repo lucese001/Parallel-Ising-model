@@ -1,0 +1,198 @@
+Epilog:  nodes=1:ppn=32
+Epilog:  walltime=03:00:00
+Epilog:  neednodes=1:ppn=32
+Epilog:  cput=399:00:00
+Epilog:  mem=28gb
+################################################
+# Summary for job running at Roma3 cluster
+#
+#  JobID:       31405.qmgr.cluster.roma3
+#  JobName:     ising_compare
+#  Submitted:   lcerioni.theorm3
+#  Started:     2026-02-16 20:09:29
+#  Queue:       al9_mpi_short
+#  ExecutingOn: wn-01-01-02
+#  ExecHost(s): wn-01-01-02.cluster.roma3/0-31
+#  Nodes:       1
+#  PPN:         N/A
+################################################
+Confronto IDX_ALLOC vs ROWING vs PREFETCH
+Start: Mon Feb 16 08:09:29 PM CET 2026
+
+Compilazione ROWING...
+In file included from src/main.cpp:5:
+include/io.hpp:124:19: warning: missing terminating " character
+  124 |     master_printf("N_dim: %d, Npunti: %zu, NThreads: %d, nConfs: %d, Beta: %lg\n,
+      |                   ^
+include/io.hpp:124:19: error: missing terminating " character
+  124 |     master_printf("N_dim: %d, Npunti: %zu, NThreads: %d, nConfs: %d, Beta: %lg\n,
+      |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/io.hpp:125:39: warning: missing terminating " character
+  125 |                     numero di rank: %d", N_dim, N, nThreads, nConfs, Beta,world_size);
+      |                                       ^
+include/io.hpp:125:39: error: missing terminating " character
+  125 |                     numero di rank: %d", N_dim, N, nThreads, nConfs, Beta,world_size);
+      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/io.hpp: In function ‘void print_simulation_info(int, long long int, size_t, int, double, size_t, bool, int)’:
+include/io.hpp:125:21: error: ‘numero’ was not declared in this scope
+  125 |                     numero di rank: %d", N_dim, N, nThreads, nConfs, Beta,world_size);
+      |                     ^~~~~~
+src/main.cpp: In function ‘int main(int, char**)’:
+src/main.cpp:181:71: error: expected ‘)’ before ‘sizeof’
+  181 |     print_simulation_info(N_dim, N, nThreads, nConfs, Beta, world_size
+      |                          ~                                            ^
+      |                                                                       )
+  182 |                           sizeof(uint32_t), true);
+      |                           ~~~~~~                                       
+src/main.cpp:181:26: error: too few arguments to function ‘void print_simulation_info(int, long long int, size_t, int, double, size_t, bool, int)’
+  181 |     print_simulation_info(N_dim, N, nThreads, nConfs, Beta, world_size
+      |     ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  182 |                           sizeof(uint32_t), true);
+      |                           ~~~~~~~~~~~~~~~~~~~~~~~
+In file included from src/main.cpp:5:
+include/io.hpp:121:13: note: declared here
+  121 | inline void print_simulation_info(int N_dim, long long N, size_t nThreads, int nConfs,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+src/main.cpp:351:56: error: invalid initialization of reference of type ‘const std::vector<unsigned int>&’ from expression of type ‘std::vector<long unsigned int>’
+  351 |                                         global_offset, arr,
+      |                                                        ^~~
+In file included from src/main.cpp:3:
+include/metropolis.hpp:28:33: note: in passing argument 6 of ‘void metropolis_update_bulk(std::vector<long unsigned int>&, int, const std::vector<long unsigned int>&, const std::vector<long unsigned int>&, const std::vector<long unsigned int>&, const std::vector<unsigned int>&, const std::vector<long long int>&, const std::vector<double>&, size_t, long long int&, long long int&, uint32_t, int)’
+   28 |         const vector<uint32_t>& stride_halo,
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+Compilazione PREFETCH...
+In file included from src/main.cpp:5:
+include/io.hpp:124:19: warning: missing terminating " character
+  124 |     master_printf("N_dim: %d, Npunti: %zu, NThreads: %d, nConfs: %d, Beta: %lg\n,
+      |                   ^
+include/io.hpp:124:19: error: missing terminating " character
+  124 |     master_printf("N_dim: %d, Npunti: %zu, NThreads: %d, nConfs: %d, Beta: %lg\n,
+      |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/io.hpp:125:39: warning: missing terminating " character
+  125 |                     numero di rank: %d", N_dim, N, nThreads, nConfs, Beta,world_size);
+      |                                       ^
+include/io.hpp:125:39: error: missing terminating " character
+  125 |                     numero di rank: %d", N_dim, N, nThreads, nConfs, Beta,world_size);
+      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/io.hpp: In function ‘void print_simulation_info(int, long long int, size_t, int, double, size_t, bool, int)’:
+include/io.hpp:125:21: error: ‘numero’ was not declared in this scope
+  125 |                     numero di rank: %d", N_dim, N, nThreads, nConfs, Beta,world_size);
+      |                     ^~~~~~
+src/main.cpp: In function ‘int main(int, char**)’:
+src/main.cpp:181:71: error: expected ‘)’ before ‘sizeof’
+  181 |     print_simulation_info(N_dim, N, nThreads, nConfs, Beta, world_size
+      |                          ~                                            ^
+      |                                                                       )
+  182 |                           sizeof(uint32_t), true);
+      |                           ~~~~~~                                       
+src/main.cpp:181:26: error: too few arguments to function ‘void print_simulation_info(int, long long int, size_t, int, double, size_t, bool, int)’
+  181 |     print_simulation_info(N_dim, N, nThreads, nConfs, Beta, world_size
+      |     ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  182 |                           sizeof(uint32_t), true);
+      |                           ~~~~~~~~~~~~~~~~~~~~~~~
+In file included from src/main.cpp:5:
+include/io.hpp:121:13: note: declared here
+  121 | inline void print_simulation_info(int N_dim, long long N, size_t nThreads, int nConfs,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+src/main.cpp:351:56: error: invalid initialization of reference of type ‘const std::vector<unsigned int>&’ from expression of type ‘std::vector<long unsigned int>’
+  351 |                                         global_offset, arr,
+      |                                                        ^~~
+In file included from src/main.cpp:3:
+include/metropolis.hpp:28:33: note: in passing argument 6 of ‘void metropolis_update_bulk(std::vector<long unsigned int>&, int, const std::vector<long unsigned int>&, const std::vector<long unsigned int>&, const std::vector<long unsigned int>&, const std::vector<unsigned int>&, const std::vector<long long int>&, const std::vector<double>&, size_t, long long int&, long long int&, uint32_t, int)’
+   28 |         const vector<uint32_t>& stride_halo,
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+
+========== WEAK SCALING 3D ==========
+Volume per rank costante: 200x200x200 = 8000000 siti/rank
+
+--- Weak: 1 rank x 32 threads, 200x200x200 ---
+  [idx]
+[wn-01-01-02.cluster.roma3:785136] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  1 rank 0
+N_dim: 3, Npunti: 8000000, NThreads: 32, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 4 Bytes
+Output file: output/meas_1rank_200x200x200.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 19.688 s (100.0%)
+Computation time:              18.539 s ( 94.2%)
+MPI Communication:              0.312 s (  1.6%)
+I/O (file write):               0.006 s (  0.0%)
+Initialitation time:            0.831 s (  4.2%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.197 s
+  [rowing]
+[wn-01-01-02.cluster.roma3:785177] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  1 rank 0
+N_dim: 3, Npunti: 8000000, NThreads: 32, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 4 Bytes
+Output file: output/meas_1rank_200x200x200.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 19.309 s (100.0%)
+Computation time:              18.327 s ( 94.9%)
+MPI Communication:              0.305 s (  1.6%)
+I/O (file write):               0.002 s (  0.0%)
+Initialitation time:            0.675 s (  3.5%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.193 s
+Bulk (rowing) time: 17.732078 s (0.177321 s/conf) | Boundary time: 0.594664 s (0.005947 s/conf)
+  [prefetch]
+[wn-01-01-02.cluster.roma3:785237] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  1 rank 0
+N_dim: 3, Npunti: 8000000, NThreads: 32, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 4 Bytes
+Output file: output/meas_1rank_200x200x200.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 19.128 s (100.0%)
+Computation time:              18.128 s ( 94.8%)
+MPI Communication:              0.307 s (  1.6%)
+I/O (file write):               0.002 s (  0.0%)
+Initialitation time:            0.690 s (  3.6%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.191 s
+Bulk (rowing) time: 17.544049 s (0.175440 s/conf) | Boundary time: 0.583735 s (0.005837 s/conf)
+
+--- Weak: 2 rank x 16 threads, 400x200x200 ---
+  [idx]
+[wn-01-01-02.cluster.roma3:785286] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:785287] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  2 rank 0
+N_dim: 3, Npunti: 16000000, NThreads: 16, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 4 Bytes
+Output file: output/meas_2rank_400x200x200.txt
+Epilog:  nodes=1:ppn=32
+Epilog:  walltime=03:00:00
+Epilog:  neednodes=1:ppn=32
+Epilog:  cput=399:00:00
+Epilog:  mem=28gb
+Epilog:  cput=00:00:57
+Epilog:  vmem=4927148kb
+Epilog:  walltime=00:01:13
+Epilog:  mem=47112kb
+Epilog:  energy_used=0
+ARG: 31405.qmgr.cluster.roma3 lcerioni theorm3 ising_compare 785054 nodes=1:ppn=32,walltime=03:00:00,neednodes=1:ppn=32,cput=399:00:00,mem=28gb cput=00:00:57,vmem=4927148kb,walltime=00:01:13,mem=47112kb,energy_used=0 al9_mpi_short  271 /var/spool/torque/mom_priv/jobs/31405.qmgr.cluster.roma3.SC
+################################################
+# Summary of resources used by job 31405.qmgr.cluster.roma3
+#
+#  Queue:        al9_mpi_short
+#  User:         lcerioni
+#  Group:        theorm3
+#  JobName:      ising_compare
+#  ArrayID:      31405
+#  SubID:        N/A
+#  Queued:       2026-02-16 20:09:11
+#  Eligible:     2026-02-16 20:09:11
+#  Started:      2026-02-16 20:09:12
+#  Ended:        2026-02-16 20:10:42
+#  Host:         wn-01-01-02
+#  nnodes:       1
+#  ppn:          32
+#  exec_host:    wn-01-01-02.cluster.roma3/0-31
+#  ResReq:       nodes=1:ppn=32,walltime=03:00:00,neednodes=1:ppn=32,cput=399:00:00,mem=28gb
+#  ResUsed:      cputmult=1.0,wallmult=1.0,cput=00:00:57,vmem=4927148kb,walltime=00:01:13,mem=47112kb,energy_used=0
+################################################

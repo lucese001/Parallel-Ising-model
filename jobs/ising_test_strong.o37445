@@ -1,0 +1,156 @@
+Epilog:  nodes=1:ppn=32
+Epilog:  walltime=04:00:00
+Epilog:  neednodes=1:ppn=32
+Epilog:  cput=399:00:00
+Epilog:  mem=28gb
+################################################
+# Summary for job running at Roma3 cluster
+#
+#  JobID:       37445.qmgr.cluster.roma3
+#  JobName:     ising_test_strong
+#  Submitted:   lcerioni.theorm3
+#  Started:     2026-02-19 00:40:27
+#  Queue:       al9_mpi_short
+#  ExecutingOn: wn-01-01-04
+#  ExecHost(s): wn-01-01-04.cluster.roma3/0-31
+#  Nodes:       1
+#  PPN:         N/A
+################################################
+Test strong prefetch cache
+Start: Thu Feb 19 12:40:27 AM CET 2026
+
+Compilazione ROWING...
+cc1plus: fatal error: src/main.cpp: No such file or directory
+compilation terminated.
+
+Compilazione PREFETCH
+cc1plus: fatal error: src/main.cpp: No such file or directory
+compilation terminated.
+
+========== STRONG SCALING ==========
+16000x1600
+
+--- Strong: 1 rank x 32 threads ---
+  [rowing]
+stdbuf: failed to run command ‘./ising_rowing.exe’: No such file or directory
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[63764,1],0]
+  Exit code:    127
+--------------------------------------------------------------------------
+  [prefetch]
+stdbuf: failed to run command ‘./ising_prefetch.exe’: No such file or directory
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[63790,1],0]
+  Exit code:    127
+--------------------------------------------------------------------------
+
+--- Strong: 2 rank x 16 threads ---
+  [rowing]
+stdbuf: failed to run command ‘./ising_rowing.exe’: No such file or directory
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+stdbuf: failed to run command ‘./ising_rowing.exe’: No such file or directory
+  [prefetch]
+stdbuf: failed to run command ‘./ising_prefetch.exe’: No such file or directory
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+stdbuf: failed to run command ‘./ising_prefetch.exe’: No such file or directory
+
+--- Strong: 4 rank x 8 threads ---
+  [rowing]
+stdbuf: failed to run command ‘./ising_rowing.exe’: No such file or directory
+stdbuf: failed to run command ‘./ising_rowing.exe’: No such file or directory
+stdbuf: failed to run command ‘./ising_rowing.exe’: No such file or directory
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+stdbuf: failed to run command ‘./ising_rowing.exe’: No such file or directory
+  [prefetch]
+stdbuf: failed to run command ‘./ising_prefetch.exe’: No such file or directory
+stdbuf: failed to run command ‘./ising_prefetch.exe’: No such file or directory
+stdbuf: failed to run command ‘./ising_prefetch.exe’: No such file or directory
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+stdbuf: failed to run command ‘./ising_prefetch.exe’: No such file or directory
+
+--- Strong: 8 rank x 4 threads ---
+  [rowing]
+stdbuf: failed to run command ‘./ising_rowing.exe’: No such file or directory
+stdbuf: failed to run command ‘./ising_rowing.exe’: No such file or directory
+stdbuf: failed to run command ‘./ising_rowing.exe’: No such file or directory
+stdbuf: failed to run command ‘./ising_rowing.exe’: No such file or directory
+stdbuf: failed to run command ‘./ising_rowing.exe’: No such file or directory
+stdbuf: failed to run command ‘./ising_rowing.exe’: No such file or directory
+stdbuf: failed to run command ‘./ising_rowing.exe’: No such file or directory
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+stdbuf: failed to run command ‘./ising_rowing.exe’: No such file or directory
+  [prefetch]
+stdbuf: failed to run command ‘./ising_prefetch.exe’: No such file or directory
+stdbuf: failed to run command ‘./ising_prefetch.exe’: No such file or directory
+stdbuf: failed to run command ‘./ising_prefetch.exe’: No such file or directory
+stdbuf: failed to run command ‘./ising_prefetch.exe’: No such file or directory
+stdbuf: failed to run command ‘./ising_prefetch.exe’: No such file or directory
+stdbuf: failed to run command ‘./ising_prefetch.exe’: No such file or directory
+stdbuf: failed to run command ‘./ising_prefetch.exe’: No such file or directory
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+stdbuf: failed to run command ‘./ising_prefetch.exe’: No such file or directory
+
+Fine: Thu Feb 19 12:40:37 AM CET 2026
+Epilog:  nodes=1:ppn=32
+Epilog:  walltime=04:00:00
+Epilog:  neednodes=1:ppn=32
+Epilog:  cput=399:00:00
+Epilog:  mem=28gb
+Epilog:  cput=00:00:00
+Epilog:  vmem=0kb
+Epilog:  walltime=00:00:10
+Epilog:  mem=0kb
+Epilog:  energy_used=0
+ARG: 37445.qmgr.cluster.roma3 lcerioni theorm3 ising_test_strong 3321878 nodes=1:ppn=32,walltime=04:00:00,neednodes=1:ppn=32,cput=399:00:00,mem=28gb cput=00:00:00,vmem=0kb,walltime=00:00:10,mem=0kb,energy_used=0 al9_mpi_short  0 /var/spool/torque/mom_priv/jobs/37445.qmgr.cluster.roma3.SC
+################################################
+# Summary of resources used by job 37445.qmgr.cluster.roma3
+#
+#  Queue:        al9_mpi_short
+#  User:         lcerioni
+#  Group:        theorm3
+#  JobName:      ising_test_strong
+#  ArrayID:      37445
+#  SubID:        N/A
+#  Queued:       2026-02-19 00:40:07
+#  Eligible:     2026-02-19 00:40:07
+#  Started:      2026-02-19 00:40:08
+#  Ended:        2026-02-19 00:40:37
+#  Host:         wn-01-01-04
+#  nnodes:       1
+#  ppn:          32
+#  exec_host:    wn-01-01-04.cluster.roma3/0-31
+#  ResReq:       nodes=1:ppn=32,walltime=04:00:00,neednodes=1:ppn=32,cput=399:00:00,mem=28gb
+#  ResUsed:      cputmult=1.0,wallmult=1.0,cput=00:00:00,vmem=0kb,walltime=00:00:10,mem=0kb,energy_used=0
+################################################

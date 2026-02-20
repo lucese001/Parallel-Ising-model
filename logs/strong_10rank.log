@@ -1,0 +1,34 @@
+[wn-03-01-03.cluster.roma3:1234416] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234418] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234416] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234418] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234415] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234417] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234417] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234415] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234424] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234421] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234424] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234420] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234419] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234421] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234420] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234419] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234422] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234422] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234423] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-03-01-03.cluster.roma3:1234423] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+N_dim: 2, Npunti: 256000000, NThreads: 3, nConfs: 100, Beta: 0.45
+numero di rank: 10
+Output file: output/meas_10rank_16000x16000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 84.634 s (100.0%)
+Computation time:              79.334 s ( 93.7%)
+MPI Communication:              2.360 s (  2.8%)
+I/O (file write):               0.003 s (  0.0%)
+Initialitation time:            2.937 s (  3.5%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.846 s
+Bulk (rowing) time: 78.813726 s (0.788137 s/conf) | Boundary time: 0.519844 s (0.005198 s/conf)

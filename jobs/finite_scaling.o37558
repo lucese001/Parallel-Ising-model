@@ -1,0 +1,212 @@
+Epilog:  nodes=1:ppn=32
+Epilog:  walltime=02:00:00
+Epilog:  neednodes=1:ppn=32
+Epilog:  cput=399:00:00
+Epilog:  mem=28gb
+################################################
+# Summary for job running at Roma3 cluster
+#
+#  JobID:       37558.qmgr.cluster.roma3
+#  JobName:     finite_scaling
+#  Submitted:   lcerioni.theorm3
+#  Started:     2026-02-19 23:50:10
+#  Queue:       al9_mpi_short
+#  ExecutingOn: wn-01-01-04
+#  ExecHost(s): wn-01-01-04.cluster.roma3/0-31
+#  Nodes:       1
+#  PPN:         N/A
+################################################
+Finite-size scaling
+Start: Thu Feb 19 11:50:10 PM CET 2026
+
+cc1plus: fatal error: src/main.cpp: No such file or directory
+compilation terminated.
+=== T=0.40  BETA=2.5000000000 ===
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: ./ising_rowing.exe
+Node: wn-01-01-04
+
+while attempting to start process rank 0.
+--------------------------------------------------------------------------
+4 total processes failed to start
+
+=== T=0.405  BETA=2.4691358025 ===
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: ./ising_rowing.exe
+Node: wn-01-01-04
+
+while attempting to start process rank 0.
+--------------------------------------------------------------------------
+4 total processes failed to start
+
+=== T=0.41  BETA=2.4390243902 ===
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: ./ising_rowing.exe
+Node: wn-01-01-04
+
+while attempting to start process rank 0.
+--------------------------------------------------------------------------
+4 total processes failed to start
+
+=== T=0.415  BETA=2.4096385542 ===
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: ./ising_rowing.exe
+Node: wn-01-01-04
+
+while attempting to start process rank 0.
+--------------------------------------------------------------------------
+4 total processes failed to start
+
+=== T=0.42  BETA=2.3809523810 ===
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: ./ising_rowing.exe
+Node: wn-01-01-04
+
+while attempting to start process rank 0.
+--------------------------------------------------------------------------
+4 total processes failed to start
+
+=== T=0.425  BETA=2.3529411765 ===
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: ./ising_rowing.exe
+Node: wn-01-01-04
+
+while attempting to start process rank 0.
+--------------------------------------------------------------------------
+4 total processes failed to start
+
+=== T=0.43  BETA=2.3255813953 ===
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: ./ising_rowing.exe
+Node: wn-01-01-04
+
+while attempting to start process rank 0.
+--------------------------------------------------------------------------
+4 total processes failed to start
+
+=== T=0.435  BETA=2.2988505747 ===
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: ./ising_rowing.exe
+Node: wn-01-01-04
+
+while attempting to start process rank 0.
+--------------------------------------------------------------------------
+4 total processes failed to start
+
+=== T=0.44  BETA=2.2727272727 ===
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: ./ising_rowing.exe
+Node: wn-01-01-04
+
+while attempting to start process rank 0.
+--------------------------------------------------------------------------
+4 total processes failed to start
+
+=== T=0.445  BETA=2.2471910112 ===
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: ./ising_rowing.exe
+Node: wn-01-01-04
+
+while attempting to start process rank 0.
+--------------------------------------------------------------------------
+4 total processes failed to start
+
+=== T=0.45  BETA=2.2222222222 ===
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: ./ising_rowing.exe
+Node: wn-01-01-04
+
+while attempting to start process rank 0.
+--------------------------------------------------------------------------
+4 total processes failed to start
+
+=== T=0.455  BETA=2.1978021978 ===
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: ./ising_rowing.exe
+Node: wn-01-01-04
+
+while attempting to start process rank 0.
+--------------------------------------------------------------------------
+4 total processes failed to start
+
+=== T=0.46  BETA=2.1739130435 ===
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: ./ising_rowing.exe
+Node: wn-01-01-04
+
+while attempting to start process rank 0.
+--------------------------------------------------------------------------
+4 total processes failed to start
+
+Finite size scaling completato
+Fine: Thu Feb 19 11:50:11 PM CET 2026
+Epilog:  nodes=1:ppn=32
+Epilog:  walltime=02:00:00
+Epilog:  neednodes=1:ppn=32
+Epilog:  cput=399:00:00
+Epilog:  mem=28gb
+Epilog:  cput=00:00:00
+Epilog:  vmem=0kb
+Epilog:  walltime=00:00:01
+Epilog:  mem=0kb
+Epilog:  energy_used=0
+ARG: 37558.qmgr.cluster.roma3 lcerioni theorm3 finite_scaling 3929280 nodes=1:ppn=32,walltime=02:00:00,neednodes=1:ppn=32,cput=399:00:00,mem=28gb cput=00:00:00,vmem=0kb,walltime=00:00:01,mem=0kb,energy_used=0 al9_mpi_short  0 /var/spool/torque/mom_priv/jobs/37558.qmgr.cluster.roma3.SC
+################################################
+# Summary of resources used by job 37558.qmgr.cluster.roma3
+#
+#  Queue:        al9_mpi_short
+#  User:         lcerioni
+#  Group:        theorm3
+#  JobName:      finite_scaling
+#  ArrayID:      37558
+#  SubID:        N/A
+#  Queued:       2026-02-19 23:49:49
+#  Eligible:     2026-02-19 23:49:49
+#  Started:      2026-02-19 23:49:51
+#  Ended:        2026-02-19 23:50:11
+#  Host:         wn-01-01-04
+#  nnodes:       1
+#  ppn:          32
+#  exec_host:    wn-01-01-04.cluster.roma3/0-31
+#  ResReq:       nodes=1:ppn=32,walltime=02:00:00,neednodes=1:ppn=32,cput=399:00:00,mem=28gb
+#  ResUsed:      cputmult=1.0,wallmult=1.0,cput=00:00:00,vmem=0kb,walltime=00:00:01,mem=0kb,energy_used=0
+################################################

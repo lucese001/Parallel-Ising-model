@@ -1,0 +1,22 @@
+[wn-01-01-02.cluster.roma3:1738900] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1738898] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1738902] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1738905] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1738904] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1738901] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1738899] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1738903] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+N_dim: 3, Npunti: 125000000, NThreads: 4, nConfs: 100, Beta: 0.45
+numero di rank: 8
+Output file: output/meas_8rank_500x500x500.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 37.074 s (100.0%)
+Computation time:              33.799 s ( 91.2%)
+MPI Communication:              1.677 s (  4.5%)
+I/O (file write):               0.005 s (  0.0%)
+Initialitation time:            1.592 s (  4.3%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.371 s
+Bulk (rowing) time: 32.132979 s (0.321330 s/conf) | Boundary time: 1.666074 s (0.016661 s/conf)

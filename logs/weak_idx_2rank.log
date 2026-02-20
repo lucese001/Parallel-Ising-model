@@ -1,0 +1,16 @@
+[wn-01-01-02.cluster.roma3:787363] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:787364] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  2 rank 0
+N_dim: 3, Npunti: 16000000, NThreads: 16, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 4 Bytes
+Output file: output/meas_2rank_400x200x200.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 19.721 s (100.0%)
+Computation time:              18.550 s ( 94.1%)
+MPI Communication:              0.331 s (  1.7%)
+I/O (file write):               0.006 s (  0.0%)
+Initialitation time:            0.834 s (  4.2%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.197 s

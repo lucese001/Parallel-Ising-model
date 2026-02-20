@@ -1,0 +1,24 @@
+[wn-01-01-08.cluster.roma3:2882041] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2882041] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2882039] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2882039] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2882038] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2882040] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2882038] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2882040] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2882042] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-08.cluster.roma3:2882042] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  5 rank 0
+N_dim: 2, Npunti: 70560000, NThreads: 6, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+Output file: output/meas_5rank_8400x8400.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 28.208 s (100.0%)
+Computation time:              20.574 s ( 72.9%)
+MPI Communication:              0.697 s (  2.5%)
+I/O (file write):               0.022 s (  0.1%)
+Initialitation time:            6.915 s ( 24.5%)
+Overhead:                       0.000 s (  0.0%)
+Configurations:               100
+Time per config:                0.282 s

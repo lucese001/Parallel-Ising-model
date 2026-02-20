@@ -25,9 +25,10 @@ NCONFS=100000
 SEED=124634
 NRANKS=4
 NTHREADS=8
-L0=64
-L1=64
-T=T=(2.0 2.05 2.1 2.15 2.2 2.22 2.24 2.26 2.28 2.30 2.32 2.35 2.4 2.5)
+L0=16
+L1=16
+L3=16
+T=(4.25 4.3 4.35 4.4 4.45 4.5 4.55 4.6 4.65 4.7 4.75)
 
 # Compila
 mpicxx -O3 -std=c++17 -fopenmp -DROWING \
@@ -39,7 +40,7 @@ for i in "${!T[@]}"; do
     BETA=$(awk "BEGIN {printf \"%.10f\", 1.0/${T[$i]}}")
     echo "=== T=${T[$i]}  BETA=$BETA ==="
     mpirun -n $NRANKS ./ising_rowing.exe \
-        $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED \
+        $NDIM $L0 $L1 $L2 $NCONFS $NTHREADS $BETA $SEED \
         2>&1 | tee "logs/finite_scaling_${NRANKS}rank_${L0}x${L1}_T${T[$i]}.log"
     echo ""
 done

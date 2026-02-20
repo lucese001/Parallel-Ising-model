@@ -1,0 +1,341 @@
+Epilog:  nodes=1:ppn=32
+Epilog:  walltime=02:00:00
+Epilog:  neednodes=1:ppn=32
+Epilog:  cput=399:00:00
+Epilog:  pmem=3500mb
+################################################
+# Summary for job running at Roma3 cluster
+#
+#  JobID:       11346.qmgr.cluster.roma3
+#  JobName:     ising_strong
+#  Submitted:   lcerioni.theorm3
+#  Started:     2026-02-10 13:40:17
+#  Queue:       al9_mpi_short
+#  ExecutingOn: cloud-02-04
+#  ExecHost(s): cloud-02-04.cluster.roma3/0-31
+#  Nodes:       1
+#  PPN:         N/A
+################################################
+Strong Scaling Test
+Start: Tue Feb 10 01:40:17 PM CET 2026
+
+Reticolo fisso 8000x8000, 100 configurazioni
+
+=== 1 rank x 32 threads ===
+[cloud-02-04.cluster.roma3:2658509] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2658509] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  1 rank 0
+N_dim: 2, Npunti: 64000000, NThreads: 32, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+[INIT] Rank=0, N_local=64000000, first 5 global_idx: 8000000(+) 8000001(-) 8000002(+) 8000003(-) 8000004(+) 
+Output file: output/meas_1rank_8000x8000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                151.132 s (100.0%)
+Computation time:             139.475 s ( 92.3%)
+MPI Communication:              0.040 s (  0.0%)
+I/O (file write):               0.009 s (  0.0%)
+Initialitation time:           11.607 s (  7.7%)
+Overhead:                      11.607 s (  7.7%)
+Configurations:               100
+Time per config:                1.511 s
+
+=== 2 rank x 16 threads ===
+[cloud-02-04.cluster.roma3:2660111] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2660112] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2660111] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2660112] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  2 rank 0
+N_dim: 2, Npunti: 64000000, NThreads: 16, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+[INIT] Rank=0, N_local=32000000, first 5 global_idx: 0(-) 1(-) 2(-) 3(-) 4(-) 
+[INIT] Rank=1, N_local=32000000, first 5 global_idx: 8004000(-) 4000(-) 8004001(-) 8004002(-) 8004003(-) 
+Output file: output/meas_2rank_8000x8000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 76.149 s (100.0%)
+Computation time:              70.037 s ( 92.0%)
+MPI Communication:              0.039 s (  0.1%)
+I/O (file write):               0.008 s (  0.0%)
+Initialitation time:            6.064 s (  8.0%)
+Overhead:                       6.064 s (  8.0%)
+Configurations:               100
+Time per config:                0.761 s
+
+=== 4 rank x 8 threads ===
+[cloud-02-04.cluster.roma3:2660946] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2660948] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2660946] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2660948] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2660945] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2660947] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2660945] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2660947] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 2, Npunti: 64000000, NThreads: 8, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+[INIT] Rank=0, N_local=16000000, first 5 global_idx: 0(-) 1(-) 2(-) 3(-) 4(-) 
+[INIT] Rank=1, N_local=16000000, first 5 global_idx: 32000000(-) 32000001(+) 32000002(+) 32000003(+) 32000004(+) 
+[INIT] Rank=2, N_local=16000000, first 5 global_idx: 4000(-) 4001(-) 4002(+) 4003(-) 4004(+) 
+[INIT] Rank=3, N_local=16000000, first 5 global_idx: 32004000(-) 32004001(+) 32004002(+) 32004003(-) 32004004(-) 
+Output file: output/meas_4rank_8000x8000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 27.765 s (100.0%)
+Computation time:               9.632 s ( 34.7%)
+MPI Communication:              9.734 s ( 35.1%)
+I/O (file write):               0.008 s (  0.0%)
+Initialitation time:            8.391 s ( 30.2%)
+Overhead:                       8.391 s ( 30.2%)
+Configurations:               100
+Time per config:                0.278 s
+
+=== 8 rank x 4 threads ===
+[cloud-02-04.cluster.roma3:2661285] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661283] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661281] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661279] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661283] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661285] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661279] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661281] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661278] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661278] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661280] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661282] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661280] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661282] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661284] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661284] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  8 rank 0
+N_dim: 2, Npunti: 64000000, NThreads: 4, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+[INIT] Rank=0, N_local=8000000, first 5 global_idx: 0(-) 1(-) 2(-) 3(-) 4(-) 
+[INIT] Rank=1, N_local=8000000, first 5 global_idx: 48000000(-) 48000001(-) 48000002(+) 48000003(+) 48000004(-) 
+[INIT] Rank=2, N_local=8000000, first 5 global_idx: 2000(-) 2001(+) 2002(-) 2003(-) 2004(+) 
+[INIT] Rank=3, N_local=8000000, first 5 global_idx: 32002000(+) 32002001(+) 32002002(+) 32002003(+) 32002004(-) 
+[INIT] Rank=4, N_local=8000000, first 5 global_idx: 4000(-) 4001(-) 4002(+) 4003(-) 4004(+) 
+[INIT] Rank=5, N_local=8000000, first 5 global_idx: 32004000(-) 32004001(+) 32004002(+) 32004003(-) 32004004(-) 
+[INIT] Rank=6, N_local=8000000, first 5 global_idx: 6000(-) 6001(+) 6002(+) 6003(+) 6004(-) 
+[INIT] Rank=7, N_local=8000000, first 5 global_idx: 32006000(-) 32006001(-) 32006002(+) 32006003(+) 32006004(+) 
+Output file: output/meas_8rank_8000x8000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 26.458 s (100.0%)
+Computation time:              19.036 s ( 71.9%)
+MPI Communication:              1.212 s (  4.6%)
+I/O (file write):               0.021 s (  0.1%)
+Initialitation time:            6.189 s ( 23.4%)
+Overhead:                       6.189 s ( 23.4%)
+Configurations:               100
+Time per config:                0.265 s
+
+=== 16 rank x 2 threads ===
+[cloud-02-04.cluster.roma3:2661602] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661602] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661609] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661617] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661617] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661608] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661609] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661608] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661605] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661605] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661606] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661604] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661603] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661610] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661616] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661603] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661606] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661610] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661607] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661604] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661611] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661607] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661611] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661616] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661614] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661615] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661614] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661615] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661612] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661612] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661613] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2661613] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  16 rank 0
+N_dim: 2, Npunti: 64000000, NThreads: 2, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+[INIT] Rank=0, N_local=4000000, first 5 global_idx: 8000000(+) 8000001(-) 8000002(+) 8000003(-) 8000004(+) 
+[INIT] Rank=1, N_local=4000000, first 5 global_idx: 16000000(-) 16000001(-) 16000002(-) 16000003(-) 16000004(+) 
+[INIT] Rank=2, N_local=4000000, first 5 global_idx: 32000000(-) 32000001(+) 32000002(+) 32000003(+) 32000004(+) 
+[INIT] Rank=3, N_local=4000000, first 5 global_idx: 48000000(-) 48000001(-) 48000002(+) 48000003(+) 48000004(-) 
+[INIT] Rank=4, N_local=4000000, first 5 global_idx: 8002000(+) 8002001(+) 8002002(+) 8002003(+) 8002004(+) 
+[INIT] Rank=5, N_local=4000000, first 5 global_idx: 24002000(+) 24002001(-) 24002002(+) 24002003(+) 24002004(-) 
+[INIT] Rank=6, N_local=4000000, first 5 global_idx: 40002000(+) 40002001(-) 40002002(-) 40002003(+) 40002004(-) 
+[INIT] Rank=7, N_local=4000000, first 5 global_idx: 56002000(+) 56002001(+) 56002002(+) 56002003(+) 56002004(+) 
+[INIT] Rank=8, N_local=4000000, first 5 global_idx: 4000(-) 4001(-) 4002(+) 4003(-) 4004(+) 
+[INIT] Rank=9, N_local=4000000, first 5 global_idx: 16004000(+) 16004001(-) 16004002(+) 16004003(-) 16004004(+) 
+[INIT] Rank=10, N_local=4000000, first 5 global_idx: 40004000(-) 40004001(-) 40004002(+) 40004003(+) 40004004(-) 
+[INIT] Rank=11, N_local=4000000, first 5 global_idx: 56004000(-) 56004001(+) 56004002(-) 56004003(-) 56004004(+) 
+[INIT] Rank=12, N_local=4000000, first 5 global_idx: 8006000(+) 8006001(-) 8006002(+) 8006003(+) 8006004(+) 
+[INIT] Rank=13, N_local=4000000, first 5 global_idx: 16006000(+) 16006001(+) 16006002(+) 16006003(+) 16006004(-) 
+[INIT] Rank=14, N_local=4000000, first 5 global_idx: 40006000(-) 40006001(-) 40006002(-) 40006003(+) 40006004(+) 
+[INIT] Rank=15, N_local=4000000, first 5 global_idx: 48006000(+) 48006001(-) 48006002(-) 48006003(+) 48006004(+) 
+Output file: output/meas_16rank_8000x8000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 44.336 s (100.0%)
+Computation time:              36.366 s ( 82.0%)
+MPI Communication:              1.466 s (  3.3%)
+I/O (file write):               0.014 s (  0.0%)
+Initialitation time:            6.490 s ( 14.6%)
+Overhead:                       6.491 s ( 14.6%)
+Configurations:               100
+Time per config:                0.443 s
+
+=== 32 rank x 1 threads ===
+[cloud-02-04.cluster.roma3:2662158] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662158] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662159] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662159] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662164] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662163] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662163] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662166] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662168] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662168] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662167] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662171] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662171] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662174] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662174] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662179] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662180] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662180] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662182] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662182] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662186] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662189] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662189] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662165] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662175] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662173] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662181] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662160] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662178] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662188] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662184] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662164] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662172] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662186] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662179] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662172] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662167] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662161] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662173] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662188] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662166] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662170] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662187] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662169] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662176] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662185] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662178] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662162] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662187] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662165] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662162] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662175] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662177] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662160] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662181] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662177] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662169] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662184] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662161] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662183] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662183] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662176] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662170] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[cloud-02-04.cluster.roma3:2662185] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  32 rank 0
+N_dim: 2, Npunti: 64000000, NThreads: 1, nConfs: 100, Beta: 0.45
+Memory usage of the rng: 8 Bytes
+[INIT] Rank=0, N_local=2000000, first 5 global_idx: 0(-) 1(-) 2(-) 3(-) 4(-) 
+[INIT] Rank=1, N_local=2000000, first 5 global_idx: 16000000(-) 16000001(-) 16000002(-) 16000003(-) 16000004(+) 
+[INIT] Rank=2, N_local=2000000, first 5 global_idx: 32000000(-) 32000001(+) 32000002(+) 32000003(+) 32000004(+) 
+[INIT] Rank=3, N_local=2000000, first 5 global_idx: 48000000(-) 48000001(-) 48000002(+) 48000003(+) 48000004(-) 
+[INIT] Rank=4, N_local=2000000, first 5 global_idx: 1000(-) 1001(-) 1002(+) 1003(+) 1004(-) 
+[INIT] Rank=5, N_local=2000000, first 5 global_idx: 16001000(-) 16001001(+) 16001002(-) 16001003(+) 16001004(-) 
+[INIT] Rank=6, N_local=2000000, first 5 global_idx: 32001000(+) 32001001(-) 32001002(-) 32001003(+) 32001004(-) 
+[INIT] Rank=7, N_local=2000000, first 5 global_idx: 48001000(+) 48001001(-) 48001002(+) 48001003(+) 48001004(+) 
+[INIT] Rank=8, N_local=2000000, first 5 global_idx: 2000(-) 2001(+) 2002(-) 2003(-) 2004(+) 
+[INIT] Rank=9, N_local=2000000, first 5 global_idx: 16002000(+) 16002001(-) 16002002(-) 16002003(+) 16002004(-) 
+[INIT] Rank=10, N_local=2000000, first 5 global_idx: 32002000(+) 32002001(+) 32002002(+) 32002003(+) 32002004(-) 
+[INIT] Rank=11, N_local=2000000, first 5 global_idx: 48002000(+) 48002001(-) 48002002(-) 48002003(+) 48002004(+) 
+[INIT] Rank=12, N_local=2000000, first 5 global_idx: 3000(+) 3001(-) 3002(-) 3003(+) 3004(-) 
+[INIT] Rank=13, N_local=2000000, first 5 global_idx: 16003000(+) 16003001(+) 16003002(-) 16003003(+) 16003004(-) 
+[INIT] Rank=14, N_local=2000000, first 5 global_idx: 32003000(+) 32003001(+) 32003002(-) 32003003(-) 32003004(+) 
+[INIT] Rank=15, N_local=2000000, first 5 global_idx: 48003000(-) 48003001(-) 48003002(-) 48003003(+) 48003004(-) 
+[INIT] Rank=16, N_local=2000000, first 5 global_idx: 4000(-) 4001(-) 4002(+) 4003(-) 4004(+) 
+[INIT] Rank=17, N_local=2000000, first 5 global_idx: 16004000(+) 16004001(-) 16004002(+) 16004003(-) 16004004(+) 
+[INIT] Rank=18, N_local=2000000, first 5 global_idx: 32004000(-) 32004001(+) 32004002(+) 32004003(-) 32004004(-) 
+[INIT] Rank=19, N_local=2000000, first 5 global_idx: 48004000(-) 48004001(+) 48004002(-) 48004003(-) 48004004(+) 
+[INIT] Rank=20, N_local=2000000, first 5 global_idx: 5000(+) 5001(-) 5002(-) 5003(-) 5004(-) 
+[INIT] Rank=21, N_local=2000000, first 5 global_idx: 16005000(-) 16005001(-) 16005002(-) 16005003(-) 16005004(+) 
+[INIT] Rank=22, N_local=2000000, first 5 global_idx: 32005000(+) 32005001(+) 32005002(-) 32005003(-) 32005004(+) 
+[INIT] Rank=23, N_local=2000000, first 5 global_idx: 48005000(+) 48005001(-) 48005002(-) 48005003(+) 48005004(-) 
+[INIT] Rank=24, N_local=2000000, first 5 global_idx: 6000(-) 6001(+) 6002(+) 6003(+) 6004(-) 
+[INIT] Rank=25, N_local=2000000, first 5 global_idx: 16006000(+) 16006001(+) 16006002(+) 16006003(+) 16006004(-) 
+[INIT] Rank=26, N_local=2000000, first 5 global_idx: 32006000(-) 32006001(-) 32006002(+) 32006003(+) 32006004(+) 
+[INIT] Rank=27, N_local=2000000, first 5 global_idx: 48006000(+) 48006001(-) 48006002(-) 48006003(+) 48006004(+) 
+[INIT] Rank=28, N_local=2000000, first 5 global_idx: 7000(-) 7001(+) 7002(-) 7003(+) 7004(+) 
+[INIT] Rank=29, N_local=2000000, first 5 global_idx: 16007000(+) 16007001(-) 16007002(+) 16007003(+) 16007004(+) 
+[INIT] Rank=30, N_local=2000000, first 5 global_idx: 32007000(+) 32007001(-) 32007002(+) 32007003(+) 32007004(-) 
+[INIT] Rank=31, N_local=2000000, first 5 global_idx: 48007000(-) 48007001(+) 48007002(+) 48007003(-) 48007004(+) 
+Output file: output/meas_32rank_8000x8000.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                155.568 s (100.0%)
+Computation time:             133.687 s ( 85.9%)
+MPI Communication:              3.114 s (  2.0%)
+I/O (file write):               0.016 s (  0.0%)
+Initialitation time:           18.751 s ( 12.1%)
+Overhead:                      18.752 s ( 12.1%)
+Configurations:               100
+Time per config:                1.556 s
+
+Strong Scaling Completato
+Fine: Tue Feb 10 01:48:24 PM CET 2026
+Epilog:  nodes=1:ppn=32
+Epilog:  walltime=02:00:00
+Epilog:  neednodes=1:ppn=32
+Epilog:  cput=399:00:00
+Epilog:  pmem=3500mb
+Epilog:  cput=00:34:56
+Epilog:  vmem=18998664kb
+Epilog:  walltime=00:08:07
+Epilog:  mem=1525148kb
+Epilog:  energy_used=0
+ARG: 11346.qmgr.cluster.roma3 lcerioni theorm3 ising_strong 2658375 nodes=1:ppn=32,walltime=02:00:00,neednodes=1:ppn=32,cput=399:00:00,pmem=3500mb cput=00:34:56,vmem=18998664kb,walltime=00:08:07,mem=1525148kb,energy_used=0 al9_mpi_short  0 /var/spool/torque/mom_priv/jobs/11346.qmgr.cluster.roma3.SC
+################################################
+# Summary of resources used by job 11346.qmgr.cluster.roma3
+#
+#  Queue:        al9_mpi_short
+#  User:         lcerioni
+#  Group:        theorm3
+#  JobName:      ising_strong
+#  ArrayID:      11346
+#  SubID:        N/A
+#  Queued:       2026-02-10 13:40:02
+#  Eligible:     2026-02-10 13:40:02
+#  Started:      2026-02-10 13:40:04
+#  Ended:        2026-02-10 13:48:24
+#  Host:         cloud-02-04
+#  nnodes:       1
+#  ppn:          32
+#  exec_host:    cloud-02-04.cluster.roma3/0-31
+#  ResReq:       nodes=1:ppn=32,walltime=02:00:00,neednodes=1:ppn=32,cput=399:00:00,pmem=3500mb
+#  ResUsed:      cputmult=1.0,wallmult=1.0,cput=00:34:56,vmem=18998664kb,walltime=00:08:07,mem=1525148kb,energy_used=0
+################################################

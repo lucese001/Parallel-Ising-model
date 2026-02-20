@@ -1,0 +1,119 @@
+Epilog:  nodes=1:ppn=32
+Epilog:  walltime=00:30:00
+Epilog:  neednodes=1:ppn=32
+Epilog:  cput=399:00:00
+Epilog:  mem=28gb
+################################################
+# Summary for job running at Roma3 cluster
+#
+#  JobID:       37443.qmgr.cluster.roma3
+#  JobName:     ising_repro
+#  Submitted:   lcerioni.theorm3
+#  Started:     2026-02-19 00:17:53
+#  Queue:       al9_mpi_short
+#  ExecutingOn: wn-01-01-02
+#  ExecHost(s): wn-01-01-02.cluster.roma3/34-65
+#  Nodes:       1
+#  PPN:         N/A
+################################################
+Test riproducibilita 
+Start: Thu Feb 19 12:17:53 AM CET 2026
+Cpus_allowed_list:	0-71
+--- 1 rank x 32 threads ---
+[wn-01-01-02.cluster.roma3:1730847] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1730847] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+N_dim: 2, Npunti: 14400, NThreads: 32, nConfs: 1000, Beta: 0.45
+numero di rank: 1
+Output file: output/meas_1rank_120x120.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                  1.134 s (100.0%)
+Computation time:               0.955 s ( 84.2%)
+MPI Communication:              0.017 s (  1.5%)
+I/O (file write):               0.016 s (  1.4%)
+Initialitation time:            0.144 s ( 12.7%)
+Overhead:                       0.002 s (  0.2%)
+Configurations:               1000
+Time per config:                0.001 s
+Bulk (rowing) time: 0.632664 s (0.000633 s/conf) | Boundary time: 0.321881 s (0.000322 s/conf)
+
+--- 2 rank x 16 threads ---
+[wn-01-01-02.cluster.roma3:1730886] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1730887] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1730887] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1730886] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+N_dim: 2, Npunti: 14400, NThreads: 16, nConfs: 1000, Beta: 0.45
+numero di rank: 2
+Output file: output/meas_2rank_120x120.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                  0.549 s (100.0%)
+Computation time:               0.447 s ( 81.4%)
+MPI Communication:              0.024 s (  4.3%)
+I/O (file write):               0.014 s (  2.5%)
+Initialitation time:            0.063 s ( 11.5%)
+Overhead:                       0.001 s (  0.2%)
+Configurations:               1000
+Time per config:                0.001 s
+Bulk (rowing) time: 0.296157 s (0.000296 s/conf) | Boundary time: 0.150938 s (0.000151 s/conf)
+
+--- 4 rank x 8 threads ---
+[wn-01-01-02.cluster.roma3:1730928] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1730930] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1730928] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1730930] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1730929] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1730929] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1730931] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-02.cluster.roma3:1730931] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+N_dim: 2, Npunti: 14400, NThreads: 8, nConfs: 1000, Beta: 0.45
+numero di rank: 4
+Output file: output/meas_4rank_120x120.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                  2.917 s (100.0%)
+Computation time:               1.045 s ( 35.8%)
+MPI Communication:              1.733 s ( 59.4%)
+I/O (file write):               0.011 s (  0.4%)
+Initialitation time:            0.125 s (  4.3%)
+Overhead:                       0.002 s (  0.1%)
+Configurations:               1000
+Time per config:                0.003 s
+Bulk (rowing) time: 0.607008 s (0.000607 s/conf) | Boundary time: 0.437740 s (0.000438 s/conf)
+
+Confronto output
+OK: 1 rank vs 2 rank -> IDENTICI
+OK: 1 rank vs 4 rank -> IDENTICI
+RIPRODUCIBILITA PASSATA
+Fine: Thu Feb 19 12:18:01 AM CET 2026
+Epilog:  nodes=1:ppn=32
+Epilog:  walltime=00:30:00
+Epilog:  neednodes=1:ppn=32
+Epilog:  cput=399:00:00
+Epilog:  mem=28gb
+Epilog:  cput=00:01:03
+Epilog:  vmem=0kb
+Epilog:  walltime=00:00:08
+Epilog:  mem=0kb
+Epilog:  energy_used=0
+ARG: 37443.qmgr.cluster.roma3 lcerioni theorm3 ising_repro 1730762 nodes=1:ppn=32,walltime=00:30:00,neednodes=1:ppn=32,cput=399:00:00,mem=28gb cput=00:01:03,vmem=0kb,walltime=00:00:08,mem=0kb,energy_used=0 al9_mpi_short  0 /var/spool/torque/mom_priv/jobs/37443.qmgr.cluster.roma3.SC
+################################################
+# Summary of resources used by job 37443.qmgr.cluster.roma3
+#
+#  Queue:        al9_mpi_short
+#  User:         lcerioni
+#  Group:        theorm3
+#  JobName:      ising_repro
+#  ArrayID:      37443
+#  SubID:        N/A
+#  Queued:       2026-02-19 00:17:32
+#  Eligible:     2026-02-19 00:17:32
+#  Started:      2026-02-19 00:17:34
+#  Ended:        2026-02-19 00:18:01
+#  Host:         wn-01-01-02
+#  nnodes:       1
+#  ppn:          32
+#  exec_host:    wn-01-01-02.cluster.roma3/34-65
+#  ResReq:       nodes=1:ppn=32,walltime=00:30:00,neednodes=1:ppn=32,cput=399:00:00,mem=28gb
+#  ResUsed:      cputmult=1.0,wallmult=1.0,cput=00:01:03,vmem=0kb,walltime=00:00:08,mem=0kb,energy_used=0
+################################################
