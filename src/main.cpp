@@ -237,7 +237,7 @@ int main(int argc, char** argv) {
         // Formatta T con precisione sufficiente, rimuovi zeri finali
         char Tbuf[32];
         snprintf(Tbuf, sizeof(Tbuf), "%.6g", T);
-        fname += "_T=" + string(Tbuf) + ".txt";
+        fname += "_T" + string(Tbuf) + ".txt";
 
         measFile = fopen(fname.c_str(), "w");
         if (!measFile) {
@@ -385,8 +385,6 @@ int main(int argc, char** argv) {
             double m = (double)Mag / (double)N;
             fprintf(measFile, "%lg %lg\n", e, m);
             fflush(measFile);
-
-            master_printf("iConf=%d  E=%.6g  M=%.6g\n", iConf, e, m);
 
             ioTime.stop();
         }
