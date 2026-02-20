@@ -125,12 +125,13 @@ void initialize_configuration(vector<int8_t>& conf_local,
                                      const vector<size_t>& local_L_halo,
                                      const vector<size_t>& global_offset,
                                      const vector<size_t>& arr,
-                                     uint32_t rng_seed) {
+                                     uint32_t rng_seed,
+                                     bool cold_start = false) {
     // Inizializza
 
     #pragma omp parallel for schedule(static)
         for (size_t i = 0; i < conf_local.size(); ++i) conf_local[i] = 0;
-    
+
     #ifdef DEBUG
     vector<size_t> debug_global_idx;
     vector<int8_t> debug_spins;
@@ -147,18 +148,13 @@ void initialize_configuration(vector<int8_t>& conf_local,
 
             size_t global_index = compute_global_index(i, local_L, global_offset, arr, N_dim,
                                                        coord_local.data(), coord_global.data());
-            uint32_t rand_val = philox_rand(global_index, 0, rng_seed);
-            int8_t spin = (rand_val & 1) & 1 ? 1 : -1;
-
-            #ifdef DEBUG
-            #pragma omp critical
-            {
-                if (debug_global_idx.size() < 5) {
-                    debug_global_idx.push_back(global_index);
-                    debug_spins.push_back(spin);
-                }
+            int8_t spin;
+            if (cold_start) {
+                spin = 1;
+            } else {
+                uint32_t rand_val = philox_rand(global_index, 0, rng_seed);
+                spin = (rand_val >> 16) & 1 ? 1 : -1;
             }
-            #endif
 
             for (int d = 0; d < N_dim; ++d)
                 coord_halo[d] = coord_local[d] + 1;

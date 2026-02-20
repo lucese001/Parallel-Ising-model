@@ -3,9 +3,13 @@
 #PBS -l nodes=1:ppn=32
 #PBS -l walltime=02:00:00
 #PBS -j oe
+#PBS -o /dev/null
 
 cd $PBS_O_WORKDIR
 mkdir -p logs output
+
+LOGFILE="logs/finite_scaling_${PBS_JOBID}.log"
+exec > "$LOGFILE" 2>&1
 
 # Setup MPI
 unset LD_LIBRARY_PATH
@@ -38,10 +42,15 @@ mpicxx -O3 -std=c++17 -fopenmp -DROWING \
 for i in "${!T[@]}"; do
 
     BETA=$(awk "BEGIN {printf \"%.10f\", 1.0/${T[$i]}}")
-    echo "=== T=${T[$i]}  BETA=$BETA ==="
+
+    echo "=== T=${T[$i]}  BETA=$BETA  (hot) ==="
     mpirun -n $NRANKS ./ising_rowing.exe \
-        $NDIM $L0 $L1 $L2 $NCONFS $NTHREADS $BETA $SEED \
-        2>&1 | tee "logs/finite_scaling_${NRANKS}rank_${L0}x${L1}_T${T[$i]}.log"
+        $NDIM $L0 $L1 $L2 $NCONFS $NTHREADS $BETA $SEED
+    echo ""
+
+    echo "=== T=${T[$i]}  BETA=$BETA  (cold) ==="
+    mpirun -n $NRANKS ./ising_rowing.exe \
+        $NDIM $L0 $L1 $L2 $NCONFS $NTHREADS $BETA $SEED -cold
     echo ""
 done
 

@@ -49,14 +49,28 @@ int main(int argc, char** argv) {
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
       master_printf("world_size  %d rank %d\n", world_size, world_rank);
     
+    // Controlla il flag cold: serve per avere 2 simulazioni, una con conf
+    // iniziale random e un' altra dove tutti gli spin sono allineati.
+    bool cold_start = false;
+    for (int i = 1; i < argc; ++i) {
+        if (strcmp(argv[i], "-cold") == 0) {
+            cold_start = true;
+            // Rimuovi il flag dagli argomenti
+            for (int j = i; j < argc - 1; ++j)
+                argv[j] = argv[j + 1];
+            argc--;
+            break;
+        }
+    }
+
     // Lettura parametri: da riga di comando o da file
-    // Uso: ./ising_philox.exe <N_dim> <L0> [L1 ...] <nConfs> <nThreads> <Beta> <seed>
+
     if (world_rank == 0) {
         if (argc > 1) {
             N_dim = atoi(argv[1]);
             int expected = N_dim + 6;
             if (argc != expected) {
-                fprintf(stderr, "Uso: %s <N_dim> <L0> [L1 ...] <nConfs> <nThreads> <Beta> <seed>\n", argv[0]);
+                fprintf(stderr, "Uso: %s <N_dim> <L0> [L1 ...] <nConfs> <nThreads> <Beta> <seed> [-cold]\n", argv[0]);
                 MPI_Abort(MPI_COMM_WORLD, 1);
                 return 1;
             }
@@ -86,6 +100,7 @@ int main(int argc, char** argv) {
     MPI_Bcast(&nThreads, 1, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(&Beta, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&seed, sizeof(size_t), MPI_BYTE, 0, MPI_COMM_WORLD);
+    { int cs = cold_start; MPI_Bcast(&cs, 1, MPI_INT, 0, MPI_COMM_WORLD); cold_start = cs; }
 
     omp_set_num_threads((int)nThreads);
     
@@ -173,7 +188,8 @@ int main(int argc, char** argv) {
 
     //Genera la prima configurazione
     initialize_configuration(conf_local, N_local, N_dim, local_L,
-                            local_L_halo,global_offset, arr, rng_seed);
+                            local_L_halo,global_offset, arr, rng_seed,
+                            cold_start);
 
     // Costruisce le dimensioni delle facce e la sua posizione
     vector<FaceInfo> faces = build_faces(local_L, N_dim);
@@ -237,7 +253,7 @@ int main(int argc, char** argv) {
         // Formatta T con precisione sufficiente, rimuovi zeri finali
         char Tbuf[32];
         snprintf(Tbuf, sizeof(Tbuf), "%.6g", T);
-        fname += "_T" + string(Tbuf) + ".txt";
+        fname += "_T" + string(Tbuf) + (cold_start ? "_cold" : "_hot") + ".txt";
 
         measFile = fopen(fname.c_str(), "w");
         if (!measFile) {
