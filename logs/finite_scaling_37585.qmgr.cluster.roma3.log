@@ -1,0 +1,555 @@
+Finite-size scaling
+Start: Fri Feb 20 12:35:35 PM CET 2026
+
+=== T=4.25  BETA=0.2352941176  (hot) ===
+[wn-01-01-04.cluster.roma3:82037] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82039] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82036] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82038] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82036] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82038] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82039] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82037] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.235294
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.25_hot.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.533 s (100.0%)
+Computation time:               6.134 s ( 58.2%)
+MPI Communication:              3.284 s ( 31.2%)
+I/O (file write):               0.966 s (  9.2%)
+Initialitation time:            0.073 s (  0.7%)
+Overhead:                       0.075 s (  0.7%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 3.993269 s (0.000040 s/conf) | Boundary time: 2.140848 s (0.000021 s/conf)
+
+=== T=4.25  BETA=0.2352941176  (cold) ===
+[wn-01-01-04.cluster.roma3:82101] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82103] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82104] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82102] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82101] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82103] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82104] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82102] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.235294
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.25_cold.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.741 s (100.0%)
+Computation time:               6.199 s ( 57.7%)
+MPI Communication:              3.450 s ( 32.1%)
+I/O (file write):               0.949 s (  8.8%)
+Initialitation time:            0.067 s (  0.6%)
+Overhead:                       0.076 s (  0.7%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 4.029540 s (0.000040 s/conf) | Boundary time: 2.169258 s (0.000022 s/conf)
+
+=== T=4.3  BETA=0.2325581395  (hot) ===
+[wn-01-01-04.cluster.roma3:82151] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82150] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82153] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82152] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82151] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82153] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82152] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82150] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.232558
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.3_hot.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.627 s (100.0%)
+Computation time:               6.242 s ( 58.7%)
+MPI Communication:              3.259 s ( 30.7%)
+I/O (file write):               0.972 s (  9.2%)
+Initialitation time:            0.068 s (  0.6%)
+Overhead:                       0.086 s (  0.8%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 4.054380 s (0.000041 s/conf) | Boundary time: 2.187472 s (0.000022 s/conf)
+
+=== T=4.3  BETA=0.2325581395  (cold) ===
+[wn-01-01-04.cluster.roma3:82206] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82205] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82207] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82208] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82206] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82208] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82207] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82205] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.232558
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.3_cold.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.515 s (100.0%)
+Computation time:               6.152 s ( 58.5%)
+MPI Communication:              3.265 s ( 31.0%)
+I/O (file write):               0.949 s (  9.0%)
+Initialitation time:            0.069 s (  0.7%)
+Overhead:                       0.080 s (  0.8%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 3.957813 s (0.000040 s/conf) | Boundary time: 2.193817 s (0.000022 s/conf)
+
+=== T=4.35  BETA=0.2298850575  (hot) ===
+[wn-01-01-04.cluster.roma3:82251] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82253] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82254] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82252] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82253] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82251] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82252] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82254] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.229885
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.35_hot.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.461 s (100.0%)
+Computation time:               6.098 s ( 58.3%)
+MPI Communication:              3.264 s ( 31.2%)
+I/O (file write):               0.955 s (  9.1%)
+Initialitation time:            0.069 s (  0.7%)
+Overhead:                       0.075 s (  0.7%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 3.966744 s (0.000040 s/conf) | Boundary time: 2.131145 s (0.000021 s/conf)
+
+=== T=4.35  BETA=0.2298850575  (cold) ===
+[wn-01-01-04.cluster.roma3:82298] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82300] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82301] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82299] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82301] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82300] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82299] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82298] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.229885
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.35_cold.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.419 s (100.0%)
+Computation time:               6.077 s ( 58.3%)
+MPI Communication:              3.229 s ( 31.0%)
+I/O (file write):               0.968 s (  9.3%)
+Initialitation time:            0.071 s (  0.7%)
+Overhead:                       0.075 s (  0.7%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 3.941939 s (0.000039 s/conf) | Boundary time: 2.134917 s (0.000021 s/conf)
+
+=== T=4.4  BETA=0.2272727273  (hot) ===
+[wn-01-01-04.cluster.roma3:82363] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82365] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82366] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82364] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82363] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82365] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82366] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82364] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.227273
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.4_hot.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.619 s (100.0%)
+Computation time:               6.225 s ( 58.6%)
+MPI Communication:              3.290 s ( 31.0%)
+I/O (file write):               0.958 s (  9.0%)
+Initialitation time:            0.069 s (  0.6%)
+Overhead:                       0.077 s (  0.7%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 4.005592 s (0.000040 s/conf) | Boundary time: 2.219757 s (0.000022 s/conf)
+
+=== T=4.4  BETA=0.2272727273  (cold) ===
+[wn-01-01-04.cluster.roma3:82408] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82410] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82411] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82409] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82410] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82408] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82409] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82411] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.227273
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.4_cold.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.982 s (100.0%)
+Computation time:               6.284 s ( 57.2%)
+MPI Communication:              3.602 s ( 32.8%)
+I/O (file write):               0.950 s (  8.6%)
+Initialitation time:            0.066 s (  0.6%)
+Overhead:                       0.080 s (  0.7%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 4.058838 s (0.000041 s/conf) | Boundary time: 2.224837 s (0.000022 s/conf)
+
+=== T=4.45  BETA=0.2247191011  (hot) ===
+[wn-01-01-04.cluster.roma3:82456] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82458] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82459] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82457] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82457] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82459] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82458] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82456] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.224719
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.45_hot.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.574 s (100.0%)
+Computation time:               6.161 s ( 58.3%)
+MPI Communication:              3.283 s ( 31.0%)
+I/O (file write):               0.987 s (  9.3%)
+Initialitation time:            0.070 s (  0.7%)
+Overhead:                       0.073 s (  0.7%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 3.987862 s (0.000040 s/conf) | Boundary time: 2.172971 s (0.000022 s/conf)
+
+=== T=4.45  BETA=0.2247191011  (cold) ===
+[wn-01-01-04.cluster.roma3:82515] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82517] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82518] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82516] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82516] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82518] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82515] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82517] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.224719
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.45_cold.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.490 s (100.0%)
+Computation time:               6.147 s ( 58.6%)
+MPI Communication:              3.221 s ( 30.7%)
+I/O (file write):               0.973 s (  9.3%)
+Initialitation time:            0.067 s (  0.6%)
+Overhead:                       0.082 s (  0.8%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 3.959922 s (0.000040 s/conf) | Boundary time: 2.187349 s (0.000022 s/conf)
+
+=== T=4.5  BETA=0.2222222222  (hot) ===
+[wn-01-01-04.cluster.roma3:82563] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82565] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82566] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82564] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82565] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82563] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82564] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82566] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.222222
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.5_hot.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.588 s (100.0%)
+Computation time:               6.212 s ( 58.7%)
+MPI Communication:              3.271 s ( 30.9%)
+I/O (file write):               0.956 s (  9.0%)
+Initialitation time:            0.066 s (  0.6%)
+Overhead:                       0.083 s (  0.8%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 4.008815 s (0.000040 s/conf) | Boundary time: 2.203223 s (0.000022 s/conf)
+
+=== T=4.5  BETA=0.2222222222  (cold) ===
+[wn-01-01-04.cluster.roma3:82609] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82611] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82608] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82610] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82609] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82611] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82610] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82608] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.222222
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.5_cold.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.698 s (100.0%)
+Computation time:               6.251 s ( 58.4%)
+MPI Communication:              3.317 s ( 31.0%)
+I/O (file write):               0.985 s (  9.2%)
+Initialitation time:            0.065 s (  0.6%)
+Overhead:                       0.080 s (  0.7%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 4.031151 s (0.000040 s/conf) | Boundary time: 2.219846 s (0.000022 s/conf)
+
+=== T=4.55  BETA=0.2197802198  (hot) ===
+[wn-01-01-04.cluster.roma3:82669] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82671] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82670] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82672] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82670] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82672] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82671] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82669] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.21978
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.55_hot.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.671 s (100.0%)
+Computation time:               6.286 s ( 58.9%)
+MPI Communication:              3.279 s ( 30.7%)
+I/O (file write):               0.951 s (  8.9%)
+Initialitation time:            0.071 s (  0.7%)
+Overhead:                       0.084 s (  0.8%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 4.058894 s (0.000041 s/conf) | Boundary time: 2.227023 s (0.000022 s/conf)
+
+=== T=4.55  BETA=0.2197802198  (cold) ===
+[wn-01-01-04.cluster.roma3:82716] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82718] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82719] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82717] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82718] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82716] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82719] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82717] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.21978
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.55_cold.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.645 s (100.0%)
+Computation time:               6.254 s ( 58.7%)
+MPI Communication:              3.262 s ( 30.6%)
+I/O (file write):               0.978 s (  9.2%)
+Initialitation time:            0.069 s (  0.6%)
+Overhead:                       0.083 s (  0.8%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 3.987675 s (0.000040 s/conf) | Boundary time: 2.265907 s (0.000023 s/conf)
+
+=== T=4.6  BETA=0.2173913043  (hot) ===
+[wn-01-01-04.cluster.roma3:82762] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82764] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82765] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82763] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82763] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82764] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82765] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82762] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.217391
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.6_hot.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.596 s (100.0%)
+Computation time:               6.181 s ( 58.3%)
+MPI Communication:              3.279 s ( 30.9%)
+I/O (file write):               0.991 s (  9.3%)
+Initialitation time:            0.069 s (  0.6%)
+Overhead:                       0.076 s (  0.7%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 3.986503 s (0.000040 s/conf) | Boundary time: 2.194520 s (0.000022 s/conf)
+
+=== T=4.6  BETA=0.2173913043  (cold) ===
+[wn-01-01-04.cluster.roma3:82818] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82820] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82817] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82819] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82819] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82817] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82820] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82818] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.217391
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.6_cold.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.813 s (100.0%)
+Computation time:               6.239 s ( 57.7%)
+MPI Communication:              3.402 s ( 31.5%)
+I/O (file write):               1.030 s (  9.5%)
+Initialitation time:            0.066 s (  0.6%)
+Overhead:                       0.076 s (  0.7%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 4.005987 s (0.000040 s/conf) | Boundary time: 2.232999 s (0.000022 s/conf)
+
+=== T=4.65  BETA=0.2150537634  (hot) ===
+[wn-01-01-04.cluster.roma3:82865] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82867] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82868] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82866] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82865] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82867] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82868] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82866] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.215054
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.65_hot.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.706 s (100.0%)
+Computation time:               6.287 s ( 58.7%)
+MPI Communication:              3.294 s ( 30.8%)
+I/O (file write):               0.966 s (  9.0%)
+Initialitation time:            0.075 s (  0.7%)
+Overhead:                       0.085 s (  0.8%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 4.023701 s (0.000040 s/conf) | Boundary time: 2.262928 s (0.000023 s/conf)
+
+=== T=4.65  BETA=0.2150537634  (cold) ===
+[wn-01-01-04.cluster.roma3:82931] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82933] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82934] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82932] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82934] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82932] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82933] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:82931] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.215054
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.65_cold.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.759 s (100.0%)
+Computation time:               6.263 s ( 58.2%)
+MPI Communication:              3.317 s ( 30.8%)
+I/O (file write):               1.034 s (  9.6%)
+Initialitation time:            0.067 s (  0.6%)
+Overhead:                       0.077 s (  0.7%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 4.034532 s (0.000040 s/conf) | Boundary time: 2.228533 s (0.000022 s/conf)
+
+=== T=4.7  BETA=0.2127659574  (hot) ===
+[wn-01-01-04.cluster.roma3:83758] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:83753] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:83756] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:83760] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:83758] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:83753] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:83760] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:83756] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.212766
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.7_hot.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.629 s (100.0%)
+Computation time:               6.205 s ( 58.4%)
+MPI Communication:              3.289 s ( 30.9%)
+I/O (file write):               0.993 s (  9.3%)
+Initialitation time:            0.068 s (  0.6%)
+Overhead:                       0.074 s (  0.7%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 3.983083 s (0.000040 s/conf) | Boundary time: 2.222365 s (0.000022 s/conf)
+
+=== T=4.7  BETA=0.2127659574  (cold) ===
+[wn-01-01-04.cluster.roma3:84273] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84270] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84272] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84271] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84272] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84270] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84273] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84271] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.212766
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.7_cold.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.677 s (100.0%)
+Computation time:               6.205 s ( 58.1%)
+MPI Communication:              3.310 s ( 31.0%)
+I/O (file write):               1.015 s (  9.5%)
+Initialitation time:            0.069 s (  0.6%)
+Overhead:                       0.079 s (  0.7%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 3.983625 s (0.000040 s/conf) | Boundary time: 2.221279 s (0.000022 s/conf)
+
+=== T=4.75  BETA=0.2105263158  (hot) ===
+[wn-01-01-04.cluster.roma3:84326] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84328] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84329] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84327] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84328] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84326] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84327] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84329] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.210526
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.75_hot.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.620 s (100.0%)
+Computation time:               6.222 s ( 58.6%)
+MPI Communication:              3.242 s ( 30.5%)
+I/O (file write):               1.011 s (  9.5%)
+Initialitation time:            0.067 s (  0.6%)
+Overhead:                       0.078 s (  0.7%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 4.002981 s (0.000040 s/conf) | Boundary time: 2.219033 s (0.000022 s/conf)
+
+=== T=4.75  BETA=0.2105263158  (cold) ===
+[wn-01-01-04.cluster.roma3:84372] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84374] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84375] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84373] mca_base_component_repository_open: unable to open mca_btl_openib: libosmcomp.so.4: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84374] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84372] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84373] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+[wn-01-01-04.cluster.roma3:84375] mca_base_component_repository_open: unable to open mca_mtl_psm: libpsm_infinipath.so.1: cannot open shared object file: No such file or directory (ignored)
+world_size  4 rank 0
+N_dim: 3, Npunti: 32768, NThreads: 8, nConfs: 100000, Beta: 0.210526
+Memory usage of the rng: 4 Bytes
+Output file: output/32x32x32/meas_T4.75_cold.txt
+
+          PERFORMANCE PROFILING        
+Total runtime:                 10.604 s (100.0%)
+Computation time:               6.214 s ( 58.6%)
+MPI Communication:              3.256 s ( 30.7%)
+I/O (file write):               0.989 s (  9.3%)
+Initialitation time:            0.067 s (  0.6%)
+Overhead:                       0.077 s (  0.7%)
+Configurations:               100000
+Time per config:                0.000 s
+Bulk (rowing) time: 3.993851 s (0.000040 s/conf) | Boundary time: 2.220190 s (0.000022 s/conf)
+
+Finite size scaling completato
+Fine: Fri Feb 20 12:39:35 PM CET 2026

@@ -29,10 +29,9 @@ NCONFS=100000
 SEED=124634
 NRANKS=4
 NTHREADS=8
-L0=16
-L1=16
-L2=16
-T=(4.25 4.3 4.35 4.4 4.45 4.5 4.55 4.6 4.65 4.7 4.75)
+L0=256
+L1=256
+T=(2.10 2.15 2.2 2.25 2.3 2.35 2.4 2.45 2.5 2.55 2.6 2.65 2.7 2.75 2.8 2.85)
 
 # Compila
 mpicxx -O3 -std=c++17 -fopenmp -DROWING \
@@ -45,7 +44,7 @@ for i in "${!T[@]}"; do
 
     echo "=== T=${T[$i]}  BETA=$BETA  (hot) ==="
     mpirun -n $NRANKS ./ising_rowing.exe \
-        $NDIM $L0 $L1 $L2 $NCONFS $NTHREADS $BETA $SEED
+        $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED
     echo ""
 
     echo "=== T=${T[$i]}  BETA=$BETA  (cold) ==="
