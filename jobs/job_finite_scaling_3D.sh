@@ -1,5 +1,5 @@
 #!/bin/bash
-#PBS -N finite_scaling
+#PBS -N finite_scaling_3D
 #PBS -l nodes=1:ppn=32
 #PBS -l walltime=02:00:00
 #PBS -j oe
