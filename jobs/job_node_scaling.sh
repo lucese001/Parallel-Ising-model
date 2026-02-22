@@ -18,8 +18,10 @@ export PATH=$MPI_ROOT/bin:$PATH
 export LD_LIBRARY_PATH=$MPI_ROOT/lib
 export OMP_PROC_BIND=close
 export OMP_PLACES=cores
+# Disabilita InfiniBand per evitare warning
+export OMPI_MCA_btl=tcp,self
 
-echo "Node Scaling Test (2 e 4 nodi)"
+echo "Node Scaling Test (1, 2 e 4 nodi)"
 echo "Start: $(date)"
 echo ""
 
@@ -27,7 +29,8 @@ echo ""
 NCONFS=100
 BETA=0.45
 SEED=124634
-NTHREADS=8
+NTHREADS=32
+RANKS_PER_NODE=4
 
 # Compila
 mpicxx -O3 -std=c++17 -fopenmp -DROWING \
@@ -43,10 +46,10 @@ for L in 64 128 256; do
     echo "--- Reticolo 2D: ${L}x${L} ---"
     echo ""
 
-    for NNODES in 2 4; do
-        NRANKS=$((NNODES * 4))
+    for NNODES in 1 2 4; do
+        NRANKS=$((NNODES * RANKS_PER_NODE))
         echo "  === $NNODES nodi, $NRANKS ranks x $NTHREADS threads ==="
-        mpirun -n $NRANKS ./ising_rowing.exe \
+        mpirun -n $NRANKS --map-by ppr:${RANKS_PER_NODE}:node ./ising_rowing.exe \
             2 $L $L $NCONFS $NTHREADS $BETA $SEED
         echo ""
     done
@@ -61,10 +64,10 @@ for L in 8 16 32; do
     echo "--- Reticolo 3D: ${L}x${L}x${L} ---"
     echo ""
 
-    for NNODES in 2 4; do
-        NRANKS=$((NNODES * 4))
+    for NNODES in 1 2 4; do
+        NRANKS=$((NNODES * RANKS_PER_NODE))
         echo "  === $NNODES nodi, $NRANKS ranks x $NTHREADS threads ==="
-        mpirun -n $NRANKS ./ising_rowing.exe \
+        mpirun -n $NRANKS --map-by ppr:${RANKS_PER_NODE}:node ./ising_rowing.exe \
             3 $L $L $L $NCONFS $NTHREADS $BETA $SEED
         echo ""
     done
