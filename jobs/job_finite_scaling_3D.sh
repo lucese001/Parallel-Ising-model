@@ -23,7 +23,7 @@ echo "Start: $(date)"
 echo ""
 
 # Parametri fissi
-NDIM=2
+NDIM=3
 NCONFS=100000
 SEED=124634
 NRANKS=4
