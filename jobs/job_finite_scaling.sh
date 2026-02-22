@@ -6,9 +6,8 @@
 #PBS -o /dev/null
 
 cd $PBS_O_WORKDIR
-mkdir -p logs output
 
-LOGFILE="logs/finite_scaling_${PBS_JOBID}.log"
+LOGFILE="output/finite_scaling_${PBS_JOBID}.log"
 exec > "$LOGFILE" 2>&1
 
 # Setup MPI
@@ -29,9 +28,11 @@ NCONFS=100000
 SEED=124634
 NRANKS=4
 NTHREADS=8
-L0=256
-L1=256
-T=(2.10 2.15 2.2 2.25 2.3 2.35 2.4 2.45 2.5 2.55 2.6 2.65 2.7 2.75 2.8 2.85)
+L0=64
+L1=64
+# Temperature e configurazioni corrispondenti
+T=(     1.90    1.95   2      2.05    2.10   2.15    2.20    2.25    2.30    2.35    2.40    2.45   2.50)
+NCONFS=( 100000 100000 100000 100000  100000 1000000 2000000 2000000 1000000 1000000 1000000 1000000 100000)
 
 # Compila
 mpicxx -O3 -std=c++17 -fopenmp -DROWING \
@@ -44,12 +45,12 @@ for i in "${!T[@]}"; do
 
     echo "=== T=${T[$i]}  BETA=$BETA  (hot) ==="
     mpirun -n $NRANKS ./ising_rowing.exe \
-        $NDIM $L0 $L1 $NCONFS $NTHREADS $BETA $SEED
+        $NDIM $L0 $L1 ${NCONFS[$i]} $NTHREADS $BETA $SEED
     echo ""
 
     echo "=== T=${T[$i]}  BETA=$BETA  (cold) ==="
     mpirun -n $NRANKS ./ising_rowing.exe \
-        $NDIM $L0 $L1 $L2 $NCONFS $NTHREADS $BETA $SEED -cold
+        $NDIM $L0 $L1 ${NCONFS[$i]} $NTHREADS $BETA $SEED -cold
     echo ""
 done
 
