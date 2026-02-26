@@ -1,6 +1,6 @@
 #!/bin/bash
 #PBS -N ising_test_strong
-#PBS -l nodes=1:ppn=32
+#PBS -l nodes=1:ppn=64
 #PBS -l walltime=04:00:00
 #PBS -j oe
 

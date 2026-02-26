@@ -405,7 +405,8 @@ int main(int argc, char** argv) {
             double e = (double)E / (double)N;
             double m = (double)Mag / (double)N;
             fprintf(measFile, "%lg %lg\n", e, m);
-            fflush(measFile);
+            if ((iConf + 1) % 1000 == 0)
+                fflush(measFile);
 
             ioTime.stop();
         }
